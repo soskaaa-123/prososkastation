@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - HEVO PRO</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: #fff; padding: 2rem; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e91e63; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat { background: #151515; padding: 1.5rem; border-radius: 16px; text-align: center; }
+        .stat-value { font-size: 2rem; font-weight: 900; color: #e91e63; }
+        table { width: 100%; background: #151515; border-radius: 16px; overflow: hidden; border-collapse: collapse; }
+        th, td { padding: 1rem; text-align: right; border-bottom: 1px solid #333; }
+        th { background: rgba(233,30,99,0.2); }
+        .btn { padding: 0.5rem 1rem; border: none; border-radius: 8px; cursor: pointer; margin: 0 0.25rem; }
+        .btn-success { background: #4caf50; color: white; }
+        .btn-danger { background: #f44336; color: white; }
+        .status { padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; }
+        .status.pending { background: rgba(255,193,7,0.2); color: #ff9800; }
+        .status.approved { background: rgba(76,175,80,0.2); color: #4caf50; }
+        .hevo-ready { background: rgba(76,175,80,0.1); border: 2px solid #4caf50; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔧 لوحة التحكم</h1>
+        <div>
+            <a href="index.html" style="color: #e91e63; text-decoration: none; margin-left: 1rem;">← العودة للموقع</a>
+        </div>
+    </div>
+    
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-value" id="totalProfit">0</div>
+            <div style="color: #888;">إجمالي الربح</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value" id="totalOrders">0</div>
+            <div style="color: #888;">الطلبات</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value" id="pendingDeps">0</div>
+            <div style="color: #888;">شحنات قيد الانتظار</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value" id="hevoReady">0</div>
+            <div style="color: #888;">جاهزة للتنفيذ</div>
+        </div>
+    </div>
+    
+    <h2 style="margin-bottom: 1rem;">📋 طلبات الشحن</h2>
+    <table style="margin-bottom: 2rem;">
+        <thead>
+            <tr>
+                <th>الوقت</th>
+                <th>المستخدم</th>
+                <th>المبلغ</th>
+                <th>الرسوم</th>
+                <th>النهائي</th>
+                <th>الطريقة</th>
+                <th>الحالة</th>
+                <th>إجراء</th>
+            </tr>
+        </thead>
+        <tbody id="depositsTable"></tbody>
+    </table>
+    
+    <h2 style="margin-bottom: 1rem;">🛒 الطلبات (جاهزة للتنفيذ على HEVO)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>رقم الطلب</th>
+                <th>المستخدم</th>
+                <th>الخدمة</th>
+                <th>الرابط</th>
+                <th>الكمية</th>
+                <th>تكلفة HEVO</th>
+                <th>الربح</th>
+                <th>الوقت</th>
+                <th>نسخ</th>
+            </tr>
+        </thead>
+        <tbody id="ordersTable"></tbody>
+    </table>
+
+    <script>
+        function loadData() {
+            // Deposits
+            const deposits = JSON.parse(localStorage.getItem('deposits') || '[]');
+            const pendingDeps = deposits.filter(d => d.status === 'pending');
+            document.getElementById('pendingDeps').textContent = pendingDeps.length;
+            
+            document.getElementById('depositsTable').innerHTML = pendingDeps.map(d => {
+                const user = getUser(d.userId);
+                return `
+                    <tr>
+                        <td>${new Date(d.timestamp).toLocaleString('ar-EG')}</td>
+                        <td>${user ? user.name : d.userId}</td>
+                        <td>${d.amount} ج.م</td>
+                        <td>${d.fee} ج.م</td>
+                        <td style="color: #4caf50; font-weight: 700;">${d.finalAmount} ج.م</td>
+                        <td>${d.method}</td>
+                        <td><span class="status pending">قيد الانتظار</span></td>
+                        <td>
+                            <button class="btn btn-success" onclick="approveDep('${d.timestamp}')">موافقة</button>
+                            <button class="btn btn-danger" onclick="rejectDep('${d.timestamp}')">رفض</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('') || '<tr><td colspan="8" style="text-align: center;">لا توجد شحنات</td></tr>';
+            
+            // Orders
+            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+            const now = new Date();
+            const hevoReady = orders.filter(o => {
+                const orderTime = new Date(o.timestamp);
+                const diff = (now - orderTime) / 60000;
+                return diff >= 30 && o.status === 'pending';
+            });
+            
+            document.getElementById('hevoReady').textContent = hevoReady.length;
+            document.getElementById('totalOrders').textContent = orders.length;
+            
+            const totalProfit = orders.reduce((sum, o) => sum + (o.profit || 0), 0);
+            document.getElementById('totalProfit').textContent = totalProfit + ' ج.م';
+            
+            document.getElementById('ordersTable').innerHTML = hevoReady.map(o => {
+                const user = getUser(o.userId);
+                return `
+                    <tr class="hevo-ready">
+                        <td>${o.orderId}</td>
+                        <td>${user ? user.name : o.userId}</td>
+                        <td>${o.serviceName}</td>
+                        <td><input value="${o.link}" readonly style="background: transparent; border: none; color: #fff; width: 200px;" onclick="this.select(); document.execCommand('copy'); alert('تم نسخ الرابط')"></td>
+                        <td>${o.quantity.toLocaleString()}</td>
+                        <td style="color: #ff9800;">${o.hevoCost} ج.م</td>
+                        <td style="color: #4caf50; font-weight: 700;">+${o.profit} ج.م</td>
+                        <td>${Math.floor((now - new Date(o.timestamp)) / 60000)} دقيقة</td>
+                        <td><button class="btn btn-success" onclick="copyOrder('${o.orderId}')">نسخ الكل</button></td>
+                    </tr>
+                `;
+            }).join('') || '<tr><td colspan="9" style="text-align: center;">لا توجد طلبات جاهزة</td></tr>';
+        }
+        
+        function getUser(uid) {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            return users.find(u => u.id === uid);
+        }
+        
+        function approveDep(timestamp) {
+            const deposits = JSON.parse(localStorage.getItem('deposits') || '[]');
+            const dep = deposits.find(d => d.timestamp === timestamp);
+            if (dep) {
+                dep.status = 'approved';
+                localStorage.setItem('deposits', JSON.stringify(deposits));
+                
+                // Add balance to user
+                let users = JSON.parse(localStorage.getItem('users') || '[]');
+                const user = users.find(u => u.id === dep.userId);
+                if (user) {
+                    user.balance = (user.balance || 0) + dep.finalAmount;
+                    localStorage.setItem('users', JSON.stringify(users));
+                    
+                    // Update current user if logged in
+                    const current = JSON.parse(localStorage.getItem('currentUser'));
+                    if (current && current.id === dep.userId) {
+                        localStorage.setItem('currentUser', JSON.stringify(user));
+                    }
+                }
+                
+                loadData();
+                alert('تم إضافة الرصيد!');
+            }
+        }
+        
+        function rejectDep(timestamp) {
+            const deposits = JSON.parse(localStorage.getItem('deposits') || '[]');
+            const dep = deposits.find(d => d.timestamp === timestamp);
+            if (dep) {
+                dep.status = 'rejected';
+                localStorage.setItem('deposits', JSON.stringify(deposits));
+                loadData();
+            }
+        }
+        
+        function copyOrder(oid) {
+            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+            const o = orders.find(x => x.orderId === oid);
+            if (o) {
+                const text = `Service: ${o.serviceName}\nLink: ${o.link}\nQty: ${o.quantity}\nHEVO Cost: ${o.hevoCost} EGP`;
+                navigator.clipboard.writeText(text);
+                alert('تم نسخ تفاصيل الطلب!');
+            }
+        }
+        
+        loadData();
+        setInterval(loadData, 10000); // Refresh every 10 seconds
+    </script>
+</body>
+</html>
