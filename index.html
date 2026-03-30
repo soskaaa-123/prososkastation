@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEVO TEAM PRO</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --primary: #e91e63; --dark: #0a0a0a; --card: #151515; --success: #4caf50; --warning: #ff9800; --danger: #f44336; --info: #2196f3; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--dark); color: #fff; min-height: 100vh; }
+        
+        /* Auth */
+        .auth-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+        .auth-box { background: var(--card); border: 2px solid var(--primary); border-radius: 24px; padding: 3rem; width: 100%; max-width: 450px; text-align: center; }
+        .auth-logo { font-size: 2.5rem; font-weight: 900; color: var(--primary); margin-bottom: 0.5rem; }
+        .auth-tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid rgba(255,255,255,0.1); padding-bottom: 1rem; }
+        .auth-tab { flex: 1; padding: 1rem; background: transparent; border: none; color: #888; font-size: 1.1rem; font-weight: 700; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -1rem; }
+        .auth-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .auth-form { display: none; }
+        .auth-form.active { display: block; }
+        .form-group { margin-bottom: 1.5rem; text-align: right; }
+        .form-label { display: block; margin-bottom: 0.5rem; color: #888; font-weight: 600; }
+        .form-input { width: 100%; padding: 1rem; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; font-size: 1rem; }
+        .form-input:focus { outline: none; border-color: var(--primary); }
+        .btn-auth { width: 100%; padding: 1.25rem; background: var(--primary); border: none; border-radius: 12px; color: white; font-size: 1.2rem; font-weight: 800; cursor: pointer; margin-top: 1rem; }
+        
+        /* Main App */
+        #mainApp { display: none; }
+        .header { background: var(--primary); padding: 1rem 2rem; position: sticky; top: 0; z-index: 100; }
+        .header-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.8rem; font-weight: 900; }
+        .user-info { display: flex; align-items: center; gap: 1.5rem; }
+        .balance-pill { background: rgba(0,0,0,0.3); padding: 0.75rem 1.5rem; border-radius: 50px; display: flex; align-items: center; gap: 0.5rem; font-weight: 700; }
+        .btn-header { background: rgba(255,255,255,0.2); border: none; color: white; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.9rem; }
+        .btn-logout { background: var(--danger); }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        
+        /* Tabs */
+        .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .tab { padding: 1rem 2rem; background: var(--card); border: 2px solid transparent; border-radius: 12px; cursor: pointer; font-weight: 700; }
+        .tab.active { border-color: var(--primary); }
+        .section { display: none; }
+        .section.active { display: block; }
+        
+        /* Services */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+        .service-card { background: var(--card); border: 2px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1.5rem; cursor: pointer; transition: all 0.3s; }
+        .service-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .service-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem; }
+        .service-icon { font-size: 2.5rem; }
+        .service-name { font-size: 1.2rem; font-weight: 800; }
+        .price-tag { background: var(--primary); padding: 0.5rem 1rem; border-radius: 8px; font-weight: 800; }
+        .service-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); }
+        .stat { text-align: center; }
+        .stat-value { color: var(--primary); font-weight: 800; }
+        
+        /* Deposit */
+        .add-balance-section { background: var(--card); border: 2px solid rgba(233,30,99,0.3); border-radius: 24px; padding: 2rem; text-align: center; }
+        .section-title { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--primary); }
+        .preset-amounts { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .amount-btn { background: rgba(233,30,99,0.1); border: 2px solid var(--primary); color: white; padding: 1rem 2rem; border-radius: 12px; cursor: pointer; font-weight: 700; }
+        .amount-btn.selected { background: var(--primary); }
+        .custom-amount { display: flex; gap: 1rem; justify-content: center; align-items: center; margin: 1rem 0; }
+        .custom-input { background: rgba(255,255,255,0.05); border: 2px solid var(--primary); color: white; padding: 1rem; border-radius: 12px; width: 150px; text-align: center; }
+        .fee-notice { background: rgba(33,150,243,0.1); border: 2px solid var(--info); border-radius: 12px; padding: 1rem; margin: 1rem 0; color: var(--info); }
+        .payment-methods { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+        .payment-method { background: rgba(255,255,255,0.03); border: 2px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; cursor: pointer; text-align: center; }
+        .payment-method.selected { border-color: var(--primary); background: rgba(233,30,99,0.1); }
+        .payment-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .btn-deposit { background: var(--success); color: white; border: none; padding: 1rem 3rem; border-radius: 12px; font-size: 1.2rem; font-weight: 700; cursor: pointer; margin-top: 1rem; }
+        
+        /* Bulk */
+        .bulk-section { background: var(--card); border: 2px dashed var(--primary); border-radius: 24px; padding: 3rem; text-align: center; }
+        .upload-area { border: 3px dashed rgba(255,255,255,0.2); border-radius: 20px; padding: 3rem; cursor: pointer; margin: 2rem 0; }
+        .upload-area:hover { border-color: var(--primary); }
+        .upload-icon { font-size: 4rem; margin-bottom: 1rem; }
+        .file-input { display: none; }
+        .template-btn { background: transparent; border: 2px solid var(--info); color: var(--info); padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; }
+        
+        /* Orders */
+        .orders-list { background: var(--card); border-radius: 20px; padding: 2rem; }
+        .order-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .order-status { padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 700; }
+        .status.pending { background: rgba(255,193,7,0.2); color: var(--warning); }
+        .status.processing { background: rgba(33,150,243,0.2); color: var(--info); }
+        .status.completed { background: rgba(76,175,80,0.2); color: var(--success); }
+        
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; padding: 2rem; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--card); border: 2px solid var(--primary); border-radius: 24px; padding: 2rem; width: 100%; max-width: 500px; }
+        .qty-selector { display: flex; align-items: center; gap: 1.5rem; justify-content: center; margin: 1rem 0; }
+        .qty-btn { width: 50px; height: 50px; border-radius: 12px; border: 2px solid var(--primary); background: transparent; color: white; font-size: 1.5rem; cursor: pointer; }
+        .qty-value { font-size: 1.75rem; font-weight: 800; min-width: 100px; text-align: center; }
+        .total-box { background: rgba(233,30,99,0.1); border: 2px solid var(--primary); border-radius: 16px; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; margin: 1.5rem 0; }
+        .total-amount { font-size: 2rem; font-weight: 900; color: var(--primary); }
+        .btn-primary { width: 100%; padding: 1.25rem; background: var(--primary); border: none; border-radius: 12px; color: white; font-size: 1.2rem; font-weight: 800; cursor: pointer; }
+        
+        /* Toast */
+        .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card); border: 2px solid var(--primary); border-radius: 16px; padding: 1.5rem 2.5rem; z-index: 2000; transition: transform 0.3s; text-align: center; min-width: 300px; }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.error { border-color: var(--danger); }
+        
+        /* Auto Status */
+        .auto-status { background: rgba(76,175,80,0.1); border: 2px solid var(--success); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem; text-align: center; }
+    </style>
+</head>
+<body>
+    <!-- AUTH PAGE -->
+    <div id="authPage" class="auth-container">
+        <div class="auth-box">
+            <div class="auth-logo">⚡ HEVO TEAM PRO</div>
+            <p style="color: #888; margin-bottom: 2rem;">أفضل خدمات السوشيال ميديا</p>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuth('login')">دخول</button>
+                <button class="auth-tab" onclick="switchAuth('register')">تسجيل</button>
+            </div>
+            
+            <form id="loginForm" class="auth-form active" onsubmit="login(event)">
+                <div class="form-group">
+                    <label class="form-label">البريد الإلكتروني</label>
+                    <input type="email" class="form-input" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">كلمة المرور</label>
+                    <input type="password" class="form-input" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn-auth">دخول</button>
+            </form>
+            
+            <form id="registerForm" class="auth-form" onsubmit="register(event)">
+                <div class="form-group">
+                    <label class="form-label">الاسم</label>
+                    <input type="text" class="form-input" id="regName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">البريد الإلكتروني</label>
+                    <input type="email" class="form-input" id="regEmail" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">رقم الهاتف</label>
+                    <input type="tel" class="form-input" id="regPhone" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">كلمة المرور</label>
+                    <input type="password" class="form-input" id="regPassword" required>
+                </div>
+                <button type="submit" class="btn-auth">تسجيل</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="mainApp">
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">⚡ HEVO TEAM PRO</div>
+                <div class="user-info">
+                    <span id="userName"></span>
+                    <div class="balance-pill">💰 <span id="userBalance">0</span> ج.م</div>
+                    <a href="admin.html" class="btn-header">🔧 لوحة التحكم</a>
+                    <button class="btn-header btn-logout" onclick="logout()">خروج</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="auto-status">
+                <div style="font-size: 2rem;">🤖</div>
+                <h3>التنفيذ التلقائي مفعل</h3>
+                <p style="color: #888;">الطلبات تنفذ تلقائياً على HEVO بعد 30 دقيقة</p>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="showTab('services', this)">🛒 الخدمات</div>
+                <div class="tab" onclick="showTab('bulk', this)">📊 مجمعة</div>
+                <div class="tab" onclick="showTab('deposit', this)">💳 شحن</div>
+                <div class="tab" onclick="showTab('orders', this)">📋 طلباتي</div>
+            </div>
+
+            <!-- Services -->
+            <div id="services" class="section active">
+                <div class="services-grid" id="servicesGrid"></div>
+            </div>
+
+            <!-- Bulk -->
+            <div id="bulk" class="section">
+                <div class="bulk-section">
+                    <h2 class="section-title">📊 رفع طلبات مجمعة</h2>
+                    <div class="upload-area" onclick="document.getElementById('bulkFile').click()">
+                        <div class="upload-icon">📁</div>
+                        <h3>اضغط أو اسحب ملف Excel</h3>
+                        <p style="color: #888;">.xlsx أو .csv</p>
+                        <input type="file" id="bulkFile" class="file-input" accept=".xlsx,.xls,.csv" onchange="handleBulk(event)">
+                    </div>
+                    <button class="template-btn" onclick="downloadTemplate()">تحميل قالب</button>
+                    <div id="bulkPreview" style="display: none; margin-top: 2rem;">
+                        <div id="bulkList"></div>
+                        <button class="btn-primary" onclick="submitBulk()" style="margin-top: 1rem;">تأكيد الكل</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deposit -->
+            <div id="deposit" class="section">
+                <div class="add-balance-section">
+                    <h2 class="section-title">💳 شحن الرصيد</h2>
+                    <div class="preset-amounts">
+                        <button class="amount-btn" onclick="selectAmt(50, this)">50</button>
+                        <button class="amount-btn selected" onclick="selectAmt(100, this)">100</button>
+                        <button class="amount-btn" onclick="selectAmt(250, this)">250</button>
+                        <button class="amount-btn" onclick="selectAmt(500, this)">500</button>
+                        <button class="amount-btn" onclick="selectAmt(1000, this)">1000</button>
+                    </div>
+                    <div class="custom-amount">
+                        <span>مخصص:</span>
+                        <input type="number" class="custom-input" id="customAmt" placeholder="مبلغ" oninput="updateFinal()">
+                    </div>
+                    <div class="fee-notice">
+                        ⚠️ رسوم المعالجة: 10 ج.م
+                        <div id="finalAmt" style="margin-top: 0.5rem; color: var(--success);">النهائي: 90 ج.م</div>
+                    </div>
+                    <div class="payment-methods">
+                        <div class="payment-method selected" onclick="selectPay(this, 'visa')"><div class="payment-icon">💳</div><div>Visa</div></div>
+                        <div class="payment-method" onclick="selectPay(this, 'paypal')"><div class="payment-icon">P</div><div>PayPal</div></div>
+                        <div class="payment-method" onclick="selectPay(this, 'stripe')"><div class="payment-icon">S</div><div>Stripe</div></div>
+                        <div class="payment-method" onclick="selectPay(this, 'fawry')"><div class="payment-icon">F</div><div>Fawry</div></div>
+                        <div class="payment-method" onclick="selectPay(this, 'crypto')"><div class="payment-icon">₿</div><div>Crypto</div></div>
+                    </div>
+                    <button class="btn-deposit" onclick="deposit()">تأكيد الشحن</button>
+                </div>
+            </div>
+
+            <!-- Orders -->
+            <div id="orders" class="section">
+                <div class="orders-list" id="ordersList">
+                    <p style="text-align: center; color: #888;">لا توجد طلبات</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Modal -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <h2 style="text-align: center; color: var(--primary); margin-bottom: 1rem;">طلب جديد</h2>
+            <input type="hidden" id="selService">
+            <div class="form-group">
+                <label class="form-label">الخدمة</label>
+                <input type="text" class="form-input" id="selServiceName" readonly>
+            </div>
+            <div class="form-group">
+                <label class="form-label">الرابط</label>
+                <input type="url" class="form-input" id="orderLink" placeholder="https://...">
+            </div>
+            <div class="form-group">
+                <label class="form-label">الكمية</label>
+                <div class="qty-selector">
+                    <button class="qty-btn" onclick="chgQty(-1000)">-</button>
+                    <div class="qty-value" id="orderQty">1000</div>
+                    <button class="qty-btn" onclick="chgQty(1000)">+</button>
+                </div>
+            </div>
+            <div class="total-box">
+                <div>الإجمالي</div>
+                <div class="total-amount" id="orderTotal">0 ج.م</div>
+            </div>
+            <button class="btn-primary" onclick="submitOrder()">تأكيد</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">
+        <div id="toastTitle" style="font-weight: 800; margin-bottom: 0.5rem;"></div>
+        <div id="toastMsg" style="color: #888;"></div>
+    </div>
+
+    <script>
+        // ==========================================
+        // CONFIG - REPLACE THESE VALUES
+        // ==========================================
+        
+        // Google Script URL from Step 3
+        const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
+        
+        // Telegram
+        const BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE';
+        const CHAT_ID = 'YOUR_CHAT_ID_HERE';
+        
+        // Paymob (from Step 5)
+        const PAYMOB_CONFIG = {
+            apiKey: 'YOUR_PAYMOB_API_KEY',
+            integrationId: 'YOUR_PAYMOB_INTEGRATION_ID',
+            iframeId: 'YOUR_PAYMOB_IFRAME_ID'
+        };
+        
+        // HEVO PRICES - UPDATE THESE WITH REAL PRICES FROM HEVO WEBSITE
+        const HEVO_PRICES = {
+            instagram_followers: 45,    // ← CHANGE TO REAL PRICE
+            instagram_likes: 25,        // ← CHANGE TO REAL PRICE
+            instagram_views: 15,        // ← CHANGE TO REAL PRICE
+            tiktok_followers: 55,       // ← CHANGE TO REAL PRICE
+            tiktok_likes: 30,           // ← CHANGE TO REAL PRICE
+            youtube_views: 40,          // ← CHANGE TO REAL PRICE
+            youtube_subs: 80,           // ← CHANGE TO REAL PRICE
+            twitter_followers: 50,      // ← CHANGE TO REAL PRICE
+            telegram_members: 35,       // ← CHANGE TO REAL PRICE
+            facebook_followers: 40,     // ← CHANGE TO REAL PRICE
+            spotify_plays: 25           // ← CHANGE TO REAL PRICE
+        };
+        
+        const MARKUP = 2.5; // Your profit (2.5x = 150% profit)
+        const FEE = 10; // 10 EGP fee per deposit
+        
+        // ==========================================
+        // SERVICES LIST
+        // ==========================================
+        
+        const SERVICES = [
+            { id: 'instagram_followers', name: 'متابعين انستجرام', icon: '📸', min: 100, max: 500000 },
+            { id: 'instagram_likes', name: 'لايكات انستجرام', icon: '❤️', min: 50, max: 100000 },
+            { id: 'instagram_views', name: 'مشاهدات انستجرام', icon: '👁️', min: 100, max: 5000000 },
+            { id: 'tiktok_followers', name: 'متابعين تيك توك', icon: '🎵', min: 100, max: 1000000 },
+            { id: 'tiktok_likes', name: 'لايكات تيك توك', icon: '❤️', min: 100, max: 2000000 },
+            { id: 'youtube_views', name: 'مشاهدات يوتيوب', icon: '▶️', min: 1000, max: 10000000 },
+            { id: 'youtube_subs', name: 'مشتركين يوتيوب', icon: '🔔', min: 100, max: 500000 },
+            { id: 'twitter_followers', name: 'متابعين تويتر', icon: '🐦', min: 100, max: 500000 },
+            { id: 'telegram_members', name: 'أعضاء تيليجرام', icon: '✈️', min: 100, max: 500000 },
+            { id: 'facebook_followers', name: 'متابعين فيسبوك', icon: '👥', min: 100, max: 200000 },
+            { id: 'spotify_plays', name: 'تشغيلات سبوتيفاي', icon: '🎧', min: 1000, max: 10000000 }
+        ];
+        
+        // ==========================================
+        // STATE
+        // ==========================================
+        
+        let currentUser = null;
+        let selService = null;
+        let orderQty = 1000;
+        let selAmount = 100;
+        let selPayment = 'visa';
+        let bulkOrders = [];
+        
+        // ==========================================
+        // AUTH FUNCTIONS
+        // ==========================================
+        
+        function switchAuth(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tab + 'Form').classList.add('active');
+        }
+        
+        function login(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const pass = document.getElementById('loginPassword').value;
+            
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === email && u.password === pass);
+            
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                showApp();
+            } else {
+                toast('خطأ', 'بيانات غير صحيحة', 'error');
+            }
+        }
+        
+        function register(e) {
+            e.preventDefault();
+            const user = {
+                id: Date.now().toString(),
+                name: document.getElementById('regName').value,
+                email: document.getElementById('regEmail').value,
+                phone: document.getElementById('regPhone').value,
+                password: document.getElementById('regPassword').value,
+                balance: 0
+            };
+            
+            let users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (users.find(u => u.email === user.email)) {
+                toast('خطأ', 'البريد مستخدم', 'error');
+                return;
+            }
+            
+            users.push(user);
+            localStorage.setItem('users', JSON.stringify(users));
+            currentUser = user;
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            
+            // Add to Google Sheets
+            sendToSheet({ type: 'user', ...user });
+            
+            showApp();
+            toast('تم', 'تم إنشاء الحساب');
+        }
+        
+        function logout() {
+            localStorage.removeItem('currentUser');
+            location.reload();
+        }
+        
+        function showApp() {
+            document.getElementById('authPage').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('userName').textContent = currentUser.name;
+            updateBalance();
+            renderServices();
+            loadOrders();
+        }
+        
+        // Check login on load
+        if (localStorage.getItem('currentUser')) {
+            currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            showApp();
+        }
+        
+        // ==========================================
+        // APP FUNCTIONS
+        // ==========================================
+        
+        function showTab(tab, el) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById(tab).classList.add('active');
+        }
+        
+        function updateBalance() {
+            document.getElementById('userBalance').textContent = currentUser.balance.toLocaleString();
+        }
+        
+        function saveUser() {
+            let users = JSON.parse(localStorage.getItem('users') || '[]');
+            const idx = users.findIndex(u => u.id === currentUser.id);
+            if (idx !== -1) {
+                users[idx] = currentUser;
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            }
+        }
+        
+        // ==========================================
+        // SERVICES
+        // ==========================================
+        
+        function renderServices() {
+            const grid = document.getElementById('servicesGrid');
+            grid.innerHTML = SERVICES.map(s => {
+                const price = Math.round((HEVO_PRICES[s.id] || 50) * MARKUP);
+                return `
+                    <div class="service-card" onclick="openOrder('${s.id}')">
+                        <div class="service-header">
+                            <div>
+                                <div style="font-size: 2.5rem;">${s.icon}</div>
+                                <div class="service-name">${s.name}</div>
+                            </div>
+                            <div class="price-tag">${price} ج.م</div>
+                        </div>
+                        <div class="service-stats">
+                            <div class="stat"><div class="stat-value">${s.min}</div><div style="font-size: 0.8rem; color: #888;">حد أدنى</div></div>
+                            <div class="stat"><div class="stat-value">${s.max}</div><div style="font-size: 0.8rem; color: #888;">حد أقصى</div></div>
+                            <div class="stat"><div class="stat-value">فوري</div><div style="font-size: 0.8rem; color: #888;">سرعة</div></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function openOrder(sid) {
+            selService = SERVICES.find(s => s.id === sid);
+            document.getElementById('selService').value = sid;
+            document.getElementById('selServiceName').value = selService.name;
+            orderQty = selService.min;
+            document.getElementById('orderQty').textContent = orderQty;
+            updateOrderTotal();
+            document.getElementById('orderModal').classList.add('active');
+        }
+        
+        function chgQty(delta) {
+            const nq = orderQty + delta;
+            if (nq >= selService.min && nq <= selService.max) {
+                orderQty = nq;
+                document.getElementById('orderQty').textContent = orderQty;
+                updateOrderTotal();
+            }
+        }
+        
+        function updateOrderTotal() {
+            const hp = HEVO_PRICES[selService.id] || 50;
+            const total = Math.round((orderQty / 1000) * hp * MARKUP);
+            document.getElementById('orderTotal').textContent = total + ' ج.م';
+        }
+        
+        function submitOrder() {
+            const link = document.getElementById('orderLink').value;
+            if (!link) {
+                toast('خطأ', 'أدخل الرابط', 'error');
+                return;
+            }
+            
+            const hp = HEVO_PRICES[selService.id] || 50;
+            const total = Math.round((orderQty / 1000) * hp * MARKUP);
+            
+            if (total > currentUser.balance) {
+                toast('رصيد غير كافٍ', 'اشحن رصيدك', 'error');
+                return;
+            }
+            
+            currentUser.balance -= total;
+            saveUser();
+            updateBalance();
+            
+            const order = {
+                type: 'order',
+                orderId: 'ORD-' + Date.now(),
+                userId: currentUser.id,
+                userName: currentUser.name,
+                service: selService.id,
+                serviceName: selService.name,
+                link: link,
+                quantity: orderQty,
+                customerPrice: total,
+                hevoCost: Math.round((orderQty / 1000) * hp),
+                profit: total - Math.round((orderQty / 1000) * hp),
+                status: 'pending',
+                hevoStatus: 'waiting_30min',
+                timestamp: new Date().toISOString()
+            };
+            
+            saveOrder(order);
+            sendToSheet(order);
+            sendTg(`🛒 طلب من ${currentUser.name}\n${selService.name} x${orderQty}\n${total} ج.م`);
+            
+            closeOrder();
+            toast('تم', `رقم الطلب: ${order.orderId}`);
+            document.getElementById('orderLink').value = '';
+            loadOrders();
+        }
+        
+        function closeOrder() {
+            document.getElementById('orderModal').classList.remove('active');
+        }
+        
+        function saveOrder(order) {
+            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+            orders.push(order);
+            localStorage.setItem('orders', JSON.stringify(orders));
+        }
+        
+        function loadOrders() {
+            const all = JSON.parse(localStorage.getItem('orders') || '[]');
+            const mine = all.filter(o => o.userId === currentUser.id).reverse();
+            const container = document.getElementById('ordersList');
+            
+            if (mine.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #888;">لا توجد طلبات</p>';
+                return;
+            }
+            
+            container.innerHTML = mine.map(o => `
+                <div class="order-item">
+                    <div>
+                        <div style="font-weight: 700;">${o.serviceName}</div>
+                        <div style="color: #888; font-size: 0.85rem;">${o.link}</div>
+                        <div style="font-size: 0.8rem; margin-top: 0.5rem;">${new Date(o.timestamp).toLocaleString('ar-EG')}</div>
+                    </div>
+                    <div style="text-align: left;">
+                        <div style="font-weight: 800; color: var(--primary);">${o.customerPrice} ج.م</div>
+                        <span class="order-status status ${o.status}">${o.status === 'pending' ? 'قيد الانتظار' : o.status === 'processing' ? 'جاري' : 'مكتمل'}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // ==========================================
+        // BULK UPLOAD
+        // ==========================================
+        
+        function downloadTemplate() {
+            const data = [
+                ['service', 'link', 'quantity'],
+                ['instagram_followers', 'https://instagram.com/user', '1000'],
+                ['tiktok_followers', 'https://tiktok.com/@user', '5000']
+            ];
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Orders');
+            XLSX.writeFile(wb, 'HEVO_Template.xlsx');
+        }
+        
+        function handleBulk(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const data = new Uint8Array(evt.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                const rows = XLSX.utils.sheet_to_json(sheet);
+                
+                bulkOrders = rows.map((r, i) => ({
+                    id: 'BLK-' + Date.now() + '-' + i,
+                    service: r.service || r.Service || r.الخدمة,
+                    link: r.link || r.Link || r.الرابط,
+                    quantity: parseInt(r.quantity || r.Quantity || r.الكمية) || 1000
+                })).filter(o => o.service && o.link);
+                
+                showBulkPreview();
+            };
+            reader.readAsArrayBuffer(file);
+        }
+        
+        function showBulkPreview() {
+            let total = 0;
+            const html = bulkOrders.map(o => {
+                const s = SERVICES.find(x => x.id === o.service);
+                const hp = HEVO_PRICES[o.service] || 50;
+                const price = Math.round((o.quantity / 1000) * hp * MARKUP);
+                total += price;
+                return `
+                    <div class="order-item" style="text-align: right;">
+                        <div>
+                            <div style="font-weight: 700;">${s ? s.name : o.service}</div>
+                            <div style="color: #888; font-size: 0.9rem;">${o.link}</div>
+                            <div style="color: var(--primary);">${o.quantity}</div>
+                        </div>
+                        <div style="font-weight: 800;">${price} ج.م</div>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('bulkList').innerHTML = html + `
+                <div class="total-box" style="margin-top: 1rem;">
+                    <div>الإجمالي</div>
+                    <div class="total-amount">${total} ج.م</div>
+                </div>
+            `;
+            document.getElementById('bulkPreview').style.display = 'block';
+        }
+        
+        function submitBulk() {
+            const total = bulkOrders.reduce((sum, o) => {
+                const hp = HEVO_PRICES[o.service] || 50;
+                return sum + Math.round((o.quantity / 1000) * hp * MARKUP);
+            }, 0);
+            
+            if (total > currentUser.balance) {
+                toast('رصيد غير كافٍ', `المطلوب: ${total} ج.م`, 'error');
+                return;
+            }
+            
+            bulkOrders.forEach(o => {
+                const s = SERVICES.find(x => x.id === o.service);
+                const hp = HEVO_PRICES[o.service] || 50;
+                const price = Math.round((o.quantity / 1000) * hp * MARKUP);
+                
+                currentUser.balance -= price;
+                
+                const order = {
+                    type: 'order',
+                    orderId: o.id,
+                    userId: currentUser.id,
+                    userName: currentUser.name,
+                    service: o.service,
+                    serviceName: s ? s.name : o.service,
+                    link: o.link,
+                    quantity: o.quantity,
+                    customerPrice: price,
+                    hevoCost: Math.round((o.quantity / 1000) * hp),
+                    profit: price - Math.round((o.quantity / 1000) * hp),
+                    status: 'pending',
+                    hevoStatus: 'waiting_30min',
+                    isBulk: true,
+                    timestamp: new Date().toISOString()
+                };
+                
+                saveOrder(order);
+                sendToSheet(order);
+            });
+            
+            saveUser();
+            updateBalance();
+            sendTg(`📊 طلبات مجمعة من ${currentUser.name}\n${bulkOrders.length} طلبات\n${total} ج.م`);
+            
+            toast('تم', `${bulkOrders.length} طلبات تم إرسالها`);
+            document.getElementById('bulkPreview').style.display = 'none';
+            document.getElementById('bulkFile').value = '';
+            bulkOrders = [];
+            loadOrders();
+        }
+        
+        // ==========================================
+        // DEPOSIT
+        // ==========================================
+        
+        function selectAmt(amt, btn) {
+            selAmount = amt;
+            document.getElementById('customAmt').value = '';
+            document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            updateFinal();
+        }
+        
+        function selectPay(el, method) {
+            selPayment = method;
+            document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+        
+        function updateFinal() {
+            const custom = parseInt(document.getElementById('customAmt').value) || 0;
+            const amt = custom || selAmount;
+            const final = Math.max(0, amt - FEE);
+            document.getElementById('finalAmt').textContent = `النهائي: ${final} ج.م (بعد خصم ${FEE} ج.م)`;
+        }
+        
+        function deposit() {
+            const custom = parseInt(document.getElementById('customAmt').value) || 0;
+            const amt = custom || selAmount;
+            
+            if (amt < 20) {
+                toast('خطأ', 'الحد الأدنى 20 ج.م', 'error');
+                return;
+            }
+            
+            const final = amt - FEE;
+            
+            // For now, manual approval required
+            const deposit = {
+                type: 'deposit',
+                userId: currentUser.id,
+                amount: amt,
+                fee: FEE,
+                finalAmount: final,
+                method: selPayment,
+                status: 'pending',
+                timestamp: new Date().toISOString()
+            };
+            
+            const deposits = JSON.parse(localStorage.getItem('deposits') || '[]');
+            deposits.push(deposit);
+            localStorage.setItem('deposits', JSON.stringify(deposits));
+            
+            sendToSheet(deposit);
+            sendTg(`💰 شحن جديد من ${currentUser.name}\n${amt} ج.م - ${selPayment}`);
+            
+            toast('تم إرسال الطلب', 'سيتم مراجعة الدفع وإضافة الرصيد');
+        }
+        
+        // ==========================================
+        // UTILITIES
+        // ==========================================
+        
+        function sendToSheet(data) {
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).catch(() => {});
+        }
+        
+        function sendTg(msg) {
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: CHAT_ID, text: msg, parse_mode: 'HTML' })
+            }).catch(() => {});
+        }
+        
+        function toast(title, msg, type) {
+            const t = document.getElementById('toast');
+            t.className = 'toast ' + (type === 'error' ? 'error' : '');
+            document.getElementById('toastTitle').textContent = title;
+            document.getElementById('toastMsg').textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 4000);
+        }
+        
+        // Close modals on outside click
+        document.querySelectorAll('.modal').forEach(m => {
+            m.addEventListener('click', (e) => {
+                if (e.target === m) m.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
