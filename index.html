@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HEVO TEAM PRO</title>
+    <title>PROSOSKA STATION</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -110,7 +110,7 @@
     <!-- AUTH PAGE -->
     <div id="authPage" class="auth-container">
         <div class="auth-box">
-            <div class="auth-logo">⚡ HEVO TEAM PRO</div>
+            <div class="auth-logo">⚡ PROSOSKA STATION</div>
             <p style="color: #888; margin-bottom: 2rem;">أفضل خدمات السوشيال ميديا</p>
             
             <div class="auth-tabs">
@@ -156,7 +156,7 @@
     <div id="mainApp">
         <header class="header">
             <div class="header-content">
-                <div class="logo">⚡ HEVO TEAM PRO</div>
+                <div class="logo">⚡ PROSOSKA STATION</div>
                 <div class="user-info">
                     <span id="userName"></span>
                     <div class="balance-pill">💰 <span id="userBalance">0</span> ج.م</div>
@@ -278,44 +278,29 @@
 
     <script>
         // ==========================================
-        // CONFIG - REPLACE THESE VALUES
+        // CONFIG - ONLY THIS SECTION - NO DUPLICATES
         // ==========================================
         
-        // Google Script URL from Step 3
-        const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbylKzl0bxU-wmsJb01xwTrGLZ_I5S6bmS7SOV8MyJNnTSQLn_lQNCdEUNoRXek0DOcuLw/exec';
+        const BOT_TOKEN = '8079436579:AAGW2iBbqboW5FyInKE-RjBW1EsccJvgqRA';
+        const CHAT_ID = '7986362527';
+        const MARKUP = 2.5;
+        const FEE = 10;
         
-        // Telegram
-        const BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE';
-        const CHAT_ID = 'YOUR_CHAT_ID_HERE';
-        
-        // Paymob (from Step 5)
-        const PAYMOB_CONFIG = {
-            apiKey: 'YOUR_PAYMOB_API_KEY',
-            integrationId: 'YOUR_PAYMOB_INTEGRATION_ID',
-            iframeId: 'YOUR_PAYMOB_IFRAME_ID'
-        };
-        
-        // HEVO PRICES - UPDATE THESE WITH REAL PRICES FROM HEVO WEBSITE
         const HEVO_PRICES = {
-            instagram_followers: 45,    // ← CHANGE TO REAL PRICE
-            instagram_likes: 25,        // ← CHANGE TO REAL PRICE
-            instagram_views: 15,        // ← CHANGE TO REAL PRICE
-            tiktok_followers: 100,       // ← CHANGE TO REAL PRICE
-            tiktok_likes: 30,           // ← CHANGE TO REAL PRICE
-            tiktok_views: 30,           // ← CHANGE TO REAL PRICE
-            youtube_views: 40,          // ← CHANGE TO REAL PRICE
-            twitter_followers: 50,      // ← CHANGE TO REAL PRICE
-            telegram_members: 35,       // ← CHANGE TO REAL PRICE
-            facebook_followers: 40,     // ← CHANGE TO REAL PRICE
-            spotify_plays: 25           // ← CHANGE TO REAL PRICE
+            instagram_followers: 45,
+            instagram_likes: 25,
+            instagram_views: 15,
+            tiktok_followers: 100,
+            tiktok_likes: 30,
+            tiktok_views: 30,
+            youtube_views: 40,
+            youtube_subs: 80,
+            twitter_followers: 50,
+            telegram_members: 35,
+            facebook_followers: 40,
+            spotify_plays: 25
         };
-        
-        const MARKUP = 2.5; // Your profit (2.5x = 150% profit)
-        const FEE = 10; // 10 EGP fee per deposit
-        
-        // ==========================================
-        // SERVICES LIST
-        // ==========================================
         
         const SERVICES = [
             { id: 'instagram_followers', name: 'متابعين انستجرام', icon: '📸', min: 100, max: 500000 },
@@ -345,13 +330,6 @@
         // ==========================================
         // AUTH FUNCTIONS
         // ==========================================
-
-        
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbylKzl0bxU-wmsJb01xwTrGLZ_I5S6bmS7SOV8MyJNnTSQLn_lQNCdEUNoRXek0DOcuLw/exec';
-const BOT_TOKEN = '8079436579:AAGW2iBbqboW5FyInKE-RjBW1EsccJvgqRA';
-const CHAT_ID = '7986362527';
-const MARKUP = 2.5;
-const FEE = 10;
         
         function switchAuth(tab) {
             document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
@@ -364,7 +342,7 @@ const FEE = 10;
             e.preventDefault();
             const email = document.getElementById('loginEmail').value;
             const pass = document.getElementById('loginPassword').value;
-           
+            
             const users = JSON.parse(localStorage.getItem('users') || '[]');
             const user = users.find(u => u.email === email && u.password === pass);
             
@@ -399,9 +377,7 @@ const FEE = 10;
             currentUser = user;
             localStorage.setItem('currentUser', JSON.stringify(user));
             
-            // Add to Google Sheets
             sendToSheet({ type: 'user', ...user });
-            
             showApp();
             toast('تم', 'تم إنشاء الحساب');
         }
@@ -420,7 +396,6 @@ const FEE = 10;
             loadOrders();
         }
         
-        // Check login on load
         if (localStorage.getItem('currentUser')) {
             currentUser = JSON.parse(localStorage.getItem('currentUser'));
             showApp();
@@ -738,7 +713,6 @@ const FEE = 10;
             
             const final = amt - FEE;
             
-            // For now, manual approval required
             const deposit = {
                 type: 'deposit',
                 userId: currentUser.id,
@@ -790,7 +764,6 @@ const FEE = 10;
             setTimeout(() => t.classList.remove('show'), 4000);
         }
         
-        // Close modals on outside click
         document.querySelectorAll('.modal').forEach(m => {
             m.addEventListener('click', (e) => {
                 if (e.target === m) m.classList.remove('active');
