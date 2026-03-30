@@ -300,10 +300,10 @@
             instagram_followers: 45,    // ← CHANGE TO REAL PRICE
             instagram_likes: 25,        // ← CHANGE TO REAL PRICE
             instagram_views: 15,        // ← CHANGE TO REAL PRICE
-            tiktok_followers: 55,       // ← CHANGE TO REAL PRICE
+            tiktok_followers: 100,       // ← CHANGE TO REAL PRICE
             tiktok_likes: 30,           // ← CHANGE TO REAL PRICE
+            tiktok_views: 30,           // ← CHANGE TO REAL PRICE
             youtube_views: 40,          // ← CHANGE TO REAL PRICE
-            youtube_subs: 80,           // ← CHANGE TO REAL PRICE
             twitter_followers: 50,      // ← CHANGE TO REAL PRICE
             telegram_members: 35,       // ← CHANGE TO REAL PRICE
             facebook_followers: 40,     // ← CHANGE TO REAL PRICE
@@ -345,6 +345,13 @@
         // ==========================================
         // AUTH FUNCTIONS
         // ==========================================
+
+        
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbylKzl0bxU-wmsJb01xwTrGLZ_I5S6bmS7SOV8MyJNnTSQLn_lQNCdEUNoRXek0DOcuLw/exec';
+const BOT_TOKEN = '8079436579:AAGW2iBbqboW5FyInKE-RjBW1EsccJvgqRA';
+const CHAT_ID = '7986362527';
+const MARKUP = 2.5;
+const FEE = 10;
         
         function switchAuth(tab) {
             document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
@@ -357,7 +364,7 @@
             e.preventDefault();
             const email = document.getElementById('loginEmail').value;
             const pass = document.getElementById('loginPassword').value;
-            
+           
             const users = JSON.parse(localStorage.getItem('users') || '[]');
             const user = users.find(u => u.email === email && u.password === pass);
             
