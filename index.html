@@ -1,791 +1,1771 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soska service</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <title>ProSoskaStation - Connect. Play. Dominate.</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root { --primary: #e91e63; --dark: #0a0a0a; --card: #151515; --success: #4caf50; --warning: #ff9800; --danger: #f44336; --info: #2196f3; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--dark); color: #fff; min-height: 100vh; }
-        
-        /* Auth */
-        .auth-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
-        .auth-box { background: var(--card); border: 2px solid var(--primary); border-radius: 24px; padding: 3rem; width: 100%; max-width: 450px; text-align: center; }
-        .auth-logo { font-size: 2.5rem; font-weight: 900; color: var(--primary); margin-bottom: 0.5rem; }
-        .auth-tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid rgba(255,255,255,0.1); padding-bottom: 1rem; }
-        .auth-tab { flex: 1; padding: 1rem; background: transparent; border: none; color: #888; font-size: 1.1rem; font-weight: 700; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -1rem; }
-        .auth-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
-        .auth-form { display: none; }
-        .auth-form.active { display: block; }
-        .form-group { margin-bottom: 1.5rem; text-align: right; }
-        .form-label { display: block; margin-bottom: 0.5rem; color: #888; font-weight: 600; }
-        .form-input { width: 100%; padding: 1rem; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; font-size: 1rem; }
-        .form-input:focus { outline: none; border-color: var(--primary); }
-        .btn-auth { width: 100%; padding: 1.25rem; background: var(--primary); border: none; border-radius: 12px; color: white; font-size: 1.2rem; font-weight: 800; cursor: pointer; margin-top: 1rem; }
-        
-        /* Main App */
-        #mainApp { display: none; }
-        .header { background: var(--primary); padding: 1rem 2rem; position: sticky; top: 0; z-index: 100; }
-        .header-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.8rem; font-weight: 900; }
-        .user-info { display: flex; align-items: center; gap: 1.5rem; }
-        .balance-pill { background: rgba(0,0,0,0.3); padding: 0.75rem 1.5rem; border-radius: 50px; display: flex; align-items: center; gap: 0.5rem; font-weight: 700; }
-        .btn-header { background: rgba(255,255,255,0.2); border: none; color: white; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.9rem; }
-        .btn-logout { background: var(--danger); }
-        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
-        
-        /* Tabs */
-        .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
-        .tab { padding: 1rem 2rem; background: var(--card); border: 2px solid transparent; border-radius: 12px; cursor: pointer; font-weight: 700; }
-        .tab.active { border-color: var(--primary); }
-        .section { display: none; }
-        .section.active { display: block; }
-        
-        /* Services */
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
-        .service-card { background: var(--card); border: 2px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1.5rem; cursor: pointer; transition: all 0.3s; }
-        .service-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        .service-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem; }
-        .service-icon { font-size: 2.5rem; }
-        .service-name { font-size: 1.2rem; font-weight: 800; }
-        .price-tag { background: var(--primary); padding: 0.5rem 1rem; border-radius: 8px; font-weight: 800; }
-        .service-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); }
-        .stat { text-align: center; }
-        .stat-value { color: var(--primary); font-weight: 800; }
-        
-        /* Deposit */
-        .add-balance-section { background: var(--card); border: 2px solid rgba(233,30,99,0.3); border-radius: 24px; padding: 2rem; text-align: center; }
-        .section-title { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--primary); }
-        .preset-amounts { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
-        .amount-btn { background: rgba(233,30,99,0.1); border: 2px solid var(--primary); color: white; padding: 1rem 2rem; border-radius: 12px; cursor: pointer; font-weight: 700; }
-        .amount-btn.selected { background: var(--primary); }
-        .custom-amount { display: flex; gap: 1rem; justify-content: center; align-items: center; margin: 1rem 0; }
-        .custom-input { background: rgba(255,255,255,0.05); border: 2px solid var(--primary); color: white; padding: 1rem; border-radius: 12px; width: 150px; text-align: center; }
-        .fee-notice { background: rgba(33,150,243,0.1); border: 2px solid var(--info); border-radius: 12px; padding: 1rem; margin: 1rem 0; color: var(--info); }
-        .payment-methods { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
-        .payment-method { background: rgba(255,255,255,0.03); border: 2px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; cursor: pointer; text-align: center; }
-        .payment-method.selected { border-color: var(--primary); background: rgba(233,30,99,0.1); }
-        .payment-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-        .btn-deposit { background: var(--success); color: white; border: none; padding: 1rem 3rem; border-radius: 12px; font-size: 1.2rem; font-weight: 700; cursor: pointer; margin-top: 1rem; }
-        
-        /* Bulk */
-        .bulk-section { background: var(--card); border: 2px dashed var(--primary); border-radius: 24px; padding: 3rem; text-align: center; }
-        .upload-area { border: 3px dashed rgba(255,255,255,0.2); border-radius: 20px; padding: 3rem; cursor: pointer; margin: 2rem 0; }
-        .upload-area:hover { border-color: var(--primary); }
-        .upload-icon { font-size: 4rem; margin-bottom: 1rem; }
-        .file-input { display: none; }
-        .template-btn { background: transparent; border: 2px solid var(--info); color: var(--info); padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; }
-        
-        /* Orders */
-        .orders-list { background: var(--card); border-radius: 20px; padding: 2rem; }
-        .order-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
-        .order-status { padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 700; }
-        .status.pending { background: rgba(255,193,7,0.2); color: var(--warning); }
-        .status.processing { background: rgba(33,150,243,0.2); color: var(--info); }
-        .status.completed { background: rgba(76,175,80,0.2); color: var(--success); }
-        
-        /* Modal */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; padding: 2rem; }
-        .modal.active { display: flex; }
-        .modal-content { background: var(--card); border: 2px solid var(--primary); border-radius: 24px; padding: 2rem; width: 100%; max-width: 500px; }
-        .qty-selector { display: flex; align-items: center; gap: 1.5rem; justify-content: center; margin: 1rem 0; }
-        .qty-btn { width: 50px; height: 50px; border-radius: 12px; border: 2px solid var(--primary); background: transparent; color: white; font-size: 1.5rem; cursor: pointer; }
-        .qty-value { font-size: 1.75rem; font-weight: 800; min-width: 100px; text-align: center; }
-        .total-box { background: rgba(233,30,99,0.1); border: 2px solid var(--primary); border-radius: 16px; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; margin: 1.5rem 0; }
-        .total-amount { font-size: 2rem; font-weight: 900; color: var(--primary); }
-        .btn-primary { width: 100%; padding: 1.25rem; background: var(--primary); border: none; border-radius: 12px; color: white; font-size: 1.2rem; font-weight: 800; cursor: pointer; }
-        
-        /* Toast */
-        .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card); border: 2px solid var(--primary); border-radius: 16px; padding: 1.5rem 2.5rem; z-index: 2000; transition: transform 0.3s; text-align: center; min-width: 300px; }
-        .toast.show { transform: translateX(-50%) translateY(0); }
-        .toast.error { border-color: var(--danger); }
-        
-        /* Auto Status */
-        .auto-status { background: rgba(76,175,80,0.1); border: 2px solid var(--success); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem; text-align: center; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        /* Payment Info Display */
-        .payment-info { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; text-align: center; }
-        .payment-info-item { margin: 0.5rem 0; font-size: 1.1rem; }
-        .payment-info-label { color: #888; font-size: 0.9rem; }
-        .payment-info-value { color: var(--primary); font-weight: 800; font-size: 1.3rem; direction: ltr; }
+        :root {
+            --primary: #6d28d9;
+            --primary-dark: #5b21b6;
+            --secondary: #ec4899;
+            --accent: #f59e0b;
+            --dark: #0f0f1a;
+            --darker: #0a0a12;
+            --card: #1a1a2e;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --gradient-1: linear-gradient(135deg, #6d28d9 0%, #ec4899 100%);
+            --gradient-2: linear-gradient(135deg, #f59e0b 0%, #ec4899 100%);
+            --gradient-3: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--darker);
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 80%, rgba(109, 40, 217, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.1) 0%, transparent 40%);
+            animation: bgMove 20s ease-in-out infinite;
+        }
+
+        @keyframes bgMove {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-5%, -5%) rotate(5deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 5%;
+            background: rgba(15, 15, 26, 0.9);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 15px rgba(109, 40, 217, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(109, 40, 217, 0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-google {
+            background: white;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-google:hover {
+            background: #f1f1f1;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 5% 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Auth Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 450px;
+            width: 100%;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            animation: modalSlide 0.3s ease;
+        }
+
+        @keyframes modalSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--text);
+        }
+
+        .modal h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .modal-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: var(--darker);
+            color: var(--text);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .captcha-box {
+            background: var(--darker);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .captcha-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--text-muted);
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .captcha-checkbox.checked {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .captcha-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        .form-options a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+
+        .form-options a:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0 1rem;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .auth-switch a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Sections */
+        section {
+            padding: 5rem 5%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        /* Categories */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .category-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: all 0.5s;
+            z-index: 0;
+        }
+
+        .category-card:hover::before {
+            left: 0;
+            opacity: 0.1;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(109, 40, 217, 0.3);
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .category-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Games Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .game-card {
+            background: var(--card);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 25px 50px rgba(109, 40, 217, 0.4);
+        }
+
+        .game-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--primary);
+        }
+
+        .game-content {
+            padding: 1.5rem;
+        }
+
+        .game-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .game-type {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .game-price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .btn-order {
+            width: 100%;
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-order:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(109, 40, 217, 0.5);
+        }
+
+        /* Hezo Section */
+        .hezo-section {
+            background: linear-gradient(135deg, rgba(109, 40, 217, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+            border-radius: 30px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            border: 1px solid rgba(109, 40, 217, 0.3);
+        }
+
+        .hezo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .hezo-card {
+            background: var(--card);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .hezo-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+            box-shadow: 0 15px 30px rgba(236, 72, 153, 0.3);
+        }
+
+        .hezo-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .hezo-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hezo-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        /* Payment Section */
+        .payment-section {
+            background: var(--card);
+            border-radius: 30px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .payment-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .payment-card {
+            background: var(--darker);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .payment-card:hover {
+            border-color: var(--success);
+            transform: translateY(-5px);
+        }
+
+        .payment-card i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--success);
+        }
+
+        .payment-card h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-info {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .whatsapp-option {
+            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-option:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+        }
+
+        .whatsapp-option i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .whatsapp-option h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .whatsapp-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        /* How It Works */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -1.5rem;
+            top: 2rem;
+            font-size: 2rem;
+            color: var(--primary);
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .step:not(:last-child)::after {
+                content: '↓';
+                right: 50%;
+                top: 100%;
+                transform: translateX(50%);
+            }
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 0 auto 1rem;
+            box-shadow: 0 5px 20px rgba(109, 40, 217, 0.5);
+        }
+
+        .step h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .step p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            padding: 3rem 5%;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            background: var(--card);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .copyright {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card);
+            color: var(--text);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast.show {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.success {
+            border-color: var(--success);
+        }
+
+        .toast.error {
+            border-color: var(--danger);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            section {
+                padding: 3rem 5%;
+            }
+        }
+
+        /* Loading Animation */
+        .loader {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .btn.loading .loader {
+            display: inline-block;
+        }
+
+        .btn.loading .btn-text {
+            display: none;
+        }
+
+        /* User Profile Dropdown */
+        .user-profile {
+            position: relative;
+        }
+
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--card);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .profile-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            background: var(--card);
+            border-radius: 15px;
+            padding: 1rem;
+            min-width: 200px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .profile-dropdown.show {
+            display: block;
+        }
+
+        .profile-dropdown a {
+            display: block;
+            padding: 0.7rem 1rem;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .profile-dropdown a:hover {
+            background: rgba(109, 40, 217, 0.2);
+        }
+
+        .profile-dropdown hr {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 0.5rem 0;
+        }
+
+        /* Hidden by default when logged out */
+        .logged-in-only {
+            display: none;
+        }
+
+        .logged-out-only {
+            display: flex;
+        }
+
+        body.authenticated .logged-in-only {
+            display: flex;
+        }
+
+        body.authenticated .logged-out-only {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <!-- AUTH PAGE -->
-    <div id="authPage" class="auth-container">
-        <div class="auth-box">
-            <div class="auth-logo">⚡ Soska service</div>
-            <p style="color: #888; margin-bottom: 2rem;">أفضل خدمات السوشيال ميديا</p>
-            
-            <div class="auth-tabs">
-                <button class="auth-tab active" onclick="switchAuth('login')">دخول</button>
-                <button class="auth-tab" onclick="switchAuth('register')">تسجيل</button>
-            </div>
-            
-            <form id="loginForm" class="auth-form active" onsubmit="login(event)">
-                <div class="form-group">
-                    <label class="form-label">البريد الإلكتروني</label>
-                    <input type="email" class="form-input" id="loginEmail" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">كلمة المرور</label>
-                    <input type="password" class="form-input" id="loginPassword" required>
-                </div>
-                <button type="submit" class="btn-auth">دخول</button>
-            </form>
-            
-            <form id="registerForm" class="auth-form" onsubmit="register(event)">
-                <div class="form-group">
-                    <label class="form-label">الاسم</label>
-                    <input type="text" class="form-input" id="regName" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">البريد الإلكتروني</label>
-                    <input type="email" class="form-input" id="regEmail" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">رقم الهاتف</label>
-                    <input type="tel" class="form-input" id="regPhone" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">كلمة المرور</label>
-                    <input type="password" class="form-input" id="regPassword" required>
-                </div>
-                <button type="submit" class="btn-auth">تسجيل</button>
-            </form>
+    <div class="bg-animation"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="logo">
+            <i class="fas fa-gamepad"></i>
+            ProSoskaStation
+        </a>
+        <div class="nav-links">
+            <a href="#games">Games</a>
+            <a href="#plus">PS Plus</a>
+            <a href="#vbucks">V-Bucks</a>
+            <a href="#hezo">Hezo</a>
+            <a href="#payment">Payment</a>
         </div>
-    </div>
-
-    <!-- MAIN APP -->
-    <div id="mainApp">
-        <header class="header">
-            <div class="header-content">
-                <div class="logo">⚡ Soska service</div>
-                <div class="user-info">
-                    <span id="userName"></span>
-                    <div class="balance-pill">💰 <span id="userBalance">0</span> ج.م</div>
-                    <a href="admin.html" class="btn-header">🔧 لوحة التحكم</a>
-                    <button class="btn-header btn-logout" onclick="logout()">خروج</button>
+        <div class="user-menu">
+            <div class="logged-out-only">
+                <button class="btn btn-secondary" onclick="openModal('login')">Sign In</button>
+                <button class="btn btn-primary" onclick="openModal('signup')">Sign Up</button>
+            </div>
+            <div class="logged-in-only user-profile">
+                <div class="profile-btn" onclick="toggleProfile()">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="username-display">User</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="profile-dropdown" id="profile-dropdown">
+                    <a href="#"><i class="fas fa-user"></i> My Profile</a>
+                    <a href="#"><i class="fas fa-shopping-bag"></i> My Orders</a>
+                    <hr>
+                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </div>
             </div>
-        </header>
+        </div>
+    </nav>
 
-        <div class="container">
-            <div class="auto-status">
-                <div style="font-size: 2rem;">🤖</div>
-                <h3>التنفيذ التلقائي مفعل</h3>
-                <p style="color: #888;">الطلبات تنفذ تلقائياً على HEVO بعد 30 دقيقة</p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Connect. Play. Dominate.</h1>
+            <p>Your trusted PlayStation games store in Egypt. Primary & Secondary accounts for PS4 & PS5.</p>
+            <button class="btn btn-primary" onclick="scrollToSection('games')" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                <i class="fas fa-rocket"></i>
+                Browse Games
+            </button>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">10K+</div>
+                    <div class="stat-label">Happy Customers</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">500+</div>
+                    <div class="stat-label">Games Available</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">Support</div>
+                </div>
             </div>
+        </div>
+    </section>
 
-            <div class="tabs">
-                <div class="tab active" onclick="showTab('services', this)">🛒 الخدمات</div>
-                <div class="tab" onclick="showTab('bulk', this)">📊 مجمعة</div>
-                <div class="tab" onclick="showTab('deposit', this)">💳 شحن</div>
-                <div class="tab" onclick="showTab('orders', this)">📋 طلباتي</div>
+    <!-- Categories -->
+    <section id="categories">
+        <h2 class="section-title">Browse Categories</h2>
+        <p class="section-subtitle">Choose your gaming experience</p>
+        <div class="categories">
+            <div class="category-card" onclick="scrollToSection('games')">
+                <div class="category-icon"><i class="fas fa-compact-disc"></i></div>
+                <h3>Games</h3>
+                <p>Primary & Secondary accounts</p>
             </div>
-
-            <!-- Services -->
-            <div id="services" class="section active">
-                <div class="services-grid" id="servicesGrid"></div>
+            <div class="category-card" onclick="scrollToSection('plus')">
+                <div class="category-icon"><i class="fas fa-plus-circle"></i></div>
+                <h3>PlayStation Plus</h3>
+                <p>1-12 Month subscriptions</p>
             </div>
+            <div class="category-card" onclick="scrollToSection('vbucks')">
+                <div class="category-icon"><i class="fas fa-coins"></i></div>
+                <h3>Fortnite V-Bucks</h3>
+                <p>Direct to your account</p>
+            </div>
+            <div class="category-card" onclick="scrollToSection('rocket')">
+                <div class="category-icon"><i class="fas fa-car"></i></div>
+                <h3>Rocket League</h3>
+                <p>Credits & Items</p>
+            </div>
+        </div>
+    </section>
 
-            <!-- Bulk -->
-            <div id="bulk" class="section">
-                <div class="bulk-section">
-                    <h2 class="section-title">📊 رفع طلبات مجمعة</h2>
-                    <div class="upload-area" onclick="document.getElementById('bulkFile').click()">
-                        <div class="upload-icon">📁</div>
-                        <h3>اضغط أو اسحب ملف Excel</h3>
-                        <p style="color: #888;">.xlsx أو .csv</p>
-                        <input type="file" id="bulkFile" class="file-input" accept=".xlsx,.xls,.csv" onchange="handleBulk(event)">
-                    </div>
-                    <button class="template-btn" onclick="downloadTemplate()">تحميل قالب</button>
-                    <div id="bulkPreview" style="display: none; margin-top: 2rem;">
-                        <div id="bulkList"></div>
-                        <button class="btn-primary" onclick="submitBulk()" style="margin-top: 1rem;">تأكيد الكل</button>
-                    </div>
+    <!-- Games Section -->
+    <section id="games">
+        <h2 class="section-title">Popular Games</h2>
+        <p class="section-subtitle">Latest titles at unbeatable prices (1.5x)</p>
+        <div class="games-grid" id="games-grid">
+            <!-- Games will be populated by JS -->
+        </div>
+    </section>
+
+    <!-- PlayStation Plus -->
+    <section id="plus">
+        <h2 class="section-title">PlayStation Plus</h2>
+        <p class="section-subtitle">Upgrade your gaming experience</p>
+        <div class="games-grid" id="plus-grid">
+            <!-- PS Plus cards will be populated by JS -->
+        </div>
+    </section>
+
+    <!-- Fortnite V-Bucks -->
+    <section id="vbucks">
+        <h2 class="section-title">Fortnite V-Bucks</h2>
+        <p class="section-subtitle">Direct delivery to your Epic account</p>
+        <div class="games-grid" id="vbucks-grid"></div>
+    </section>
+
+    <!-- Rocket League -->
+    <section id="rocket">
+        <h2 class="section-title">Rocket League Credits</h2>
+        <p class="section-subtitle">Get credits fast and secure</p>
+        <div class="games-grid" id="rocket-grid"></div>
+    </section>
+
+    <!-- Hezo Section -->
+    <section id="hezo">
+        <div class="hezo-section">
+            <h2 class="section-title"><i class="fas fa-bolt" style="margin-right: 0.5rem;"></i>Hezo Services</h2>
+            <p class="section-subtitle">Boost your social presence with our premium services</p>
+            <div class="hezo-grid" id="hezo-grid">
+                <!-- Hezo services populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Section -->
+    <section id="payment">
+        <div class="payment-section">
+            <h2 class="section-title">Payment Methods</h2>
+            <p class="section-subtitle">Choose your preferred payment option</p>
+            
+            <div class="payment-options">
+                <div class="payment-card">
+                    <i class="fas fa-wallet"></i>
+                    <h3>Telda</h3>
+                    <div class="payment-info">@selimahmed1</div>
+                    <p class="payment-desc">Send to this username</p>
+                </div>
+                <div class="payment-card">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <h3>InstaPay</h3>
+                    <div class="payment-info">01204423575</div>
+                    <p class="payment-desc">Transfer to this number</p>
                 </div>
             </div>
 
-            <!-- Deposit -->
-            <div id="deposit" class="section">
-                <div class="add-balance-section">
-                    <h2 class="section-title">💳 شحن الرصيد</h2>
+            <div class="whatsapp-option" onclick="openWhatsApp()">
+                <i class="fab fa-whatsapp"></i>
+                <h3>Order via WhatsApp</h3>
+                <div class="whatsapp-number">01212072882</div>
+                <p style="margin-top: 0.5rem; opacity: 0.9;">Click to chat directly</p>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(239, 68, 68, 0.1); border-radius: 10px; border: 1px solid rgba(239, 68, 68, 0.3);">
+                <p style="color: var(--danger); font-weight: 600; text-align: center;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Important: You must send us a screenshot of the transfer
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">إزاي تشتري منا؟</p>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Contact Us</h3>
+                <p>Contact us using WhatsApp<br>تواصل معانا على الواتساب</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Confirm & Pay</h3>
+                <p>Confirm your order then pay<br>أكد طلبك وادفع</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Wait 10-60 Minutes</h3>
+                <p>We prepare your account<br>استنى من 10 ل 60 دقيقة</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>Scan QR Code</h3>
+                <p>Send us the QR code photo<br>صور الكود وابعتهولنا</p>
+            </div>
+            <div class="step">
+                <div class="step-number">5</div>
+                <h3>Play & Enjoy!</h3>
+                <p>Start playing your game!<br>العب واستمتع!</p>
+            </div>
+        </div>
+        
+        <div style="margin-top: 3rem; background: var(--card); padding: 2rem; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1);">
+            <h3 style="text-align: center; margin-bottom: 1.5rem; color: var(--accent);">After QR Code appears:</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; text-align: center;">
+                <div>
+                    <strong style="color: var(--primary);">PS5:</strong>
+                    <ol style="margin-top: 0.5rem; color: var(--text-muted); text-align: left; display: inline-block;">
+                        <li>Switch User</li>
+                        <li>Add User</li>
+                        <li>Get Started</li>
+                        <li>Sign in with QR Code</li>
+                    </ol>
+                </div>
+                <div>
+                    <strong style="color: var(--secondary);">PS4:</strong>
+                    <ol style="margin-top: 0.5rem; color: var(--text-muted); text-align: left; display: inline-block;">
+                        <li>Switch User</li>
+                        <li>New User</li>
+                        <li>Create a User</li>
+                        <li>Sign in with QR Code</li>
+                    </ol>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 1.5rem; color: var(--accent);">
+                <i class="fas fa-bolt"></i>
+                صوّر الكود وابعتهولنا على الواتساب عشان نكمل لك التفعيل بسرعة
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <i class="fas fa-gamepad"></i>
+                ProSoskaStation
+            </div>
+            <p class="footer-text">Your trusted gaming partner in Egypt. Quality accounts, instant delivery, 24/7 support.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#" onclick="openWhatsApp()"><i class="fab fa-whatsapp"></i></a>
+                <a href="#"><i class="fab fa-discord"></i></a>
+            </div>
+            <p class="copyright">© 2026 ProSoskaStation. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div class="modal-overlay" id="auth-modal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            
+            <!-- Login Form -->
+            <div id="login-form">
+                <h2>Welcome Back!</h2>
+                <p class="modal-subtitle">Sign in to your ProSoskaStation account</p>
+                
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email or Phone Number</label>
+                        <input type="text" placeholder="Enter email or phone" required id="login-email">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" placeholder="Enter password" required id="login-password">
+                    </div>
                     
-                    <!-- Payment Methods Info -->
-                    <div class="payment-info">
-                        <div class="payment-info-item">
-                            <div class="payment-info-label">📱 Instapay</div>
-                            <div class="payment-info-value">01204423575</div>
+                    <div class="captcha-box" onclick="toggleCaptcha(this)">
+                        <div class="captcha-checkbox" id="login-captcha">
+                            <i class="fas fa-check" style="display: none; color: white;"></i>
                         </div>
-                        <div class="payment-info-item">
-                            <div class="payment-info-label">💳 Telda</div>
-                            <div class="payment-info-value">@selimahmed1</div>
-                        </div>
+                        <span class="captcha-text">I'm not a robot</span>
                     </div>
-
-                    <div class="preset-amounts">
-                        <button class="amount-btn" onclick="selectAmt(50, this)">50</button>
-                        <button class="amount-btn selected" onclick="selectAmt(100, this)">100</button>
-                        <button class="amount-btn" onclick="selectAmt(250, this)">250</button>
-                        <button class="amount-btn" onclick="selectAmt(500, this)">500</button>
-                        <button class="amount-btn" onclick="selectAmt(1000, this)">1000</button>
+                    
+                    <div class="form-options">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="checkbox" style="width: auto;"> Remember me
+                        </label>
+                        <a href="#" onclick="showForgotPassword()">Forgot password?</a>
                     </div>
-                    <div class="custom-amount">
-                        <span>مخصص:</span>
-                        <input type="number" class="custom-input" id="customAmt" placeholder="مبلغ" oninput="updateFinal()">
-                    </div>
-                    <div class="fee-notice">
-                        ⚠️ رسوم المعالجة: 10 ج.م
-                        <div id="finalAmt" style="margin-top: 0.5rem; color: var(--success);">النهائي: 90 ج.م</div>
-                    </div>
-                    <div class="payment-methods">
-                        <div class="payment-method selected" onclick="selectPay(this, 'instapay')"><div class="payment-icon">📱</div><div>Instapay</div></div>
-                        <div class="payment-method" onclick="selectPay(this, 'telda')"><div class="payment-icon">💳</div><div>Telda</div></div>
-                        <div class="payment-method" onclick="selectPay(this, 'visa')"><div class="payment-icon">💳</div><div>Visa</div></div>
-                        <div class="payment-method" onclick="selectPay(this, 'paypal')"><div class="payment-icon">P</div><div>PayPal</div></div>
-                    </div>
-                    <button class="btn-deposit" onclick="deposit()">تأكيد الشحن</button>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <span class="btn-text">Sign In</span>
+                        <div class="loader"></div>
+                    </button>
+                </form>
+                
+                <div class="divider">or continue with</div>
+                
+                <button class="btn btn-google" onclick="handleGoogleSignIn()">
+                    <i class="fab fa-google"></i>
+                    Sign in with Google
+                </button>
+                
+                <div class="auth-switch">
+                    Don't have an account? <a href="#" onclick="switchAuthMode('signup')">Sign Up</a>
                 </div>
             </div>
 
-            <!-- Orders -->
-            <div id="orders" class="section">
-                <div class="orders-list" id="ordersList">
-                    <p style="text-align: center; color: #888;">لا توجد طلبات</p>
+            <!-- Signup Form -->
+            <div id="signup-form" style="display: none;">
+                <h2>Create Account</h2>
+                <p class="modal-subtitle">Join ProSoskaStation today</p>
+                
+                <form onsubmit="handleSignup(event)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" placeholder="Enter your name" required id="signup-name">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" placeholder="Enter email" required id="signup-email">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" placeholder="01xxxxxxxxx" required id="signup-phone" pattern="01[0-9]{9}">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" placeholder="Create password (min 8 chars)" required id="signup-password" minlength="8">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" placeholder="Confirm password" required id="signup-confirm">
+                    </div>
+                    
+                    <div class="captcha-box" onclick="toggleCaptcha(this)">
+                        <div class="captcha-checkbox" id="signup-captcha">
+                            <i class="fas fa-check" style="display: none; color: white;"></i>
+                        </div>
+                        <span class="captcha-text">I'm not a robot</span>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <span class="btn-text">Create Account</span>
+                        <div class="loader"></div>
+                    </button>
+                </form>
+                
+                <div class="divider">or continue with</div>
+                
+                <button class="btn btn-google" onclick="handleGoogleSignIn()">
+                    <i class="fab fa-google"></i>
+                    Sign up with Google
+                </button>
+                
+                <div class="auth-switch">
+                    Already have an account? <a href="#" onclick="switchAuthMode('login')">Sign In</a>
+                </div>
+            </div>
+
+            <!-- Forgot Password Form -->
+            <div id="forgot-form" style="display: none;">
+                <h2>Reset Password</h2>
+                <p class="modal-subtitle">Enter your email to receive reset link</p>
+                
+                <form onsubmit="handleForgotPassword(event)">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" placeholder="Enter your email" required id="forgot-email">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <span class="btn-text">Send Reset Link</span>
+                        <div class="loader"></div>
+                    </button>
+                </form>
+                
+                <div class="auth-switch">
+                    Remember your password? <a href="#" onclick="switchAuthMode('login')">Sign In</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Order Modal -->
-    <div class="modal" id="orderModal">
-        <div class="modal-content">
-            <h2 style="text-align: center; color: var(--primary); margin-bottom: 1rem;">طلب جديد</h2>
-            <input type="hidden" id="selService">
-            <div class="form-group">
-                <label class="form-label">الخدمة</label>
-                <input type="text" class="form-input" id="selServiceName" readonly>
-            </div>
-            <div class="form-group">
-                <label class="form-label">الرابط</label>
-                <input type="url" class="form-input" id="orderLink" placeholder="https://...">
-            </div>
-            <div class="form-group">
-                <label class="form-label">الكمية</label>
-                <div class="qty-selector">
-                    <button class="qty-btn" onclick="chgQty(-1000)">-</button>
-                    <div class="qty-value" id="orderQty">1000</div>
-                    <button class="qty-btn" onclick="chgQty(1000)">+</button>
-                </div>
-            </div>
-            <div class="total-box">
-                <div>الإجمالي</div>
-                <div class="total-amount" id="orderTotal">0 ج.م</div>
-            </div>
-            <button class="btn-primary" onclick="submitOrder()">تأكيد</button>
-        </div>
-    </div>
-
+    <!-- Toast -->
     <div class="toast" id="toast">
-        <div id="toastTitle" style="font-weight: 800; margin-bottom: 0.5rem;"></div>
-        <div id="toastMsg" style="color: #888;"></div>
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message">Success!</span>
     </div>
 
     <script>
-        // ==========================================
-        // CONFIG - ONLY THIS SECTION - NO DUPLICATES
-        // ==========================================
-        
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbylKzl0bxU-wmsJb01xwTrGLZ_I5S6bmS7SOV8MyJNnTSQLn_lQNCdEUNoRXek0DOcuLw/exec';
-        const BOT_TOKEN = '8079436579:AAGW2iBbqboW5FyInKE-RjBW1EsccJvgqRA';
-        const CHAT_ID = '7986362527';
-        const MARKUP = 2.5;
-        const FEE = 10;
-        
-        const HEVO_PRICES = {
-            instagram_followers: 45,
-            instagram_likes: 25,
-            instagram_views: 15,
-            tiktok_followers: 100,
-            tiktok_likes: 30,
-            tiktok_views: 30,
-            youtube_views: 40,
-            youtube_subs: 80,
-            twitter_followers: 50,
-            telegram_members: 35,
-            facebook_followers: 40,
-            spotify_plays: 25
-        };
-        
-        const SERVICES = [
-            { id: 'instagram_followers', name: 'متابعين انستجرام', icon: '📸', min: 100, max: 500000 },
-            { id: 'instagram_likes', name: 'لايكات انستجرام', icon: '❤️', min: 50, max: 100000 },
-            { id: 'instagram_views', name: 'مشاهدات انستجرام', icon: '👁️', min: 100, max: 5000000 },
-            { id: 'tiktok_followers', name: 'متابعين تيك توك', icon: '🎵', min: 100, max: 1000000 },
-            { id: 'tiktok_likes', name: 'لايكات تيك توك', icon: '❤️', min: 100, max: 2000000 },
-            { id: 'youtube_views', name: 'مشاهدات يوتيوب', icon: '▶️', min: 1000, max: 10000000 },
-            { id: 'youtube_subs', name: 'مشتركين يوتيوب', icon: '🔔', min: 100, max: 500000 },
-            { id: 'twitter_followers', name: 'متابعين تويتر', icon: '🐦', min: 100, max: 500000 },
-            { id: 'telegram_members', name: 'أعضاء تيليجرام', icon: '✈️', min: 100, max: 500000 },
-            { id: 'facebook_followers', name: 'متابعين فيسبوك', icon: '👥', min: 100, max: 200000 },
-            { id: 'spotify_plays', name: 'تشغيلات سبوتيفاي', icon: '🎧', min: 1000, max: 10000000 }
+        // Game data with 1.5x prices
+        const games = [
+            { name: "FC 26", type: "Primary PS5", basePrice: 400, icon: "fa-futbol" },
+            { name: "GTA V", type: "Primary PS5", basePrice: 350, icon: "fa-car" },
+            { name: "Red Dead Redemption 2", type: "Primary PS4/PS5", basePrice: 450, icon: "fa-horse" },
+            { name: "WWE 2K26", type: "Primary PS5", basePrice: 600, icon: "fa-hand-rock" },
+            { name: "Spider-Man 2", type: "Primary PS5", basePrice: 750, icon: "fa-spider" },
+            { name: "NBA 2K20", type: "Primary PS4", basePrice: 300, icon: "fa-basketball-ball" },
+            { name: "Forza Horizon 5", type: "Primary Xbox/PC", basePrice: 525, icon: "fa-road" },
+            { name: "Ghost of Yotei", type: "Primary PS5", basePrice: 900, icon: "fa-ghost" },
+            { name: "Hollow Knight Silksong", type: "Primary PS5", basePrice: 375, icon: "fa-bug" },
+            { name: "Diablo IV", type: "Primary PS5", basePrice: 675, icon: "fa-skull" },
+            { name: "Resident Evil Requiem", type: "Primary PS5", basePrice: 600, icon: "fa-biohazard" },
+            { name: "It Takes Two", type: "Primary PS4/PS5", basePrice: 375, icon: "fa-users" },
+            { name: "Gang Beasts", type: "Primary PS4", basePrice: 225, icon: "fa-hand-paper" },
+            { name: "Watch Dogs 2", type: "Primary PS4", basePrice: 300, icon: "fa-eye" },
+            { name: "Detroit Become Human", type: "Primary PS4", basePrice: 262, icon: "fa-robot" },
+            { name: "Little Nightmares III", type: "Primary PS5", basePrice: 450, icon: "fa-child" },
+            { name: "Ready or Not", type: "Primary PS5", basePrice: 525, icon: "fa-shield-alt" },
+            { name: "Call of Duty Black Ops 7", type: "Primary PS5", basePrice: 1050, icon: "fa-crosshairs" },
+            { name: "Arc Raiders", type: "Primary PS5", basePrice: 450, icon: "fa-rocket" },
+            { name: "Hogwarts Legacy", type: "Primary PS5", basePrice: 675, icon: "fa-hat-wizard" },
+            { name: "The Last of Us Part II Remastered", type: "Primary PS5", basePrice: 525, icon: "fa-heart" },
+            { name: "A Way Out", type: "Primary PS4", basePrice: 262, icon: "fa-door-open" },
+            { name: "NFS Heat", type: "Primary PS4", basePrice: 375, icon: "fa-fire" },
+            { name: "NFS Payback", type: "Primary PS4", basePrice: 300, icon: "fa-money-bill" }
         ];
-        
-        // ==========================================
-        // STATE
-        // ==========================================
-        
-        let currentUser = null;
-        let selService = null;
-        let orderQty = 1000;
-        let selAmount = 100;
-        let selPayment = 'instapay';
-        let bulkOrders = [];
-        
-        // ==========================================
-        // AUTH FUNCTIONS
-        // ==========================================
-        
-        function switchAuth(tab) {
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById(tab + 'Form').classList.add('active');
+
+        const psPlus = [
+            { name: "1 Month - Essential", type: "Primary PS5", basePrice: 225 },
+            { name: "3 Months - Essential", type: "Primary PS5", basePrice: 525 },
+            { name: "12 Months - Essential", type: "Primary PS5", basePrice: 1275 },
+            { name: "1 Month - Extra", type: "Primary PS5", basePrice: 375 },
+            { name: "12 Months - Extra", type: "Primary PS5", basePrice: 1950 },
+            { name: "1 Month - Premium", type: "Primary PS5", basePrice: 525 }
+        ];
+
+        const vBucks = [
+            { name: "1,000 V-Bucks", type: "Direct Delivery", basePrice: 150 },
+            { name: "2,800 V-Bucks", type: "Direct Delivery", basePrice: 375 },
+            { name: "5,000 V-Bucks", type: "Direct Delivery", basePrice: 600 },
+            { name: "13,500 V-Bucks", type: "Direct Delivery", basePrice: 1425 }
+        ];
+
+        const rocketLeague = [
+            { name: "500 Credits", type: "Direct Delivery", basePrice: 112 },
+            { name: "1,100 Credits", type: "Direct Delivery", basePrice: 225 },
+            { name: "3,000 Credits", type: "Direct Delivery", basePrice: 525 },
+            { name: "6,500 Credits", type: "Direct Delivery", basePrice: 975 }
+        ];
+
+        const hezoServices = [
+            { name: "Likes", icon: "fa-heart", options: [
+                { amount: "1,000 Likes", price: 75 },
+                { amount: "5,000 Likes", price: 300 },
+                { amount: "10,000 Likes", price: 525 }
+            ]},
+            { name: "Views", icon: "fa-eye", options: [
+                { amount: "5,000 Views", price: 60 },
+                { amount: "25,000 Views", price: 225 },
+                { amount: "100,000 Views", price: 750 }
+            ]},
+            { name: "Favorites", icon: "fa-star", options: [
+                { amount: "500 Favorites", price: 112 },
+                { amount: "2,000 Favorites", price: 375 },
+                { amount: "5,000 Favorites", price: 825 }
+            ]},
+            { name: "Shares", icon: "fa-share-alt", options: [
+                { amount: "1,000 Shares", price: 90 },
+                { amount: "5,000 Shares", price: 375 },
+                { amount: "10,000 Shares", price: 675 }
+            ]},
+            { name: "Followers", icon: "fa-user-plus", options: [
+                { amount: "1,000 Followers", price: 150 },
+                { amount: "5,000 Followers", price: 600 },
+                { amount: "10,000 Followers", price: 1050 }
+            ]},
+            { name: "Comments", icon: "fa-comment", options: [
+                { amount: "100 Comments", price: 225 },
+                { amount: "500 Comments", price: 975 }
+            ]}
+        ];
+
+        // Calculate 1.5x price
+        function calculatePrice(basePrice) {
+            return Math.round(basePrice * 1.5);
         }
-        
-        function login(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const pass = document.getElementById('loginPassword').value;
-            
-            const users = JSON.parse(localStorage.getItem('users') || '[]');
-            const user = users.find(u => u.email === email && u.password === pass);
-            
-            if (user) {
-                currentUser = user;
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                showApp();
-            } else {
-                toast('خطأ', 'بيانات غير صحيحة', 'error');
-            }
-        }
-        
-        function register(e) {
-            e.preventDefault();
-            const user = {
-                id: Date.now().toString(),
-                name: document.getElementById('regName').value,
-                email: document.getElementById('regEmail').value,
-                phone: document.getElementById('regPhone').value,
-                password: document.getElementById('regPassword').value,
-                balance: 0
-            };
-            
-            let users = JSON.parse(localStorage.getItem('users') || '[]');
-            if (users.find(u => u.email === user.email)) {
-                toast('خطأ', 'البريد مستخدم', 'error');
-                return;
-            }
-            
-            users.push(user);
-            localStorage.setItem('users', JSON.stringify(users));
-            currentUser = user;
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            
-            sendToSheet({ type: 'user', ...user });
-            showApp();
-            toast('تم', 'تم إنشاء الحساب');
-        }
-        
-        function logout() {
-            localStorage.removeItem('currentUser');
-            location.reload();
-        }
-        
-        function showApp() {
-            document.getElementById('authPage').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
-            document.getElementById('userName').textContent = currentUser.name;
-            updateBalance();
-            renderServices();
-            loadOrders();
-        }
-        
-        if (localStorage.getItem('currentUser')) {
-            currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            showApp();
-        }
-        
-        // ==========================================
-        // APP FUNCTIONS
-        // ==========================================
-        
-        function showTab(tab, el) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            el.classList.add('active');
-            document.getElementById(tab).classList.add('active');
-        }
-        
-        function updateBalance() {
-            document.getElementById('userBalance').textContent = currentUser.balance.toLocaleString();
-        }
-        
-        function saveUser() {
-            let users = JSON.parse(localStorage.getItem('users') || '[]');
-            const idx = users.findIndex(u => u.id === currentUser.id);
-            if (idx !== -1) {
-                users[idx] = currentUser;
-                localStorage.setItem('users', JSON.stringify(users));
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            }
-        }
-        
-        // ==========================================
-        // SERVICES
-        // ==========================================
-        
-        function renderServices() {
-            const grid = document.getElementById('servicesGrid');
-            grid.innerHTML = SERVICES.map(s => {
-                const price = Math.round((HEVO_PRICES[s.id] || 50) * MARKUP);
-                return `
-                    <div class="service-card" onclick="openOrder('${s.id}')">
-                        <div class="service-header">
-                            <div>
-                                <div style="font-size: 2.5rem;">${s.icon}</div>
-                                <div class="service-name">${s.name}</div>
-                            </div>
-                            <div class="price-tag">${price} ج.م</div>
-                        </div>
-                        <div class="service-stats">
-                            <div class="stat"><div class="stat-value">${s.min}</div><div style="font-size: 0.8rem; color: #888;">حد أدنى</div></div>
-                            <div class="stat"><div class="stat-value">${s.max}</div><div style="font-size: 0.8rem; color: #888;">حد أقصى</div></div>
-                            <div class="stat"><div class="stat-value">فوري</div><div style="font-size: 0.8rem; color: #888;">سرعة</div></div>
-                        </div>
+
+        // Render games
+        function renderGames() {
+            const gamesGrid = document.getElementById('games-grid');
+            gamesGrid.innerHTML = games.map(game => `
+                <div class="game-card">
+                    <div class="game-image">
+                        <i class="fas ${game.icon || 'fa-gamepad'}"></i>
                     </div>
-                `;
-            }).join('');
-        }
-        
-        function openOrder(sid) {
-            selService = SERVICES.find(s => s.id === sid);
-            document.getElementById('selService').value = sid;
-            document.getElementById('selServiceName').value = selService.name;
-            orderQty = selService.min;
-            document.getElementById('orderQty').textContent = orderQty;
-            updateOrderTotal();
-            document.getElementById('orderModal').classList.add('active');
-        }
-        
-        function chgQty(delta) {
-            const nq = orderQty + delta;
-            if (nq >= selService.min && nq <= selService.max) {
-                orderQty = nq;
-                document.getElementById('orderQty').textContent = orderQty;
-                updateOrderTotal();
-            }
-        }
-        
-        function updateOrderTotal() {
-            const hp = HEVO_PRICES[selService.id] || 50;
-            const total = Math.round((orderQty / 1000) * hp * MARKUP);
-            document.getElementById('orderTotal').textContent = total + ' ج.م';
-        }
-        
-        function submitOrder() {
-            const link = document.getElementById('orderLink').value;
-            if (!link) {
-                toast('خطأ', 'أدخل الرابط', 'error');
-                return;
-            }
-            
-            const hp = HEVO_PRICES[selService.id] || 50;
-            const total = Math.round((orderQty / 1000) * hp * MARKUP);
-            
-            if (total > currentUser.balance) {
-                toast('رصيد غير كافٍ', 'اشحن رصيدك', 'error');
-                return;
-            }
-            
-            currentUser.balance -= total;
-            saveUser();
-            updateBalance();
-            
-            const order = {
-                type: 'order',
-                orderId: 'ORD-' + Date.now(),
-                userId: currentUser.id,
-                userName: currentUser.name,
-                service: selService.id,
-                serviceName: selService.name,
-                link: link,
-                quantity: orderQty,
-                customerPrice: total,
-                hevoCost: Math.round((orderQty / 1000) * hp),
-                profit: total - Math.round((orderQty / 1000) * hp),
-                status: 'pending',
-                hevoStatus: 'waiting_30min',
-                timestamp: new Date().toISOString()
-            };
-            
-            saveOrder(order);
-            sendToSheet(order);
-            sendTg(`🛒 طلب من ${currentUser.name}\n${selService.name} x${orderQty}\n${total} ج.م`);
-            
-            closeOrder();
-            toast('تم', `رقم الطلب: ${order.orderId}`);
-            document.getElementById('orderLink').value = '';
-            loadOrders();
-        }
-        
-        function closeOrder() {
-            document.getElementById('orderModal').classList.remove('active');
-        }
-        
-        function saveOrder(order) {
-            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-            orders.push(order);
-            localStorage.setItem('orders', JSON.stringify(orders));
-        }
-        
-        function loadOrders() {
-            const all = JSON.parse(localStorage.getItem('orders') || '[]');
-            const mine = all.filter(o => o.userId === currentUser.id).reverse();
-            const container = document.getElementById('ordersList');
-            
-            if (mine.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #888;">لا توجد طلبات</p>';
-                return;
-            }
-            
-            container.innerHTML = mine.map(o => `
-                <div class="order-item">
-                    <div>
-                        <div style="font-weight: 700;">${o.serviceName}</div>
-                        <div style="color: #888; font-size: 0.85rem;">${o.link}</div>
-                        <div style="font-size: 0.8rem; margin-top: 0.5rem;">${new Date(o.timestamp).toLocaleString('ar-EG')}</div>
-                    </div>
-                    <div style="text-align: left;">
-                        <div style="font-weight: 800; color: var(--primary);">${o.customerPrice} ج.م</div>
-                        <span class="order-status status ${o.status}">${o.status === 'pending' ? 'قيد الانتظار' : o.status === 'processing' ? 'جاري' : 'مكتمل'}</span>
+                    <div class="game-content">
+                        <h3 class="game-title">${game.name}</h3>
+                        <p class="game-type">${game.type}</p>
+                        <div class="game-price">${calculatePrice(game.basePrice)} L.E</div>
+                        <button class="btn-order" onclick="orderItem('${game.name}', ${calculatePrice(game.basePrice)})">
+                            Order Now
+                        </button>
                     </div>
                 </div>
             `).join('');
         }
-        
-        // ==========================================
-        // BULK UPLOAD
-        // ==========================================
-        
-        function downloadTemplate() {
-            const data = [
-                ['service', 'link', 'quantity'],
-                ['instagram_followers', 'https://instagram.com/user', '1000'],
-                ['tiktok_followers', 'https://tiktok.com/@user', '5000']
-            ];
-            const ws = XLSX.utils.aoa_to_sheet(data);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Orders');
-            XLSX.writeFile(wb, 'Soska_Template.xlsx');
-        }
-        
-        function handleBulk(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                const data = new Uint8Array(evt.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-                const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                const rows = XLSX.utils.sheet_to_json(sheet);
-                
-                bulkOrders = rows.map((r, i) => ({
-                    id: 'BLK-' + Date.now() + '-' + i,
-                    service: r.service || r.Service || r.الخدمة,
-                    link: r.link || r.Link || r.الرابط,
-                    quantity: parseInt(r.quantity || r.Quantity || r.الكمية) || 1000
-                })).filter(o => o.service && o.link);
-                
-                showBulkPreview();
-            };
-            reader.readAsArrayBuffer(file);
-        }
-        
-        function showBulkPreview() {
-            let total = 0;
-            const html = bulkOrders.map(o => {
-                const s = SERVICES.find(x => x.id === o.service);
-                const hp = HEVO_PRICES[o.service] || 50;
-                const price = Math.round((o.quantity / 1000) * hp * MARKUP);
-                total += price;
-                return `
-                    <div class="order-item" style="text-align: right;">
-                        <div>
-                            <div style="font-weight: 700;">${s ? s.name : o.service}</div>
-                            <div style="color: #888; font-size: 0.9rem;">${o.link}</div>
-                            <div style="color: var(--primary);">${o.quantity}</div>
-                        </div>
-                        <div style="font-weight: 800;">${price} ج.م</div>
+
+        // Render PS Plus
+        function renderPSPlus() {
+            const plusGrid = document.getElementById('plus-grid');
+            plusGrid.innerHTML = psPlus.map(item => `
+                <div class="game-card">
+                    <div class="game-image" style="background: linear-gradient(135deg, #6d28d9 0%, #ec4899 100%);">
+                        <i class="fas fa-plus-circle" style="color: white;"></i>
                     </div>
-                `;
-            }).join('');
-            
-            document.getElementById('bulkList').innerHTML = html + `
-                <div class="total-box" style="margin-top: 1rem;">
-                    <div>الإجمالي</div>
-                    <div class="total-amount">${total} ج.م</div>
+                    <div class="game-content">
+                        <h3 class="game-title">PS Plus ${item.name}</h3>
+                        <p class="game-type">${item.type}</p>
+                        <div class="game-price">${calculatePrice(item.basePrice)} L.E</div>
+                        <button class="btn-order" onclick="orderItem('PS Plus ${item.name}', ${calculatePrice(item.basePrice)})">
+                            Order Now
+                        </button>
+                    </div>
                 </div>
-            `;
-            document.getElementById('bulkPreview').style.display = 'block';
+            `).join('');
         }
-        
-        function submitBulk() {
-            const total = bulkOrders.reduce((sum, o) => {
-                const hp = HEVO_PRICES[o.service] || 50;
-                return sum + Math.round((o.quantity / 1000) * hp * MARKUP);
-            }, 0);
+
+        // Render V-Bucks
+        function renderVBucks() {
+            const vbucksGrid = document.getElementById('vbucks-grid');
+            vbucksGrid.innerHTML = vBucks.map(item => `
+                <div class="game-card">
+                    <div class="game-image" style="background: linear-gradient(135deg, #f59e0b 0%, #ec4899 100%);">
+                        <i class="fas fa-coins" style="color: white;"></i>
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">${item.name}</h3>
+                        <p class="game-type">${item.type}</p>
+                        <div class="game-price">${calculatePrice(item.basePrice)} L.E</div>
+                        <button class="btn-order" onclick="orderVBucks('${item.name}')">
+                            Order Now
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Rocket League
+        function renderRocket() {
+            const rocketGrid = document.getElementById('rocket-grid');
+            rocketGrid.innerHTML = rocketLeague.map(item => `
+                <div class="game-card">
+                    <div class="game-image" style="background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);">
+                        <i class="fas fa-car" style="color: white;"></i>
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">${item.name}</h3>
+                        <p class="game-type">${item.type}</p>
+                        <div class="game-price">${calculatePrice(item.basePrice)} L.E</div>
+                        <button class="btn-order" onclick="orderRocket('${item.name}')">
+                            Order Now
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Hezo
+        function renderHezo() {
+            const hezoGrid = document.getElementById('hezo-grid');
+            hezoGrid.innerHTML = hezoServices.map(service => `
+                <div class="hezo-card">
+                    <div class="hezo-icon"><i class="fas ${service.icon}"></i></div>
+                    <h4>${service.name}</h4>
+                    ${service.options.map(opt => `
+                        <div style="margin: 0.5rem 0; padding: 0.5rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                            <div style="font-size: 0.85rem; color: var(--text-muted);">${opt.amount}</div>
+                            <div class="hezo-price">${opt.price} L.E</div>
+                            <button class="btn-order" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; margin-top: 0.3rem;" 
+                                onclick="orderItem('Hezo ${service.name} - ${opt.amount}', ${opt.price})">
+                                Buy
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+        }
+
+        // Modal functions
+        function openModal(mode) {
+            document.getElementById('auth-modal').classList.add('active');
+            switchAuthMode(mode);
+        }
+
+        function closeModal() {
+            document.getElementById('auth-modal').classList.remove('active');
+        }
+
+        function switchAuthMode(mode) {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('signup-form').style.display = 'none';
+            document.getElementById('forgot-form').style.display = 'none';
             
-            if (total > currentUser.balance) {
-                toast('رصيد غير كافٍ', `المطلوب: ${total} ج.م`, 'error');
+            if (mode === 'login') document.getElementById('login-form').style.display = 'block';
+            else if (mode === 'signup') document.getElementById('signup-form').style.display = 'block';
+            else if (mode === 'forgot') document.getElementById('forgot-form').style.display = 'block';
+        }
+
+        function showForgotPassword() {
+            switchAuthMode('forgot');
+        }
+
+        // CAPTCHA
+        function toggleCaptcha(element) {
+            const checkbox = element.querySelector('.captcha-checkbox');
+            const check = checkbox.querySelector('i');
+            
+            if (checkbox.classList.contains('checked')) {
+                checkbox.classList.remove('checked');
+                check.style.display = 'none';
+            } else {
+                checkbox.classList.add('checked');
+                check.style.display = 'block';
+            }
+        }
+
+        // Form handlers
+        function handleLogin(e) {
+            e.preventDefault();
+            const captcha = document.querySelector('#login-captcha').classList.contains('checked');
+            if (!captcha) {
+                showToast('Please verify you are not a robot', 'error');
                 return;
             }
             
-            bulkOrders.forEach(o => {
-                const s = SERVICES.find(x => x.id === o.service);
-                const hp = HEVO_PRICES[o.service] || 50;
-                const price = Math.round((o.quantity / 1000) * hp * MARKUP);
-                
-                currentUser.balance -= price;
-                
-                const order = {
-                    type: 'order',
-                    orderId: o.id,
-                    userId: currentUser.id,
-                    userName: currentUser.name,
-                    service: o.service,
-                    serviceName: s ? s.name : o.service,
-                    link: o.link,
-                    quantity: o.quantity,
-                    customerPrice: price,
-                    hevoCost: Math.round((o.quantity / 1000) * hp),
-                    profit: price - Math.round((o.quantity / 1000) * hp),
-                    status: 'pending',
-                    hevoStatus: 'waiting_30min',
-                    isBulk: true,
-                    timestamp: new Date().toISOString()
-                };
-                
-                saveOrder(order);
-                sendToSheet(order);
-            });
+            const email = document.getElementById('login-email').value;
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.classList.add('loading');
             
-            saveUser();
-            updateBalance();
-            sendTg(`📊 طلبات مجمعة من ${currentUser.name}\n${bulkOrders.length} طلبات\n${total} ج.م`);
-            
-            toast('تم', `${bulkOrders.length} طلبات تم إرسالها`);
-            document.getElementById('bulkPreview').style.display = 'none';
-            document.getElementById('bulkFile').value = '';
-            bulkOrders = [];
-            loadOrders();
+            setTimeout(() => {
+                btn.classList.remove('loading');
+                document.body.classList.add('authenticated');
+                document.getElementById('username-display').textContent = email.split('@')[0];
+                closeModal();
+                showToast('Welcome back!', 'success');
+            }, 1500);
         }
-        
-        // ==========================================
-        // DEPOSIT
-        // ==========================================
-        
-        function selectAmt(amt, btn) {
-            selAmount = amt;
-            document.getElementById('customAmt').value = '';
-            document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-            updateFinal();
-        }
-        
-        function selectPay(el, method) {
-            selPayment = method;
-            document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
-            el.classList.add('selected');
-        }
-        
-        function updateFinal() {
-            const custom = parseInt(document.getElementById('customAmt').value) || 0;
-            const amt = custom || selAmount;
-            const final = Math.max(0, amt - FEE);
-            document.getElementById('finalAmt').textContent = `النهائي: ${final} ج.م (بعد خصم ${FEE} ج.م)`;
-        }
-        
-        function deposit() {
-            const custom = parseInt(document.getElementById('customAmt').value) || 0;
-            const amt = custom || selAmount;
-            
-            if (amt < 20) {
-                toast('خطأ', 'الحد الأدنى 20 ج.م', 'error');
+
+        function handleSignup(e) {
+            e.preventDefault();
+            const captcha = document.querySelector('#signup-captcha').classList.contains('checked');
+            if (!captcha) {
+                showToast('Please verify you are not a robot', 'error');
                 return;
             }
             
-            const final = amt - FEE;
+            const password = document.getElementById('signup-password').value;
+            const confirm = document.getElementById('signup-confirm').value;
             
-            const deposit = {
-                type: 'deposit',
-                userId: currentUser.id,
-                amount: amt,
-                fee: FEE,
-                finalAmount: final,
-                method: selPayment,
-                status: 'pending',
-                timestamp: new Date().toISOString()
-            };
+            if (password !== confirm) {
+                showToast('Passwords do not match', 'error');
+                return;
+            }
             
-            const deposits = JSON.parse(localStorage.getItem('deposits') || '[]');
-            deposits.push(deposit);
-            localStorage.setItem('deposits', JSON.stringify(deposits));
+            const name = document.getElementById('signup-name').value;
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.classList.add('loading');
             
-            sendToSheet(deposit);
-            sendTg(`💰 شحن جديد من ${currentUser.name}\n${amt} ج.م - ${selPayment}\nInstapay: 01204423575\nTelda: @selimahmed1`);
+            setTimeout(() => {
+                btn.classList.remove('loading');
+                document.body.classList.add('authenticated');
+                document.getElementById('username-display').textContent = name;
+                closeModal();
+                showToast('Account created successfully!', 'success');
+            }, 1500);
+        }
+
+        function handleForgotPassword(e) {
+            e.preventDefault();
+            const email = document.getElementById('forgot-email').value;
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.classList.add('loading');
             
-            toast('تم إرسال الطلب', 'سيتم مراجعة الدفع وإضافة الرصيد');
+            setTimeout(() => {
+                btn.classList.remove('loading');
+                showToast(`Reset link sent to ${email}`, 'success');
+                switchAuthMode('login');
+            }, 1500);
         }
-        
-        // ==========================================
-        // UTILITIES
-        // ==========================================
-        
-        function sendToSheet(data) {
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            }).catch(() => {});
+
+        function handleGoogleSignIn() {
+            showToast('Google Sign In coming soon', 'success');
         }
-        
-        function sendTg(msg) {
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: CHAT_ID, text: msg, parse_mode: 'HTML' })
-            }).catch(() => {});
+
+        function logout() {
+            document.body.classList.remove('authenticated');
+            showToast('Logged out successfully', 'success');
+            toggleProfile();
         }
-        
-        function toast(title, msg, type) {
-            const t = document.getElementById('toast');
-            t.className = 'toast ' + (type === 'error' ? 'error' : '');
-            document.getElementById('toastTitle').textContent = title;
-            document.getElementById('toastMsg').textContent = msg;
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 4000);
+
+        // Profile dropdown
+        function toggleProfile() {
+            document.getElementById('profile-dropdown').classList.toggle('show');
         }
-        
-        document.querySelectorAll('.modal').forEach(m => {
-            m.addEventListener('click', (e) => {
-                if (e.target === m) m.classList.remove('active');
-            });
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            const icon = toast.querySelector('i');
+            
+            toastMessage.textContent = message;
+            toast.className = 'toast show ' + type;
+            
+            if (type === 'error') {
+                icon.className = 'fas fa-exclamation-circle';
+            } else {
+                icon.className = 'fas fa-check-circle';
+            }
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Order functions
+        function orderItem(name, price) {
+            const message = `Hello! I want to order:\n${name}\nPrice: ${price} L.E\n\nPayment method: [Telda/InstaPay]`;
+            const encoded = encodeURIComponent(message);
+            window.open(`https://wa.me/201212072882?text=${encoded}`, '_blank');
+        }
+
+        function orderVBucks(amount) {
+            const email = prompt('Enter your Epic Email:');
+            const password = prompt('Enter your Epic Password:');
+            if (email && password) {
+                const message = `Hello! I want to order ${amount}\nEpic Email: ${email}\nEpic Password: ${password}`;
+                window.open(`https://wa.me/201212072882?text=${encodeURIComponent(message)}`, '_blank');
+            }
+        }
+
+        function orderRocket(amount) {
+            const email = prompt('Enter your Epic Email:');
+            const password = prompt('Enter your Epic Password:');
+            if (email && password) {
+                const message = `Hello! I want to order ${amount}\nEpic Email: ${email}\nEpic Password: ${password}`;
+                window.open(`https://wa.me/201212072882?text=${encodeURIComponent(message)}`, '_blank');
+            }
+        }
+
+        function openWhatsApp() {
+            window.open('https://wa.me/201212072882', '_blank');
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Close modal on outside click
+        document.getElementById('auth-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // Close profile dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const profile = document.querySelector('.user-profile');
+            const dropdown = document.getElementById('profile-dropdown');
+            if (profile && !profile.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderGames();
+            renderPSPlus();
+            renderVBucks();
+            renderRocket();
+            renderHezo();
         });
     </script>
 </body>
