@@ -13,25 +13,25 @@
         }
 
         :root {
-            --primary: #6d28d9;
-            --primary-dark: #5b21b6;
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
             --secondary: #ec4899;
             --accent: #f59e0b;
             --dark: #0f0f1a;
             --darker: #0a0a12;
             --card: #1a1a2e;
+            --card-hover: #252542;
             --text: #f8fafc;
             --text-muted: #94a3b8;
             --success: #10b981;
             --danger: #ef4444;
-            --gradient-1: linear-gradient(135deg, #6d28d9 0%, #ec4899 100%);
+            --gradient-1: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
             --gradient-2: linear-gradient(135deg, #f59e0b 0%, #ec4899 100%);
-            --gradient-3: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
             --glass: rgba(255, 255, 255, 0.05);
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: var(--darker);
             color: var(--text);
             line-height: 1.6;
@@ -54,7 +54,7 @@
             position: absolute;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle at 20% 80%, rgba(109, 40, 217, 0.15) 0%, transparent 50%),
+            background: radial-gradient(circle at 20% 80%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
                         radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
                         radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.1) 0%, transparent 40%);
             animation: bgMove 20s ease-in-out infinite;
@@ -71,7 +71,7 @@
             top: 0;
             width: 100%;
             padding: 1rem 5%;
-            background: rgba(15, 15, 26, 0.9);
+            background: rgba(15, 15, 26, 0.95);
             backdrop-filter: blur(20px);
             z-index: 1000;
             display: flex;
@@ -90,12 +90,6 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-        }
-
-        .logo i {
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .nav-links {
@@ -148,17 +142,18 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            font-size: 0.95rem;
         }
 
         .btn-primary {
             background: var(--gradient-1);
             color: white;
-            box-shadow: 0 4px 15px rgba(109, 40, 217, 0.4);
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(109, 40, 217, 0.6);
+            box-shadow: 0 6px 25px rgba(124, 58, 237, 0.6);
         }
 
         .btn-secondary {
@@ -282,14 +277,8 @@
         }
 
         @keyframes modalSlide {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .modal-close {
@@ -361,6 +350,7 @@
             display: flex;
             align-items: center;
             gap: 1rem;
+            cursor: pointer;
         }
 
         .captcha-checkbox {
@@ -410,8 +400,7 @@
             font-size: 0.85rem;
         }
 
-        .divider::before,
-        .divider::after {
+        .divider::before, .divider::after {
             content: '';
             flex: 1;
             height: 1px;
@@ -454,76 +443,10 @@
             font-size: 1.1rem;
         }
 
-        /* Categories */
-        .categories {
+        /* Game Cards - Enhanced */
+        .games-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 4rem;
-        }
-
-        .category-card {
-            background: var(--card);
-            border-radius: 20px;
-            padding: 2rem;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .category-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: var(--gradient-1);
-            opacity: 0;
-            transition: all 0.5s;
-            z-index: 0;
-        }
-
-        .category-card:hover::before {
-            left: 0;
-            opacity: 0.1;
-        }
-
-        .category-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(109, 40, 217, 0.3);
-        }
-
-        .category-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .category-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .category-card p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Games Grid */
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 2rem;
             margin-bottom: 4rem;
         }
@@ -534,25 +457,41 @@
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s;
-            position: relative;
         }
 
         .game-card:hover {
-            transform: translateY(-10px) scale(1.02);
+            transform: translateY(-10px);
             border-color: var(--primary);
-            box-shadow: 0 25px 50px rgba(109, 40, 217, 0.4);
+            box-shadow: 0 25px 50px rgba(124, 58, 237, 0.4);
         }
 
         .game-image {
             width: 100%;
-            height: 200px;
-            object-fit: cover;
+            height: 180px;
             background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4rem;
+            font-size: 3rem;
             color: var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.3) 0%, rgba(236, 72, 153, 0.3) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .game-card:hover .game-image::before {
+            opacity: 1;
         }
 
         .game-content {
@@ -560,24 +499,51 @@
         }
 
         .game-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--text);
         }
 
-        .game-type {
-            color: var(--text-muted);
+        /* Price Options */
+        .price-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .price-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--darker);
+            border-radius: 10px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .price-option:hover {
+            border-color: var(--primary);
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .price-option.selected {
+            border-color: var(--primary);
+            background: rgba(124, 58, 237, 0.2);
+        }
+
+        .option-type {
             font-size: 0.85rem;
-            margin-bottom: 1rem;
+            color: var(--text-muted);
         }
 
-        .game-price {
-            font-size: 1.5rem;
-            font-weight: 800;
-            background: var(--gradient-2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
+        .option-price {
+            font-weight: 700;
+            color: var(--success);
+            font-size: 1rem;
         }
 
         .btn-order {
@@ -585,38 +551,38 @@
             background: var(--gradient-1);
             color: white;
             border: none;
-            padding: 0.8rem;
+            padding: 0.9rem;
             border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            margin-top: 0.5rem;
         }
 
         .btn-order:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(109, 40, 217, 0.5);
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(124, 58, 237, 0.5);
         }
 
         /* Hezo Section */
         .hezo-section {
-            background: linear-gradient(135deg, rgba(109, 40, 217, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
             border-radius: 30px;
             padding: 3rem;
             margin-bottom: 4rem;
-            border: 1px solid rgba(109, 40, 217, 0.3);
+            border: 1px solid rgba(124, 58, 237, 0.3);
         }
 
         .hezo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
         }
 
         .hezo-card {
             background: var(--card);
-            border-radius: 15px;
+            border-radius: 20px;
             padding: 1.5rem;
-            text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s;
         }
@@ -627,21 +593,94 @@
             box-shadow: 0 15px 30px rgba(236, 72, 153, 0.3);
         }
 
-        .hezo-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--secondary);
+        .hezo-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .hezo-card h4 {
-            font-size: 1.1rem;
+        .hezo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .hezo-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        /* Custom Input for Hezo */
+        .custom-order {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .custom-input-group {
+            display: flex;
+            gap: 0.5rem;
             margin-bottom: 0.5rem;
         }
 
-        .hezo-price {
-            font-size: 1.3rem;
-            font-weight: 700;
+        .custom-input-group input {
+            flex: 1;
+            padding: 0.7rem;
+            background: var(--darker);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .custom-input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .custom-input-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .price-calc {
+            text-align: center;
+            padding: 0.5rem;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
             color: var(--success);
+        }
+
+        .preset-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .preset-btn {
+            padding: 0.5rem;
+            background: var(--darker);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .preset-btn:hover {
+            border-color: var(--secondary);
+            background: rgba(236, 72, 153, 0.1);
         }
 
         /* Payment Section */
@@ -684,7 +723,7 @@
         }
 
         .payment-info {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--success);
             margin-bottom: 0.5rem;
@@ -769,7 +808,7 @@
             font-size: 1.5rem;
             font-weight: 800;
             margin: 0 auto 1rem;
-            box-shadow: 0 5px 20px rgba(109, 40, 217, 0.5);
+            box-shadow: 0 5px 20px rgba(124, 58, 237, 0.5);
         }
 
         .step h3 {
@@ -841,7 +880,7 @@
             font-size: 0.9rem;
         }
 
-        /* Toast Notification */
+        /* Toast */
         .toast {
             position: fixed;
             bottom: 2rem;
@@ -864,45 +903,23 @@
         }
 
         @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
-        .toast.success {
-            border-color: var(--success);
-        }
-
-        .toast.error {
-            border-color: var(--danger);
-        }
+        .toast.success { border-color: var(--success); }
+        .toast.error { border-color: var(--danger); }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .hero-stats {
-                flex-direction: column;
-                gap: 1.5rem;
-            }
-            
-            section {
-                padding: 3rem 5%;
-            }
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; }
+            .hero-stats { flex-direction: column; gap: 1.5rem; }
+            section { padding: 3rem 5%; }
+            .games-container { grid-template-columns: 1fr; }
+            .preset-options { grid-template-columns: 1fr; }
         }
 
-        /* Loading Animation */
         .loader {
             display: none;
             width: 20px;
@@ -917,19 +934,12 @@
             to { transform: rotate(360deg); }
         }
 
-        .btn.loading .loader {
-            display: inline-block;
-        }
+        .btn.loading .loader { display: inline-block; }
+        .btn.loading .btn-text { display: none; }
 
-        .btn.loading .btn-text {
-            display: none;
-        }
-
-        /* User Profile Dropdown */
-        .user-profile {
-            position: relative;
-        }
-
+        /* User Profile */
+        .user-profile { position: relative; }
+        
         .profile-btn {
             display: flex;
             align-items: center;
@@ -942,9 +952,7 @@
             transition: all 0.3s;
         }
 
-        .profile-btn:hover {
-            border-color: var(--primary);
-        }
+        .profile-btn:hover { border-color: var(--primary); }
 
         .profile-dropdown {
             position: absolute;
@@ -960,9 +968,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        .profile-dropdown.show {
-            display: block;
-        }
+        .profile-dropdown.show { display: block; }
 
         .profile-dropdown a {
             display: block;
@@ -973,9 +979,7 @@
             transition: all 0.3s;
         }
 
-        .profile-dropdown a:hover {
-            background: rgba(109, 40, 217, 0.2);
-        }
+        .profile-dropdown a:hover { background: rgba(124, 58, 237, 0.2); }
 
         .profile-dropdown hr {
             border: none;
@@ -983,21 +987,40 @@
             margin: 0.5rem 0;
         }
 
-        /* Hidden by default when logged out */
-        .logged-in-only {
-            display: none;
+        .logged-in-only { display: none; }
+        .logged-out-only { display: flex; }
+
+        body.authenticated .logged-in-only { display: flex; }
+        body.authenticated .logged-out-only { display: none; }
+
+        /* Epic Credentials Form */
+        .epic-form {
+            background: var(--darker);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .logged-out-only {
-            display: flex;
+        .epic-form .form-group {
+            margin-bottom: 0.75rem;
         }
 
-        body.authenticated .logged-in-only {
-            display: flex;
+        .epic-form label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
         }
 
-        body.authenticated .logged-out-only {
-            display: none;
+        .epic-form input {
+            padding: 0.6rem;
+            font-size: 0.9rem;
+        }
+
+        .epic-note {
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin-top: 0.5rem;
+            font-style: italic;
         }
     </style>
 </head>
@@ -1038,109 +1061,64 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="hero">
         <div class="hero-content">
             <h1>Connect. Play. Dominate.</h1>
             <p>Your trusted PlayStation games store in Egypt. Primary & Secondary accounts for PS4 & PS5.</p>
             <button class="btn btn-primary" onclick="scrollToSection('games')" style="font-size: 1.1rem; padding: 1rem 2rem;">
-                <i class="fas fa-rocket"></i>
-                Browse Games
+                <i class="fas fa-rocket"></i> Browse Games
             </button>
             <div class="hero-stats">
-                <div class="stat">
-                    <div class="stat-value">10K+</div>
-                    <div class="stat-label">Happy Customers</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value">500+</div>
-                    <div class="stat-label">Games Available</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value">24/7</div>
-                    <div class="stat-label">Support</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Categories -->
-    <section id="categories">
-        <h2 class="section-title">Browse Categories</h2>
-        <p class="section-subtitle">Choose your gaming experience</p>
-        <div class="categories">
-            <div class="category-card" onclick="scrollToSection('games')">
-                <div class="category-icon"><i class="fas fa-compact-disc"></i></div>
-                <h3>Games</h3>
-                <p>Primary & Secondary accounts</p>
-            </div>
-            <div class="category-card" onclick="scrollToSection('plus')">
-                <div class="category-icon"><i class="fas fa-plus-circle"></i></div>
-                <h3>PlayStation Plus</h3>
-                <p>1-12 Month subscriptions</p>
-            </div>
-            <div class="category-card" onclick="scrollToSection('vbucks')">
-                <div class="category-icon"><i class="fas fa-coins"></i></div>
-                <h3>Fortnite V-Bucks</h3>
-                <p>Direct to your account</p>
-            </div>
-            <div class="category-card" onclick="scrollToSection('rocket')">
-                <div class="category-icon"><i class="fas fa-car"></i></div>
-                <h3>Rocket League</h3>
-                <p>Credits & Items</p>
+                <div class="stat"><div class="stat-value">10K+</div><div class="stat-label">Happy Customers</div></div>
+                <div class="stat"><div class="stat-value">500+</div><div class="stat-label">Games Available</div></div>
+                <div class="stat"><div class="stat-value">24/7</div><div class="stat-label">Support</div></div>
             </div>
         </div>
     </section>
 
     <!-- Games Section -->
     <section id="games">
-        <h2 class="section-title">Popular Games</h2>
-        <p class="section-subtitle">Latest titles at unbeatable prices (1.5x)</p>
-        <div class="games-grid" id="games-grid">
-            <!-- Games will be populated by JS -->
-        </div>
+        <h2 class="section-title">Games</h2>
+        <p class="section-subtitle">Primary & Secondary accounts for PS4 & PS5</p>
+        <div class="games-container" id="games-container"></div>
     </section>
 
     <!-- PlayStation Plus -->
     <section id="plus">
         <h2 class="section-title">PlayStation Plus</h2>
-        <p class="section-subtitle">Upgrade your gaming experience</p>
-        <div class="games-grid" id="plus-grid">
-            <!-- PS Plus cards will be populated by JS -->
-        </div>
+        <p class="section-subtitle">1-12 Month subscriptions</p>
+        <div class="games-container" id="plus-container"></div>
     </section>
 
     <!-- Fortnite V-Bucks -->
     <section id="vbucks">
         <h2 class="section-title">Fortnite V-Bucks</h2>
         <p class="section-subtitle">Direct delivery to your Epic account</p>
-        <div class="games-grid" id="vbucks-grid"></div>
+        <div class="games-container" id="vbucks-container"></div>
     </section>
 
     <!-- Rocket League -->
     <section id="rocket">
         <h2 class="section-title">Rocket League Credits</h2>
         <p class="section-subtitle">Get credits fast and secure</p>
-        <div class="games-grid" id="rocket-grid"></div>
+        <div class="games-container" id="rocket-container"></div>
     </section>
 
     <!-- Hezo Section -->
     <section id="hezo">
         <div class="hezo-section">
-            <h2 class="section-title"><i class="fas fa-bolt" style="margin-right: 0.5rem;"></i>Hezo Services</h2>
-            <p class="section-subtitle">Boost your social presence with our premium services</p>
-            <div class="hezo-grid" id="hezo-grid">
-                <!-- Hezo services populated by JS -->
-            </div>
+            <h2 class="section-title"><i class="fas fa-bolt"></i> Hezo Services</h2>
+            <p class="section-subtitle">Boost your social presence - Custom amounts available</p>
+            <div class="hezo-grid" id="hezo-container"></div>
         </div>
     </section>
 
-    <!-- Payment Section -->
+    <!-- Payment -->
     <section id="payment">
         <div class="payment-section">
             <h2 class="section-title">Payment Methods</h2>
             <p class="section-subtitle">Choose your preferred payment option</p>
-            
             <div class="payment-options">
                 <div class="payment-card">
                     <i class="fas fa-wallet"></i>
@@ -1155,18 +1133,15 @@
                     <p class="payment-desc">Transfer to this number</p>
                 </div>
             </div>
-
             <div class="whatsapp-option" onclick="openWhatsApp()">
                 <i class="fab fa-whatsapp"></i>
                 <h3>Order via WhatsApp</h3>
                 <div class="whatsapp-number">01212072882</div>
                 <p style="margin-top: 0.5rem; opacity: 0.9;">Click to chat directly</p>
             </div>
-
             <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(239, 68, 68, 0.1); border-radius: 10px; border: 1px solid rgba(239, 68, 68, 0.3);">
                 <p style="color: var(--danger); font-weight: 600; text-align: center;">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    Important: You must send us a screenshot of the transfer
+                    <i class="fas fa-exclamation-triangle"></i> Important: You must send us a screenshot of the transfer
                 </p>
             </div>
         </div>
@@ -1203,43 +1178,12 @@
                 <p>Start playing your game!<br>العب واستمتع!</p>
             </div>
         </div>
-        
-        <div style="margin-top: 3rem; background: var(--card); padding: 2rem; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1);">
-            <h3 style="text-align: center; margin-bottom: 1.5rem; color: var(--accent);">After QR Code appears:</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; text-align: center;">
-                <div>
-                    <strong style="color: var(--primary);">PS5:</strong>
-                    <ol style="margin-top: 0.5rem; color: var(--text-muted); text-align: left; display: inline-block;">
-                        <li>Switch User</li>
-                        <li>Add User</li>
-                        <li>Get Started</li>
-                        <li>Sign in with QR Code</li>
-                    </ol>
-                </div>
-                <div>
-                    <strong style="color: var(--secondary);">PS4:</strong>
-                    <ol style="margin-top: 0.5rem; color: var(--text-muted); text-align: left; display: inline-block;">
-                        <li>Switch User</li>
-                        <li>New User</li>
-                        <li>Create a User</li>
-                        <li>Sign in with QR Code</li>
-                    </ol>
-                </div>
-            </div>
-            <p style="text-align: center; margin-top: 1.5rem; color: var(--accent);">
-                <i class="fas fa-bolt"></i>
-                صوّر الكود وابعتهولنا على الواتساب عشان نكمل لك التفعيل بسرعة
-            </p>
-        </div>
     </section>
 
     <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <div class="footer-logo">
-                <i class="fas fa-gamepad"></i>
-                ProSoskaStation
-            </div>
+            <div class="footer-logo"><i class="fas fa-gamepad"></i> ProSoskaStation</div>
             <p class="footer-text">Your trusted gaming partner in Egypt. Quality accounts, instant delivery, 24/7 support.</p>
             <div class="social-links">
                 <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -1256,11 +1200,9 @@
         <div class="modal">
             <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
             
-            <!-- Login Form -->
             <div id="login-form">
                 <h2>Welcome Back!</h2>
                 <p class="modal-subtitle">Sign in to your ProSoskaStation account</p>
-                
                 <form onsubmit="handleLogin(event)">
                     <div class="form-group">
                         <label>Email or Phone Number</label>
@@ -1270,44 +1212,33 @@
                         <label>Password</label>
                         <input type="password" placeholder="Enter password" required id="login-password">
                     </div>
-                    
                     <div class="captcha-box" onclick="toggleCaptcha(this)">
-                        <div class="captcha-checkbox" id="login-captcha">
-                            <i class="fas fa-check" style="display: none; color: white;"></i>
-                        </div>
+                        <div class="captcha-checkbox" id="login-captcha"><i class="fas fa-check" style="display: none; color: white;"></i></div>
                         <span class="captcha-text">I'm not a robot</span>
                     </div>
-                    
                     <div class="form-options">
                         <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
                             <input type="checkbox" style="width: auto;"> Remember me
                         </label>
                         <a href="#" onclick="showForgotPassword()">Forgot password?</a>
                     </div>
-                    
                     <button type="submit" class="btn btn-primary" style="width: 100%;">
                         <span class="btn-text">Sign In</span>
                         <div class="loader"></div>
                     </button>
                 </form>
-                
                 <div class="divider">or continue with</div>
-                
                 <button class="btn btn-google" onclick="handleGoogleSignIn()">
-                    <i class="fab fa-google"></i>
-                    Sign in with Google
+                    <i class="fab fa-google"></i> Sign in with Google
                 </button>
-                
                 <div class="auth-switch">
                     Don't have an account? <a href="#" onclick="switchAuthMode('signup')">Sign Up</a>
                 </div>
             </div>
 
-            <!-- Signup Form -->
             <div id="signup-form" style="display: none;">
                 <h2>Create Account</h2>
                 <p class="modal-subtitle">Join ProSoskaStation today</p>
-                
                 <form onsubmit="handleSignup(event)">
                     <div class="form-group">
                         <label>Full Name</label>
@@ -1329,49 +1260,37 @@
                         <label>Confirm Password</label>
                         <input type="password" placeholder="Confirm password" required id="signup-confirm">
                     </div>
-                    
                     <div class="captcha-box" onclick="toggleCaptcha(this)">
-                        <div class="captcha-checkbox" id="signup-captcha">
-                            <i class="fas fa-check" style="display: none; color: white;"></i>
-                        </div>
+                        <div class="captcha-checkbox" id="signup-captcha"><i class="fas fa-check" style="display: none; color: white;"></i></div>
                         <span class="captcha-text">I'm not a robot</span>
                     </div>
-                    
                     <button type="submit" class="btn btn-primary" style="width: 100%;">
                         <span class="btn-text">Create Account</span>
                         <div class="loader"></div>
                     </button>
                 </form>
-                
                 <div class="divider">or continue with</div>
-                
                 <button class="btn btn-google" onclick="handleGoogleSignIn()">
-                    <i class="fab fa-google"></i>
-                    Sign up with Google
+                    <i class="fab fa-google"></i> Sign up with Google
                 </button>
-                
                 <div class="auth-switch">
                     Already have an account? <a href="#" onclick="switchAuthMode('login')">Sign In</a>
                 </div>
             </div>
 
-            <!-- Forgot Password Form -->
             <div id="forgot-form" style="display: none;">
                 <h2>Reset Password</h2>
                 <p class="modal-subtitle">Enter your email to receive reset link</p>
-                
                 <form onsubmit="handleForgotPassword(event)">
                     <div class="form-group">
                         <label>Email Address</label>
                         <input type="email" placeholder="Enter your email" required id="forgot-email">
                     </div>
-                    
                     <button type="submit" class="btn btn-primary" style="width: 100%;">
                         <span class="btn-text">Send Reset Link</span>
                         <div class="loader"></div>
                     </button>
                 </form>
-                
                 <div class="auth-switch">
                     Remember your password? <a href="#" onclick="switchAuthMode('login')">Sign In</a>
                 </div>
@@ -1386,107 +1305,275 @@
     </div>
 
     <script>
-        // Game data with 1.5x prices
-        const games = [
-            { name: "FC 26", type: "Primary PS5", basePrice: 400, icon: "fa-futbol" },
-            { name: "GTA V", type: "Primary PS5", basePrice: 350, icon: "fa-car" },
-            { name: "Red Dead Redemption 2", type: "Primary PS4/PS5", basePrice: 450, icon: "fa-horse" },
-            { name: "WWE 2K26", type: "Primary PS5", basePrice: 600, icon: "fa-hand-rock" },
-            { name: "Spider-Man 2", type: "Primary PS5", basePrice: 750, icon: "fa-spider" },
-            { name: "NBA 2K20", type: "Primary PS4", basePrice: 300, icon: "fa-basketball-ball" },
-            { name: "Forza Horizon 5", type: "Primary Xbox/PC", basePrice: 525, icon: "fa-road" },
-            { name: "Ghost of Yotei", type: "Primary PS5", basePrice: 900, icon: "fa-ghost" },
-            { name: "Hollow Knight Silksong", type: "Primary PS5", basePrice: 375, icon: "fa-bug" },
-            { name: "Diablo IV", type: "Primary PS5", basePrice: 675, icon: "fa-skull" },
-            { name: "Resident Evil Requiem", type: "Primary PS5", basePrice: 600, icon: "fa-biohazard" },
-            { name: "It Takes Two", type: "Primary PS4/PS5", basePrice: 375, icon: "fa-users" },
-            { name: "Gang Beasts", type: "Primary PS4", basePrice: 225, icon: "fa-hand-paper" },
-            { name: "Watch Dogs 2", type: "Primary PS4", basePrice: 300, icon: "fa-eye" },
-            { name: "Detroit Become Human", type: "Primary PS4", basePrice: 262, icon: "fa-robot" },
-            { name: "Little Nightmares III", type: "Primary PS5", basePrice: 450, icon: "fa-child" },
-            { name: "Ready or Not", type: "Primary PS5", basePrice: 525, icon: "fa-shield-alt" },
-            { name: "Call of Duty Black Ops 7", type: "Primary PS5", basePrice: 1050, icon: "fa-crosshairs" },
-            { name: "Arc Raiders", type: "Primary PS5", basePrice: 450, icon: "fa-rocket" },
-            { name: "Hogwarts Legacy", type: "Primary PS5", basePrice: 675, icon: "fa-hat-wizard" },
-            { name: "The Last of Us Part II Remastered", type: "Primary PS5", basePrice: 525, icon: "fa-heart" },
-            { name: "A Way Out", type: "Primary PS4", basePrice: 262, icon: "fa-door-open" },
-            { name: "NFS Heat", type: "Primary PS4", basePrice: 375, icon: "fa-fire" },
-            { name: "NFS Payback", type: "Primary PS4", basePrice: 300, icon: "fa-money-bill" }
+        // Game data with ORIGINAL prices (will multiply by 1.5)
+        const gamesData = [
+            { 
+                name: "FC 26", 
+                icon: "fa-futbol",
+                options: [
+                    { type: "Primary PS4", price: 300 },
+                    { type: "Primary PS5", price: 450 },
+                    { type: "Secondary PS4", price: 150 },
+                    { type: "Secondary PS5", price: 200 }
+                ]
+            },
+            { 
+                name: "GTA V", 
+                icon: "fa-car",
+                options: [
+                    { type: "Primary PS4", price: 250 },
+                    { type: "Primary PS5", price: 350 },
+                    { type: "Secondary PS4", price: 100 },
+                    { type: "Secondary PS5", price: 150 }
+                ]
+            },
+            { 
+                name: "Red Dead Redemption 2", 
+                icon: "fa-horse",
+                options: [
+                    { type: "Primary PS4", price: 350 },
+                    { type: "Primary PS5", price: 450 },
+                    { type: "Secondary PS4", price: 150 },
+                    { type: "Secondary PS5", price: 200 }
+                ]
+            },
+            { 
+                name: "WWE 2K26", 
+                icon: "fa-hand-rock",
+                options: [
+                    { type: "Primary PS4", price: 400 },
+                    { type: "Primary PS5", price: 600 },
+                    { type: "Secondary PS4", price: 200 },
+                    { type: "Secondary PS5", price: 250 }
+                ]
+            },
+            { 
+                name: "Spider-Man 2", 
+                icon: "fa-spider",
+                options: [
+                    { type: "Primary PS5", price: 750 },
+                    { type: "Secondary PS5", price: 300 }
+                ]
+            },
+            { 
+                name: "NBA 2K20", 
+                icon: "fa-basketball-ball",
+                options: [
+                    { type: "Primary PS4", price: 200 },
+                    { type: "Secondary PS4", price: 80 }
+                ]
+            },
+            { 
+                name: "Forza Horizon 5", 
+                icon: "fa-road",
+                options: [
+                    { type: "Primary Xbox/PC", price: 450 },
+                    { type: "Secondary Xbox/PC", price: 180 }
+                ]
+            },
+            { 
+                name: "Ghost of Yotei", 
+                icon: "fa-ghost",
+                options: [
+                    { type: "Primary PS5", price: 900 },
+                    { type: "Secondary PS5", price: 350 }
+                ]
+            },
+            { 
+                name: "Hollow Knight Silksong", 
+                icon: "fa-bug",
+                options: [
+                    { type: "Primary PS5", price: 300 },
+                    { type: "Secondary PS5", price: 120 }
+                ]
+            },
+            { 
+                name: "Diablo IV", 
+                icon: "fa-skull",
+                options: [
+                    { type: "Primary PS4", price: 400 },
+                    { type: "Primary PS5", price: 550 },
+                    { type: "Secondary PS4", price: 180 },
+                    { type: "Secondary PS5", price: 220 }
+                ]
+            },
+            { 
+                name: "Resident Evil Requiem", 
+                icon: "fa-biohazard",
+                options: [
+                    { type: "Primary PS5", price: 600 },
+                    { type: "Secondary PS5", price: 250 }
+                ]
+            },
+            { 
+                name: "It Takes Two", 
+                icon: "fa-users",
+                options: [
+                    { type: "Primary PS4", price: 280 },
+                    { type: "Primary PS5", price: 350 },
+                    { type: "Secondary PS4", price: 120 },
+                    { type: "Secondary PS5", price: 150 }
+                ]
+            },
+            { 
+                name: "Gang Beasts", 
+                icon: "fa-hand-paper",
+                options: [
+                    { type: "Primary PS4", price: 180 },
+                    { type: "Secondary PS4", price: 80 }
+                ]
+            },
+            { 
+                name: "Watch Dogs 2", 
+                icon: "fa-eye",
+                options: [
+                    { type: "Primary PS4", price: 220 },
+                    { type: "Secondary PS4", price: 100 }
+                ]
+            },
+            { 
+                name: "Detroit Become Human", 
+                icon: "fa-robot",
+                options: [
+                    { type: "Primary PS4", price: 200 },
+                    { type: "Secondary PS4", price: 90 }
+                ]
+            },
+            { 
+                name: "Little Nightmares III", 
+                icon: "fa-child",
+                options: [
+                    { type: "Primary PS5", price: 350 },
+                    { type: "Secondary PS5", price: 150 }
+                ]
+            },
+            { 
+                name: "Ready or Not", 
+                icon: "fa-shield-alt",
+                options: [
+                    { type: "Primary PS5", price: 400 },
+                    { type: "Secondary PS5", price: 180 }
+                ]
+            },
+            { 
+                name: "Call of Duty Black Ops 7", 
+                icon: "fa-crosshairs",
+                options: [
+                    { type: "Primary PS5", price: 1000 },
+                    { type: "Secondary PS5", price: 400 }
+                ]
+            },
+            { 
+                name: "Arc Raiders", 
+                icon: "fa-rocket",
+                options: [
+                    { type: "Primary PS5", price: 350 },
+                    { type: "Secondary PS5", price: 150 }
+                ]
+            },
+            { 
+                name: "Hogwarts Legacy", 
+                icon: "fa-hat-wizard",
+                options: [
+                    { type: "Primary PS5", price: 550 },
+                    { type: "Secondary PS5", price: 220 }
+                ]
+            },
+            { 
+                name: "The Last of Us Part II Remastered", 
+                icon: "fa-heart",
+                options: [
+                    { type: "Primary PS5", price: 450 },
+                    { type: "Secondary PS5", price: 180 }
+                ]
+            },
+            { 
+                name: "A Way Out", 
+                icon: "fa-door-open",
+                options: [
+                    { type: "Primary PS4", price: 200 },
+                    { type: "Secondary PS4", price: 90 }
+                ]
+            },
+            { 
+                name: "NFS Heat", 
+                icon: "fa-fire",
+                options: [
+                    { type: "Primary PS4", price: 280 },
+                    { type: "Secondary PS4", price: 120 }
+                ]
+            },
+            { 
+                name: "NFS Payback", 
+                icon: "fa-money-bill",
+                options: [
+                    { type: "Primary PS4", price: 220 },
+                    { type: "Secondary PS4", price: 100 }
+                ]
+            }
         ];
 
-        const psPlus = [
-            { name: "1 Month - Essential", type: "Primary PS5", basePrice: 225 },
-            { name: "3 Months - Essential", type: "Primary PS5", basePrice: 525 },
-            { name: "12 Months - Essential", type: "Primary PS5", basePrice: 1275 },
-            { name: "1 Month - Extra", type: "Primary PS5", basePrice: 375 },
-            { name: "12 Months - Extra", type: "Primary PS5", basePrice: 1950 },
-            { name: "1 Month - Premium", type: "Primary PS5", basePrice: 525 }
+        const psPlusData = [
+            { name: "1 Month - Essential", type: "Primary PS5", basePrice: 200 },
+            { name: "3 Months - Essential", type: "Primary PS5", basePrice: 450 },
+            { name: "12 Months - Essential", type: "Primary PS5", basePrice: 1100 },
+            { name: "1 Month - Extra", type: "Primary PS5", basePrice: 300 },
+            { name: "3 Months - Extra", type: "Primary PS5", basePrice: 700 },
+            { name: "12 Months - Extra", type: "Primary PS5", basePrice: 1700 },
+            { name: "1 Month - Premium", type: "Primary PS5", basePrice: 400 },
+            { name: "12 Months - Premium", type: "Primary PS5", basePrice: 2200 }
         ];
 
-        const vBucks = [
-            { name: "1,000 V-Bucks", type: "Direct Delivery", basePrice: 150 },
-            { name: "2,800 V-Bucks", type: "Direct Delivery", basePrice: 375 },
-            { name: "5,000 V-Bucks", type: "Direct Delivery", basePrice: 600 },
-            { name: "13,500 V-Bucks", type: "Direct Delivery", basePrice: 1425 }
+        const vBucksData = [
+            { amount: "1,000 V-Bucks", basePrice: 100 },
+            { amount: "2,800 V-Bucks", basePrice: 250 },
+            { amount: "5,000 V-Bucks", basePrice: 400 },
+            { amount: "13,500 V-Bucks", basePrice: 950 }
         ];
 
-        const rocketLeague = [
-            { name: "500 Credits", type: "Direct Delivery", basePrice: 112 },
-            { name: "1,100 Credits", type: "Direct Delivery", basePrice: 225 },
-            { name: "3,000 Credits", type: "Direct Delivery", basePrice: 525 },
-            { name: "6,500 Credits", type: "Direct Delivery", basePrice: 975 }
+        const rocketData = [
+            { amount: "500 Credits", basePrice: 75 },
+            { amount: "1,100 Credits", basePrice: 150 },
+            { amount: "3,000 Credits", basePrice: 350 },
+            { amount: "6,500 Credits", basePrice: 650 }
         ];
 
-        const hezoServices = [
-            { name: "Likes", icon: "fa-heart", options: [
-                { amount: "1,000 Likes", price: 75 },
-                { amount: "5,000 Likes", price: 300 },
-                { amount: "10,000 Likes", price: 525 }
-            ]},
-            { name: "Views", icon: "fa-eye", options: [
-                { amount: "5,000 Views", price: 60 },
-                { amount: "25,000 Views", price: 225 },
-                { amount: "100,000 Views", price: 750 }
-            ]},
-            { name: "Favorites", icon: "fa-star", options: [
-                { amount: "500 Favorites", price: 112 },
-                { amount: "2,000 Favorites", price: 375 },
-                { amount: "5,000 Favorites", price: 825 }
-            ]},
-            { name: "Shares", icon: "fa-share-alt", options: [
-                { amount: "1,000 Shares", price: 90 },
-                { amount: "5,000 Shares", price: 375 },
-                { amount: "10,000 Shares", price: 675 }
-            ]},
-            { name: "Followers", icon: "fa-user-plus", options: [
-                { amount: "1,000 Followers", price: 150 },
-                { amount: "5,000 Followers", price: 600 },
-                { amount: "10,000 Followers", price: 1050 }
-            ]},
-            { name: "Comments", icon: "fa-comment", options: [
-                { amount: "100 Comments", price: 225 },
-                { amount: "500 Comments", price: 975 }
-            ]}
-        ];
+        // Hezo pricing per unit
+        const hezoPricing = {
+            likes: 0.075,      // 75 EGP per 1000
+            views: 0.012,      // 12 EGP per 1000
+            favorites: 0.15,   // 150 EGP per 1000
+            shares: 0.09,      // 90 EGP per 1000
+            followers: 0.15,   // 150 EGP per 1000
+            comments: 2.25     // 225 EGP per 100
+        };
 
         // Calculate 1.5x price
-        function calculatePrice(basePrice) {
-            return Math.round(basePrice * 1.5);
+        function calcPrice(base) {
+            return Math.round(base * 1.5);
         }
 
-        // Render games
+        // Render Games with all options
         function renderGames() {
-            const gamesGrid = document.getElementById('games-grid');
-            gamesGrid.innerHTML = games.map(game => `
+            const container = document.getElementById('games-container');
+            container.innerHTML = gamesData.map((game, idx) => `
                 <div class="game-card">
                     <div class="game-image">
-                        <i class="fas ${game.icon || 'fa-gamepad'}"></i>
+                        <i class="fas ${game.icon}"></i>
                     </div>
                     <div class="game-content">
                         <h3 class="game-title">${game.name}</h3>
-                        <p class="game-type">${game.type}</p>
-                        <div class="game-price">${calculatePrice(game.basePrice)} L.E</div>
-                        <button class="btn-order" onclick="orderItem('${game.name}', ${calculatePrice(game.basePrice)})">
+                        <div class="price-options" id="game-${idx}-options">
+                            ${game.options.map((opt, optIdx) => `
+                                <div class="price-option ${optIdx === 0 ? 'selected' : ''}" 
+                                     onclick="selectOption('game-${idx}', ${optIdx}, '${game.name}', '${opt.type}', ${calcPrice(opt.price)})"
+                                     data-type="${opt.type}" data-price="${calcPrice(opt.price)}">
+                                    <span class="option-type">${opt.type}</span>
+                                    <span class="option-price">${calcPrice(opt.price)} L.E</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="btn-order" onclick="orderGame(${idx}, '${game.name}')">
                             Order Now
                         </button>
                     </div>
@@ -1496,17 +1583,17 @@
 
         // Render PS Plus
         function renderPSPlus() {
-            const plusGrid = document.getElementById('plus-grid');
-            plusGrid.innerHTML = psPlus.map(item => `
+            const container = document.getElementById('plus-container');
+            container.innerHTML = psPlusData.map(item => `
                 <div class="game-card">
-                    <div class="game-image" style="background: linear-gradient(135deg, #6d28d9 0%, #ec4899 100%);">
-                        <i class="fas fa-plus-circle" style="color: white;"></i>
+                    <div class="game-image" style="background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);">
+                        <i class="fas fa-plus-circle" style="color: white; font-size: 4rem;"></i>
                     </div>
                     <div class="game-content">
-                        <h3 class="game-title">PS Plus ${item.name}</h3>
-                        <p class="game-type">${item.type}</p>
-                        <div class="game-price">${calculatePrice(item.basePrice)} L.E</div>
-                        <button class="btn-order" onclick="orderItem('PS Plus ${item.name}', ${calculatePrice(item.basePrice)})">
+                        <h3 class="game-title">${item.name}</h3>
+                        <p class="option-type" style="margin-bottom: 1rem;">${item.type}</p>
+                        <div class="option-price" style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--success);">${calcPrice(item.basePrice)} L.E</div>
+                        <button class="btn-order" onclick="orderItem('PS Plus ${item.name}', ${calcPrice(item.basePrice)})">
                             Order Now
                         </button>
                     </div>
@@ -1514,19 +1601,29 @@
             `).join('');
         }
 
-        // Render V-Bucks
+        // Render V-Bucks with Epic form
         function renderVBucks() {
-            const vbucksGrid = document.getElementById('vbucks-grid');
-            vbucksGrid.innerHTML = vBucks.map(item => `
+            const container = document.getElementById('vbucks-container');
+            container.innerHTML = vBucksData.map((item, idx) => `
                 <div class="game-card">
                     <div class="game-image" style="background: linear-gradient(135deg, #f59e0b 0%, #ec4899 100%);">
-                        <i class="fas fa-coins" style="color: white;"></i>
+                        <i class="fas fa-coins" style="color: white; font-size: 4rem;"></i>
                     </div>
                     <div class="game-content">
-                        <h3 class="game-title">${item.name}</h3>
-                        <p class="game-type">${item.type}</p>
-                        <div class="game-price">${calculatePrice(item.basePrice)} L.E</div>
-                        <button class="btn-order" onclick="orderVBucks('${item.name}')">
+                        <h3 class="game-title">${item.amount}</h3>
+                        <div class="option-price" style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--success);">${calcPrice(item.basePrice)} L.E</div>
+                        <div class="epic-form">
+                            <div class="form-group">
+                                <label>Epic Email</label>
+                                <input type="email" id="vbuck-email-${idx}" placeholder="your@email.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Epic Password</label>
+                                <input type="password" id="vbuck-pass-${idx}" placeholder="Password">
+                            </div>
+                            <p class="epic-note">* Email and password needed to deliver V-Bucks</p>
+                        </div>
+                        <button class="btn-order" onclick="orderVBuck(${idx}, '${item.amount}', ${calcPrice(item.basePrice)})" style="margin-top: 0.5rem;">
                             Order Now
                         </button>
                     </div>
@@ -1534,19 +1631,29 @@
             `).join('');
         }
 
-        // Render Rocket League
+        // Render Rocket League with Epic form
         function renderRocket() {
-            const rocketGrid = document.getElementById('rocket-grid');
-            rocketGrid.innerHTML = rocketLeague.map(item => `
+            const container = document.getElementById('rocket-container');
+            container.innerHTML = rocketData.map((item, idx) => `
                 <div class="game-card">
                     <div class="game-image" style="background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);">
-                        <i class="fas fa-car" style="color: white;"></i>
+                        <i class="fas fa-car" style="color: white; font-size: 4rem;"></i>
                     </div>
                     <div class="game-content">
-                        <h3 class="game-title">${item.name}</h3>
-                        <p class="game-type">${item.type}</p>
-                        <div class="game-price">${calculatePrice(item.basePrice)} L.E</div>
-                        <button class="btn-order" onclick="orderRocket('${item.name}')">
+                        <h3 class="game-title">${item.amount}</h3>
+                        <div class="option-price" style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--success);">${calcPrice(item.basePrice)} L.E</div>
+                        <div class="epic-form">
+                            <div class="form-group">
+                                <label>Epic Email</label>
+                                <input type="email" id="rocket-email-${idx}" placeholder="your@email.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Epic Password</label>
+                                <input type="password" id="rocket-pass-${idx}" placeholder="Password">
+                            </div>
+                            <p class="epic-note">* Email and password needed to deliver Credits</p>
+                        </div>
+                        <button class="btn-order" onclick="orderRocket(${idx}, '${item.amount}', ${calcPrice(item.basePrice)})" style="margin-top: 0.5rem;">
                             Order Now
                         </button>
                     </div>
@@ -1554,25 +1661,138 @@
             `).join('');
         }
 
-        // Render Hezo
+        // Render Hezo with custom inputs
         function renderHezo() {
-            const hezoGrid = document.getElementById('hezo-grid');
-            hezoGrid.innerHTML = hezoServices.map(service => `
+            const container = document.getElementById('hezo-container');
+            const services = [
+                { name: 'Likes', icon: 'fa-heart', type: 'likes', unit: 'likes' },
+                { name: 'Views', icon: 'fa-eye', type: 'views', unit: 'views' },
+                { name: 'Favorites', icon: 'fa-star', type: 'favorites', unit: 'favorites' },
+                { name: 'Shares', icon: 'fa-share-alt', type: 'shares', unit: 'shares' },
+                { name: 'Followers', icon: 'fa-user-plus', type: 'followers', unit: 'followers' },
+                { name: 'Comments', icon: 'fa-comment', type: 'comments', unit: 'comments' }
+            ];
+
+            container.innerHTML = services.map((svc, idx) => `
                 <div class="hezo-card">
-                    <div class="hezo-icon"><i class="fas ${service.icon}"></i></div>
-                    <h4>${service.name}</h4>
-                    ${service.options.map(opt => `
-                        <div style="margin: 0.5rem 0; padding: 0.5rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                            <div style="font-size: 0.85rem; color: var(--text-muted);">${opt.amount}</div>
-                            <div class="hezo-price">${opt.price} L.E</div>
-                            <button class="btn-order" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; margin-top: 0.3rem;" 
-                                onclick="orderItem('Hezo ${service.name} - ${opt.amount}', ${opt.price})">
-                                Buy
-                            </button>
+                    <div class="hezo-header">
+                        <div class="hezo-icon"><i class="fas ${svc.icon}"></i></div>
+                        <div class="hezo-title">${svc.name}</div>
+                    </div>
+                    
+                    <div class="preset-options">
+                        <button class="preset-btn" onclick="setHezoAmount(${idx}, 1000, '${svc.type}')">1,000</button>
+                        <button class="preset-btn" onclick="setHezoAmount(${idx}, 5000, '${svc.type}')">5,000</button>
+                        <button class="preset-btn" onclick="setHezoAmount(${idx}, 10000, '${svc.type}')">10,000</button>
+                        <button class="preset-btn" onclick="setHezoAmount(${idx}, 50000, '${svc.type}')">50,000</button>
+                    </div>
+                    
+                    <div class="custom-order">
+                        <div class="custom-input-group">
+                            <input type="number" id="hezo-amount-${idx}" placeholder="Custom amount..." min="100" oninput="calculateHezoPrice(${idx}, '${svc.type}')">
+                            <span style="color: var(--text-muted); align-self: center;">${svc.unit}</span>
                         </div>
-                    `).join('')}
+                        <div class="price-calc" id="hezo-price-${idx}" style="display: none;">
+                            Price: <span id="hezo-price-value-${idx}">0</span> L.E
+                        </div>
+                        <button class="btn-order" onclick="orderHezo(${idx}, '${svc.name}', '${svc.type}')">
+                            Order Now
+                        </button>
+                    </div>
                 </div>
             `).join('');
+        }
+
+        // Selection handler
+        function selectOption(gameId, optIdx, gameName, type, price) {
+            const options = document.querySelectorAll(`#${gameId}-options .price-option`);
+            options.forEach((opt, idx) => {
+                if (idx === optIdx) opt.classList.add('selected');
+                else opt.classList.remove('selected');
+            });
+        }
+
+        function orderGame(gameIdx, gameName) {
+            const selected = document.querySelector(`#game-${gameIdx}-options .price-option.selected`);
+            const type = selected.dataset.type;
+            const price = selected.dataset.price;
+            orderItem(`${gameName} - ${type}`, price);
+        }
+
+        function orderVBuck(idx, amount, price) {
+            const email = document.getElementById(`vbuck-email-${idx}`).value;
+            const pass = document.getElementById(`vbuck-pass-${idx}`).value;
+            if (!email || !pass) {
+                showToast('Please enter Epic credentials', 'error');
+                return;
+            }
+            const msg = `V-Bucks: ${amount}\nPrice: ${price} L.E\nEpic Email: ${email}\nEpic Pass: ${pass}`;
+            window.open(`https://wa.me/201212072882?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function orderRocket(idx, amount, price) {
+            const email = document.getElementById(`rocket-email-${idx}`).value;
+            const pass = document.getElementById(`rocket-pass-${idx}`).value;
+            if (!email || !pass) {
+                showToast('Please enter Epic credentials', 'error');
+                return;
+            }
+            const msg = `Rocket League: ${amount}\nPrice: ${price} L.E\nEpic Email: ${email}\nEpic Pass: ${pass}`;
+            window.open(`https://wa.me/201212072882?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function setHezoAmount(idx, amount, type) {
+            document.getElementById(`hezo-amount-${idx}`).value = amount;
+            calculateHezoPrice(idx, type);
+        }
+
+        function calculateHezoPrice(idx, type) {
+            const amount = parseInt(document.getElementById(`hezo-amount-${idx}`).value) || 0;
+            const rate = hezoPricing[type];
+            let price = 0;
+            
+            if (type === 'comments') {
+                price = Math.round((amount / 100) * rate * 1.5);
+            } else {
+                price = Math.round((amount / 1000) * rate * 1.5);
+            }
+            
+            const priceDisplay = document.getElementById(`hezo-price-${idx}`);
+            const priceValue = document.getElementById(`hezo-price-value-${idx}`);
+            
+            if (amount > 0) {
+                priceDisplay.style.display = 'block';
+                priceValue.textContent = price;
+            } else {
+                priceDisplay.style.display = 'none';
+            }
+        }
+
+        function orderHezo(idx, name, type) {
+            const amount = document.getElementById(`hezo-amount-${idx}`).value;
+            if (!amount || amount < 100) {
+                showToast('Please enter a valid amount (min 100)', 'error');
+                return;
+            }
+            
+            const rate = hezoPricing[type];
+            let price = 0;
+            if (type === 'comments') {
+                price = Math.round((amount / 100) * rate * 1.5);
+            } else {
+                price = Math.round((amount / 1000) * rate * 1.5);
+            }
+            
+            orderItem(`Hezo ${name} - ${amount}`, price);
+        }
+
+        function orderItem(name, price) {
+            const message = `Hello! I want to order:\n${name}\nPrice: ${price} L.E\n\nPayment method: [Telda/InstaPay]`;
+            window.open(`https://wa.me/201212072882?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function openWhatsApp() {
+            window.open('https://wa.me/201212072882', '_blank');
         }
 
         // Modal functions
@@ -1589,7 +1809,6 @@
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('signup-form').style.display = 'none';
             document.getElementById('forgot-form').style.display = 'none';
-            
             if (mode === 'login') document.getElementById('login-form').style.display = 'block';
             else if (mode === 'signup') document.getElementById('signup-form').style.display = 'block';
             else if (mode === 'forgot') document.getElementById('forgot-form').style.display = 'block';
@@ -1599,33 +1818,20 @@
             switchAuthMode('forgot');
         }
 
-        // CAPTCHA
         function toggleCaptcha(element) {
             const checkbox = element.querySelector('.captcha-checkbox');
             const check = checkbox.querySelector('i');
-            
-            if (checkbox.classList.contains('checked')) {
-                checkbox.classList.remove('checked');
-                check.style.display = 'none';
-            } else {
-                checkbox.classList.add('checked');
-                check.style.display = 'block';
-            }
+            checkbox.classList.toggle('checked');
+            check.style.display = checkbox.classList.contains('checked') ? 'block' : 'none';
         }
 
-        // Form handlers
         function handleLogin(e) {
             e.preventDefault();
             const captcha = document.querySelector('#login-captcha').classList.contains('checked');
-            if (!captcha) {
-                showToast('Please verify you are not a robot', 'error');
-                return;
-            }
-            
+            if (!captcha) { showToast('Please verify you are not a robot', 'error'); return; }
             const email = document.getElementById('login-email').value;
             const btn = e.target.querySelector('button[type="submit"]');
             btn.classList.add('loading');
-            
             setTimeout(() => {
                 btn.classList.remove('loading');
                 document.body.classList.add('authenticated');
@@ -1638,23 +1844,13 @@
         function handleSignup(e) {
             e.preventDefault();
             const captcha = document.querySelector('#signup-captcha').classList.contains('checked');
-            if (!captcha) {
-                showToast('Please verify you are not a robot', 'error');
-                return;
-            }
-            
+            if (!captcha) { showToast('Please verify you are not a robot', 'error'); return; }
             const password = document.getElementById('signup-password').value;
             const confirm = document.getElementById('signup-confirm').value;
-            
-            if (password !== confirm) {
-                showToast('Passwords do not match', 'error');
-                return;
-            }
-            
+            if (password !== confirm) { showToast('Passwords do not match', 'error'); return; }
             const name = document.getElementById('signup-name').value;
             const btn = e.target.querySelector('button[type="submit"]');
             btn.classList.add('loading');
-            
             setTimeout(() => {
                 btn.classList.remove('loading');
                 document.body.classList.add('authenticated');
@@ -1669,7 +1865,6 @@
             const email = document.getElementById('forgot-email').value;
             const btn = e.target.querySelector('button[type="submit"]');
             btn.classList.add('loading');
-            
             setTimeout(() => {
                 btn.classList.remove('loading');
                 showToast(`Reset link sent to ${email}`, 'success');
@@ -1687,58 +1882,18 @@
             toggleProfile();
         }
 
-        // Profile dropdown
         function toggleProfile() {
             document.getElementById('profile-dropdown').classList.toggle('show');
         }
 
-        // Toast notification
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             const toastMessage = document.getElementById('toast-message');
             const icon = toast.querySelector('i');
-            
             toastMessage.textContent = message;
             toast.className = 'toast show ' + type;
-            
-            if (type === 'error') {
-                icon.className = 'fas fa-exclamation-circle';
-            } else {
-                icon.className = 'fas fa-check-circle';
-            }
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        // Order functions
-        function orderItem(name, price) {
-            const message = `Hello! I want to order:\n${name}\nPrice: ${price} L.E\n\nPayment method: [Telda/InstaPay]`;
-            const encoded = encodeURIComponent(message);
-            window.open(`https://wa.me/201212072882?text=${encoded}`, '_blank');
-        }
-
-        function orderVBucks(amount) {
-            const email = prompt('Enter your Epic Email:');
-            const password = prompt('Enter your Epic Password:');
-            if (email && password) {
-                const message = `Hello! I want to order ${amount}\nEpic Email: ${email}\nEpic Password: ${password}`;
-                window.open(`https://wa.me/201212072882?text=${encodeURIComponent(message)}`, '_blank');
-            }
-        }
-
-        function orderRocket(amount) {
-            const email = prompt('Enter your Epic Email:');
-            const password = prompt('Enter your Epic Password:');
-            if (email && password) {
-                const message = `Hello! I want to order ${amount}\nEpic Email: ${email}\nEpic Password: ${password}`;
-                window.open(`https://wa.me/201212072882?text=${encodeURIComponent(message)}`, '_blank');
-            }
-        }
-
-        function openWhatsApp() {
-            window.open('https://wa.me/201212072882', '_blank');
+            icon.className = type === 'error' ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
         function scrollToSection(id) {
@@ -1754,9 +1909,7 @@
         document.addEventListener('click', function(e) {
             const profile = document.querySelector('.user-profile');
             const dropdown = document.getElementById('profile-dropdown');
-            if (profile && !profile.contains(e.target)) {
-                dropdown.classList.remove('show');
-            }
+            if (profile && !profile.contains(e.target)) dropdown.classList.remove('show');
         });
 
         // Initialize
