@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROSOSKA STATION</title>
+    <title>Soska service</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -104,13 +104,19 @@
         
         /* Auto Status */
         .auto-status { background: rgba(76,175,80,0.1); border: 2px solid var(--success); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem; text-align: center; }
+
+        /* Payment Info Display */
+        .payment-info { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; text-align: center; }
+        .payment-info-item { margin: 0.5rem 0; font-size: 1.1rem; }
+        .payment-info-label { color: #888; font-size: 0.9rem; }
+        .payment-info-value { color: var(--primary); font-weight: 800; font-size: 1.3rem; direction: ltr; }
     </style>
 </head>
 <body>
     <!-- AUTH PAGE -->
     <div id="authPage" class="auth-container">
         <div class="auth-box">
-            <div class="auth-logo">⚡ PROSOSKA STATION</div>
+            <div class="auth-logo">⚡ Soska service</div>
             <p style="color: #888; margin-bottom: 2rem;">أفضل خدمات السوشيال ميديا</p>
             
             <div class="auth-tabs">
@@ -156,7 +162,7 @@
     <div id="mainApp">
         <header class="header">
             <div class="header-content">
-                <div class="logo">⚡ PROSOSKA STATION</div>
+                <div class="logo">⚡ Soska service</div>
                 <div class="user-info">
                     <span id="userName"></span>
                     <div class="balance-pill">💰 <span id="userBalance">0</span> ج.م</div>
@@ -207,6 +213,19 @@
             <div id="deposit" class="section">
                 <div class="add-balance-section">
                     <h2 class="section-title">💳 شحن الرصيد</h2>
+                    
+                    <!-- Payment Methods Info -->
+                    <div class="payment-info">
+                        <div class="payment-info-item">
+                            <div class="payment-info-label">📱 Instapay</div>
+                            <div class="payment-info-value">01204423575</div>
+                        </div>
+                        <div class="payment-info-item">
+                            <div class="payment-info-label">💳 Telda</div>
+                            <div class="payment-info-value">@selimahmed1</div>
+                        </div>
+                    </div>
+
                     <div class="preset-amounts">
                         <button class="amount-btn" onclick="selectAmt(50, this)">50</button>
                         <button class="amount-btn selected" onclick="selectAmt(100, this)">100</button>
@@ -223,11 +242,10 @@
                         <div id="finalAmt" style="margin-top: 0.5rem; color: var(--success);">النهائي: 90 ج.م</div>
                     </div>
                     <div class="payment-methods">
-                        <div class="payment-method selected" onclick="selectPay(this, 'visa')"><div class="payment-icon">💳</div><div>Visa</div></div>
+                        <div class="payment-method selected" onclick="selectPay(this, 'instapay')"><div class="payment-icon">📱</div><div>Instapay</div></div>
+                        <div class="payment-method" onclick="selectPay(this, 'telda')"><div class="payment-icon">💳</div><div>Telda</div></div>
+                        <div class="payment-method" onclick="selectPay(this, 'visa')"><div class="payment-icon">💳</div><div>Visa</div></div>
                         <div class="payment-method" onclick="selectPay(this, 'paypal')"><div class="payment-icon">P</div><div>PayPal</div></div>
-                        <div class="payment-method" onclick="selectPay(this, 'stripe')"><div class="payment-icon">S</div><div>Stripe</div></div>
-                        <div class="payment-method" onclick="selectPay(this, 'fawry')"><div class="payment-icon">F</div><div>Fawry</div></div>
-                        <div class="payment-method" onclick="selectPay(this, 'crypto')"><div class="payment-icon">₿</div><div>Crypto</div></div>
                     </div>
                     <button class="btn-deposit" onclick="deposit()">تأكيد الشحن</button>
                 </div>
@@ -324,7 +342,7 @@
         let selService = null;
         let orderQty = 1000;
         let selAmount = 100;
-        let selPayment = 'visa';
+        let selPayment = 'instapay';
         let bulkOrders = [];
         
         // ==========================================
@@ -572,7 +590,7 @@
             const ws = XLSX.utils.aoa_to_sheet(data);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'Orders');
-            XLSX.writeFile(wb, 'HEVO_Template.xlsx');
+            XLSX.writeFile(wb, 'Soska_Template.xlsx');
         }
         
         function handleBulk(e) {
@@ -729,7 +747,7 @@
             localStorage.setItem('deposits', JSON.stringify(deposits));
             
             sendToSheet(deposit);
-            sendTg(`💰 شحن جديد من ${currentUser.name}\n${amt} ج.م - ${selPayment}`);
+            sendTg(`💰 شحن جديد من ${currentUser.name}\n${amt} ج.م - ${selPayment}\nInstapay: 01204423575\nTelda: @selimahmed1`);
             
             toast('تم إرسال الطلب', 'سيتم مراجعة الدفع وإضافة الرصيد');
         }
