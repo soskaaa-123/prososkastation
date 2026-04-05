@@ -4,1921 +4,961 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProSoskaStation - Connect. Play. Dominate.</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="description" content="Egypt's trusted PlayStation store. Buy games, PS Plus, V-Bucks, and more.">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://www.gstatic.com">
+    <link rel="preconnect" href="https://www.google.com">
+    <link rel="dns-prefetch" href="https://accept.paymob.com">
+    
+    <!-- Critical CSS Inline -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #7c3aed;
-            --primary-dark: #6d28d9;
-            --secondary: #ec4899;
-            --accent: #f59e0b;
-            --dark: #0f0f1a;
-            --darker: #0a0a12;
-            --card: #1a1a2e;
-            --card-hover: #252542;
-            --text: #f8fafc;
-            --text-muted: #94a3b8;
-            --success: #10b981;
-            --danger: #ef4444;
-            --gradient-1: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
-            --gradient-2: linear-gradient(135deg, #f59e0b 0%, #ec4899 100%);
-            --glass: rgba(255, 255, 255, 0.05);
-        }
-
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--darker);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Animated Background */
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: var(--darker);
-        }
-
-        .bg-animation::before {
-            content: '';
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 20% 80%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.1) 0%, transparent 40%);
-            animation: bgMove 20s ease-in-out infinite;
-        }
-
-        @keyframes bgMove {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(-5%, -5%) rotate(5deg); }
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 1rem 5%;
-            background: rgba(15, 15, 26, 0.95);
-            backdrop-filter: blur(20px);
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--gradient-1);
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .nav-links a:hover {
-            color: var(--secondary);
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.7rem 1.5rem;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.95rem;
-        }
-
-        .btn-primary {
-            background: var(--gradient-1);
-            color: white;
-            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(124, 58, 237, 0.6);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--text);
-        }
-
-        .btn-secondary:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-google {
-            background: white;
-            color: #333;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            width: 100%;
-            margin-top: 1rem;
-        }
-
-        .btn-google:hover {
-            background: #f1f1f1;
-            transform: translateY(-2px);
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 8rem 5% 4rem;
-            position: relative;
-        }
-
-        .hero-content {
-            max-width: 800px;
-            z-index: 1;
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: glow 3s ease-in-out infinite;
-        }
-
-        @keyframes glow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.2); }
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-        }
-
-        .hero-stats {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin-top: 3rem;
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: var(--gradient-2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .stat-label {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        /* Auth Modal */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal {
-            background: var(--card);
-            border-radius: 20px;
-            padding: 2.5rem;
-            max-width: 450px;
-            width: 100%;
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-            animation: modalSlide 0.3s ease;
-        }
-
-        @keyframes modalSlide {
-            from { opacity: 0; transform: translateY(-50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .modal-close:hover {
-            color: var(--text);
-        }
-
-        .modal h2 {
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-            text-align: center;
-        }
-
-        .modal-subtitle {
-            text-align: center;
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 0.9rem 1rem;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            background: var(--darker);
-            color: var(--text);
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .form-group input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .captcha-box {
-            background: var(--darker);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            cursor: pointer;
-        }
-
-        .captcha-checkbox {
-            width: 24px;
-            height: 24px;
-            border: 2px solid var(--text-muted);
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-
-        .captcha-checkbox.checked {
-            background: var(--success);
-            border-color: var(--success);
-        }
-
-        .captcha-text {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        .form-options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            font-size: 0.85rem;
-        }
-
-        .form-options a {
-            color: var(--secondary);
-            text-decoration: none;
-        }
-
-        .form-options a:hover {
-            text-decoration: underline;
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 1.5rem 0;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-
-        .divider::before, .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.1);
-            margin: 0 1rem;
-        }
-
-        .auth-switch {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .auth-switch a {
-            color: var(--secondary);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        /* Sections */
-        section {
-            padding: 5rem 5%;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            color: var(--text-muted);
-            margin-bottom: 3rem;
-            font-size: 1.1rem;
-        }
-
-        /* Game Cards - Enhanced */
-        .games-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 4rem;
-        }
-
-        .game-card {
-            background: var(--card);
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s;
-        }
-
-        .game-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            box-shadow: 0 25px 50px rgba(124, 58, 237, 0.4);
-        }
-
-        .game-image {
-            width: 100%;
-            height: 180px;
-            background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            color: var(--primary);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .game-image::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.3) 0%, rgba(236, 72, 153, 0.3) 100%);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .game-card:hover .game-image::before {
-            opacity: 1;
-        }
-
-        .game-content {
-            padding: 1.5rem;
-        }
-
-        .game-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--text);
-        }
-
-        /* Price Options */
-        .price-options {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .price-option {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem;
-            background: var(--darker);
-            border-radius: 10px;
-            border: 2px solid transparent;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .price-option:hover {
-            border-color: var(--primary);
-            background: rgba(124, 58, 237, 0.1);
-        }
-
-        .price-option.selected {
-            border-color: var(--primary);
-            background: rgba(124, 58, 237, 0.2);
-        }
-
-        .option-type {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .option-price {
-            font-weight: 700;
-            color: var(--success);
-            font-size: 1rem;
-        }
-
-        .btn-order {
-            width: 100%;
-            background: var(--gradient-1);
-            color: white;
-            border: none;
-            padding: 0.9rem;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 0.5rem;
-        }
-
-        .btn-order:hover {
-            transform: scale(1.02);
-            box-shadow: 0 5px 20px rgba(124, 58, 237, 0.5);
-        }
-
-        /* Hezo Section */
-        .hezo-section {
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
-            border-radius: 30px;
-            padding: 3rem;
-            margin-bottom: 4rem;
-            border: 1px solid rgba(124, 58, 237, 0.3);
-        }
-
-        .hezo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .hezo-card {
-            background: var(--card);
-            border-radius: 20px;
-            padding: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s;
-        }
-
-        .hezo-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--secondary);
-            box-shadow: 0 15px 30px rgba(236, 72, 153, 0.3);
-        }
-
-        .hezo-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .hezo-icon {
-            width: 50px;
-            height: 50px;
-            background: var(--gradient-1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        .hezo-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-
-        /* Custom Input for Hezo */
-        .custom-order {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .custom-input-group {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .custom-input-group input {
-            flex: 1;
-            padding: 0.7rem;
-            background: var(--darker);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: var(--text);
-            font-size: 0.9rem;
-        }
-
-        .custom-input-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .custom-input-group input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .price-calc {
-            text-align: center;
-            padding: 0.5rem;
-            background: rgba(16, 185, 129, 0.1);
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--success);
-        }
-
-        .preset-options {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .preset-btn {
-            padding: 0.5rem;
-            background: var(--darker);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: var(--text);
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s;
-        }
-
-        .preset-btn:hover {
-            border-color: var(--secondary);
-            background: rgba(236, 72, 153, 0.1);
-        }
-
-        /* Payment Section */
-        .payment-section {
-            background: var(--card);
-            border-radius: 30px;
-            padding: 3rem;
-            margin-bottom: 4rem;
-        }
-
-        .payment-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .payment-card {
-            background: var(--darker);
-            border-radius: 15px;
-            padding: 2rem;
-            text-align: center;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s;
-        }
-
-        .payment-card:hover {
-            border-color: var(--success);
-            transform: translateY(-5px);
-        }
-
-        .payment-card i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: var(--success);
-        }
-
-        .payment-card h3 {
-            margin-bottom: 0.5rem;
-        }
-
-        .payment-info {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--success);
-            margin-bottom: 0.5rem;
-        }
-
-        .payment-desc {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .whatsapp-option {
-            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
-            color: white;
-            border-radius: 15px;
-            padding: 2rem;
-            text-align: center;
-            margin-top: 2rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .whatsapp-option:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
-        }
-
-        .whatsapp-option i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .whatsapp-option h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .whatsapp-number {
-            font-size: 1.8rem;
-            font-weight: 800;
-        }
-
-        /* How It Works */
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .step {
-            text-align: center;
-            position: relative;
-        }
-
-        .step:not(:last-child)::after {
-            content: '→';
-            position: absolute;
-            right: -1.5rem;
-            top: 2rem;
-            font-size: 2rem;
-            color: var(--primary);
-            opacity: 0.5;
-        }
-
-        @media (max-width: 768px) {
-            .step:not(:last-child)::after {
-                content: '↓';
-                right: 50%;
-                top: 100%;
-                transform: translateX(50%);
-            }
-        }
-
-        .step-number {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient-1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 800;
-            margin: 0 auto 1rem;
-            box-shadow: 0 5px 20px rgba(124, 58, 237, 0.5);
-        }
-
-        .step h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .step p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--dark);
-            padding: 3rem 5%;
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .footer-content {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .footer-logo {
-            font-size: 2rem;
-            font-weight: 800;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
-        }
-
-        .footer-text {
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .social-links a {
-            width: 45px;
-            height: 45px;
-            background: var(--card);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text);
-            font-size: 1.2rem;
-            transition: all 0.3s;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .social-links a:hover {
-            background: var(--primary);
-            transform: translateY(-5px);
-            border-color: var(--primary);
-        }
-
-        .copyright {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: var(--card);
-            color: var(--text);
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            display: none;
-            align-items: center;
-            gap: 0.5rem;
-            z-index: 3000;
-            animation: slideIn 0.3s ease;
-        }
-
-        .toast.show {
-            display: flex;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .toast.success { border-color: var(--success); }
-        .toast.error { border-color: var(--danger); }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .nav-links { display: none; }
-            .hero-stats { flex-direction: column; gap: 1.5rem; }
-            section { padding: 3rem 5%; }
-            .games-container { grid-template-columns: 1fr; }
-            .preset-options { grid-template-columns: 1fr; }
-        }
-
-        .loader {
-            display: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .btn.loading .loader { display: inline-block; }
-        .btn.loading .btn-text { display: none; }
-
-        /* User Profile */
-        .user-profile { position: relative; }
-        
-        .profile-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--card);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .profile-btn:hover { border-color: var(--primary); }
-
-        .profile-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 0.5rem;
-            background: var(--card);
-            border-radius: 15px;
-            padding: 1rem;
-            min-width: 200px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: none;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .profile-dropdown.show { display: block; }
-
-        .profile-dropdown a {
-            display: block;
-            padding: 0.7rem 1rem;
-            color: var(--text);
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-
-        .profile-dropdown a:hover { background: rgba(124, 58, 237, 0.2); }
-
-        .profile-dropdown hr {
-            border: none;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            margin: 0.5rem 0;
-        }
-
-        .logged-in-only { display: none; }
-        .logged-out-only { display: flex; }
-
-        body.authenticated .logged-in-only { display: flex; }
-        body.authenticated .logged-out-only { display: none; }
-
-        /* Epic Credentials Form */
-        .epic-form {
-            background: var(--darker);
-            border-radius: 10px;
-            padding: 1rem;
-            margin-top: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .epic-form .form-group {
-            margin-bottom: 0.75rem;
-        }
-
-        .epic-form label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .epic-form input {
-            padding: 0.6rem;
-            font-size: 0.9rem;
-        }
-
-        .epic-note {
-            font-size: 0.75rem;
-            color: var(--accent);
-            margin-top: 0.5rem;
-            font-style: italic;
-        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--primary:#7c3aed;--secondary:#ec4899;--accent:#f59e0b;--dark:#0f0f1a;--darker:#0a0a12;--card:#1a1a2e;--text:#f8fafc;--success:#10b981;--danger:#ef4444}
+        body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--darker);color:var(--text);line-height:1.6;overflow-x:hidden}
+        .bg-animation{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;background:var(--darker)}
+        .bg-animation::before{content:'';position:absolute;width:200%;height:200%;background:radial-gradient(circle at 20% 80%,rgba(124,58,237,.15) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(236,72,153,.15) 0%,transparent 50%);animation:bgMove 20s ease-in-out infinite}
+        @keyframes bgMove{0%,100%{transform:translate(0,0) rotate(0deg)}50%{transform:translate(-5%,-5%) rotate(5deg)}}
+        nav{position:fixed;top:0;width:100%;padding:1rem 5%;background:rgba(15,15,26,.95);backdrop-filter:blur(20px);z-index:1000;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.1)}
+        .logo{font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,#7c3aed 0%,#ec4899 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;display:flex;align-items:center;gap:.5rem}
+        .nav-links{display:flex;gap:2rem}
+        .nav-links a{color:var(--text);text-decoration:none;font-weight:500;transition:all .3s}
+        .nav-links a:hover{color:var(--secondary)}
+        .cart-icon{position:relative;cursor:pointer;font-size:1.3rem}
+        .cart-count{position:absolute;top:-8px;right:-8px;background:var(--secondary);color:#fff;font-size:.7rem;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+        .btn{padding:.7rem 1.5rem;border:none;border-radius:50px;cursor:pointer;font-weight:600;transition:all .3s;display:inline-flex;align-items:center;gap:.5rem;font-size:.95rem}
+        .btn-primary{background:linear-gradient(135deg,#7c3aed 0%,#ec4899 100%);color:#fff;box-shadow:0 4px 15px rgba(124,58,237,.4)}
+        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(124,58,237,.6)}
+        .btn-secondary{background:transparent;border:2px solid var(--primary);color:var(--text)}
+        .btn-secondary:hover{background:var(--primary);color:#fff}
+        .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 5% 4rem}
+        .hero-content{max-width:800px}
+        .hero h1{font-size:4rem;font-weight:800;margin-bottom:1rem;background:linear-gradient(135deg,#7c3aed 0%,#ec4899 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .hero p{font-size:1.3rem;color:#94a3b8;margin-bottom:2rem}
+        section{padding:5rem 5%}
+        .section-title{text-align:center;font-size:2.5rem;font-weight:800;margin-bottom:1rem;background:linear-gradient(135deg,#7c3aed 0%,#ec4899 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .section-subtitle{text-align:center;color:#94a3b8;margin-bottom:3rem;font-size:1.1rem}
+        .games-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:2rem;margin-bottom:4rem}
+        .game-card{background:var(--card);border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.1);transition:all .3s}
+        .game-card:hover{transform:translateY(-10px);border-color:var(--primary);box-shadow:0 25px 50px rgba(124,58,237,.4)}
+        .game-image{width:100%;height:200px;background:linear-gradient(135deg,#1a1a2e 0%,#2d2d44 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+        .game-image img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+        .game-card:hover .game-image img{transform:scale(1.1)}
+        .game-image i{font-size:4rem;color:var(--primary);position:absolute}
+        .platform-tabs{display:flex;gap:.5rem;padding:1rem;background:var(--darker)}
+        .platform-tab{flex:1;padding:.5rem;background:transparent;border:1px solid rgba(255,255,255,.1);color:#94a3b8;border-radius:8px;cursor:pointer;transition:all .3s}
+        .platform-tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+        .account-type-tabs{display:flex;gap:.5rem;padding:0 1rem 1rem;background:var(--darker)}
+        .type-tab{flex:1;padding:.5rem;background:transparent;border:1px solid rgba(255,255,255,.1);color:#94a3b8;border-radius:8px;cursor:pointer;transition:all .3s}
+        .type-tab.active{background:var(--secondary);color:#fff;border-color:var(--secondary)}
+        .game-content{padding:1.5rem}
+        .game-title{font-size:1.3rem;font-weight:700;margin-bottom:1rem}
+        .price-display{font-size:2rem;font-weight:800;color:var(--success);margin-bottom:1rem;text-align:center}
+        .btn-order{width:100%;background:linear-gradient(135deg,#7c3aed 0%,#ec4899 100%);color:#fff;border:none;padding:1rem;border-radius:10px;font-weight:600;cursor:pointer;transition:all .3s}
+        .btn-order:hover{transform:scale(1.02);box-shadow:0 5px 20px rgba(124,58,237,.5)}
+        .btn-cart{width:100%;background:var(--darker);border:2px solid rgba(255,255,255,.1);color:var(--text);padding:.8rem;border-radius:10px;cursor:pointer;margin-top:.5rem;transition:all .3s}
+        .btn-cart:hover{border-color:var(--accent);color:var(--accent)}
+        .plus-card{background:var(--card);border-radius:20px;padding:2rem;border:1px solid rgba(255,255,255,.1)}
+        .plus-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.1)}
+        .plus-icon{width:60px;height:60px;background:linear-gradient(135deg,#7c3aed 0%,#ec4899 100%);border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:1.8rem}
+        .duration-options,.account-options{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+        .option-btn{padding:.5rem 1rem;background:var(--darker);border:1px solid rgba(255,255,255,.1);color:var(--text);border-radius:8px;cursor:pointer;transition:all .3s}
+        .option-btn.active{background:var(--primary);border-color:var(--primary)}
+        .package-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem;margin-bottom:1.5rem}
+        .package-card{background:var(--darker);border:2px solid rgba(255,255,255,.1);border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .3s}
+        .package-card.selected,.package-card:hover{border-color:var(--primary);background:rgba(124,58,237,.1)}
+        .package-amount{font-size:1.3rem;font-weight:700;margin-bottom:.5rem}
+        .package-price{color:var(--success);font-weight:600}
+        .epic-form{background:var(--darker);border-radius:12px;padding:1.5rem;margin-bottom:1rem}
+        .epic-form input{width:100%;padding:.9rem;border:2px solid rgba(255,255,255,.1);background:var(--darker);color:var(--text);border-radius:10px;margin-bottom:1rem}
+        .hezo-section{background:linear-gradient(135deg,rgba(124,58,237,.1) 0%,rgba(236,72,153,.1) 100%);border-radius:30px;padding:3rem;margin-bottom:4rem;border:1px solid rgba(124,58,237,.3)}
+        .hezo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+        .hezo-card{background:var(--card);border-radius:20px;padding:1.5rem;border:1px solid rgba(255,255,255,.1)}
+        .hezo-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
+        .hezo-icon{width:50px;height:50px;background:linear-gradient(135deg,#7c3aed 0%,#ec4899 100%);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem}
+        .preset-buttons{display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem;margin-bottom:1rem}
+        .preset-btn{padding:.6rem;background:var(--darker);border:1px solid rgba(255,255,255,.1);color:var(--text);border-radius:8px;cursor:pointer}
+        .preset-btn:hover{border-color:var(--secondary)}
+        .custom-input{display:flex;gap:.5rem;margin-bottom:.5rem}
+        .custom-input input{flex:1;padding:.8rem;background:var(--darker);border:2px solid rgba(255,255,255,.1);color:var(--text);border-radius:8px}
+        .total-display{text-align:center;padding:.8rem;background:rgba(16,185,129,.1);border-radius:8px;margin-bottom:.5rem;font-weight:700;color:var(--success)}
+        .paymob-section{background:linear-gradient(135deg,rgba(245,158,11,.1) 0%,rgba(236,72,153,.1) 100%);border-radius:30px;padding:3rem;margin-bottom:4rem;border:1px solid rgba(245,158,11,.3)}
+        .paymob-card{background:var(--card);border-radius:20px;padding:2rem}
+        .paymob-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
+        .paymob-icon{width:60px;height:60px;background:linear-gradient(135deg,#f59e0b 0%,#ec4899 100%);border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:1.8rem}
+        .wallet-display{background:linear-gradient(135deg,rgba(124,58,237,.2) 0%,rgba(236,72,153,.2) 100%);border:1px solid rgba(124,58,237,.3);border-radius:15px;padding:1rem;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center}
+        .wallet-amount{font-size:1.5rem;font-weight:700;color:var(--success)}
+        .paymob-btn{width:100%;background:linear-gradient(135deg,#f59e0b 0%,#ec4899 100%);color:#fff;border:none;padding:1rem;border-radius:10px;font-weight:600;cursor:pointer;transition:all .3s}
+        .paymob-btn:hover{transform:scale(1.02);box-shadow:0 5px 20px rgba(245,158,11,.5)}
+        .payment-section{background:var(--card);border-radius:30px;padding:3rem;margin-bottom:4rem}
+        .payment-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2rem;margin-top:2rem}
+        .payment-card{background:var(--darker);border-radius:15px;padding:2rem;text-align:center;border:2px solid rgba(255,255,255,.1);cursor:pointer;transition:all .3s}
+        .payment-card:hover{transform:translateY(-10px);border-color:var(--success)}
+        .payment-card i{font-size:3rem;margin-bottom:1rem;color:var(--success)}
+        .whatsapp-option{background:linear-gradient(135deg,#25d366 0%,#128c7e 100%);color:#fff;border-radius:15px;padding:2rem;text-align:center;margin-top:2rem;cursor:pointer;transition:all .3s}
+        .whatsapp-option:hover{transform:translateY(-5px) scale(1.02)}
+        .whatsapp-number{font-size:1.8rem;font-weight:800}
+        .cart-sidebar{position:fixed;top:0;right:-400px;width:400px;height:100%;background:var(--card);z-index:3000;transition:right .3s;display:flex;flex-direction:column;border-left:1px solid rgba(255,255,255,.1)}
+        .cart-sidebar.open{right:0}
+        .cart-header{padding:1.5rem;border-bottom:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;align-items:center}
+        .cart-items{flex:1;overflow-y:auto;padding:1rem}
+        .cart-item{background:var(--darker);border-radius:12px;padding:1rem;margin-bottom:1rem;display:flex;justify-content:space-between}
+        .cart-item-price{color:var(--success);font-weight:700}
+        .remove-item{background:none;border:none;color:var(--danger);cursor:pointer;font-size:1.2rem}
+        .cart-footer{padding:1.5rem;border-top:1px solid rgba(255,255,255,.1)}
+        .cart-total{display:flex;justify-content:space-between;font-size:1.3rem;font-weight:700;margin-bottom:1rem}
+        .checkout-payment-methods{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1rem 0}
+        .checkout-method{background:var(--darker);border:2px solid rgba(255,255,255,.1);border-radius:12px;padding:1rem;text-align:center;cursor:pointer;transition:all .3s}
+        .checkout-method.selected{border-color:var(--success);background:rgba(16,185,129,.1)}
+        .checkout-method i{font-size:1.5rem;margin-bottom:.3rem;display:block}
+        .cart-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:2999;display:none}
+        .cart-overlay.show{display:block}
+        .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);z-index:2000;justify-content:center;align-items:center;padding:1rem}
+        .modal-overlay.active{display:flex}
+        .modal{background:var(--card);border-radius:20px;padding:2.5rem;max-width:450px;width:100%;position:relative;border:1px solid rgba(255,255,255,.1)}
+        .modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:#94a3b8;font-size:1.5rem;cursor:pointer}
+        .modal h2{font-size:1.8rem;margin-bottom:.5rem;text-align:center}
+        .modal-subtitle{text-align:center;color:#94a3b8;margin-bottom:1.5rem;font-size:.9rem}
+        .form-group{margin-bottom:1.2rem}
+        .form-group label{display:block;margin-bottom:.5rem;font-weight:500;font-size:.9rem}
+        .form-group input{width:100%;padding:.9rem;border:2px solid rgba(255,255,255,.1);background:var(--darker);color:var(--text);border-radius:10px}
+        .form-group input:focus{outline:none;border-color:var(--primary)}
+        .captcha-box{background:var(--darker);border:2px solid rgba(255,255,255,.1);border-radius:10px;padding:1rem;margin-bottom:1rem;display:flex;align-items:center;gap:1rem;cursor:pointer}
+        .captcha-checkbox{width:24px;height:24px;border:2px solid #94a3b8;border-radius:4px;display:flex;align-items:center;justify-content:center}
+        .captcha-checkbox.checked{background:var(--success);border-color:var(--success)}
+        .captcha-checkbox i{display:none;color:#fff;font-size:.8rem}
+        .captcha-checkbox.checked i{display:block}
+        .divider{display:flex;align-items:center;margin:1.5rem 0;color:#94a3b8;font-size:.85rem}
+        .divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1);margin:0 1rem}
+        .auth-switch{text-align:center;margin-top:1.5rem;color:#94a3b8;font-size:.9rem}
+        .auth-switch a{color:var(--secondary);text-decoration:none;font-weight:600}
+        .btn-google{background:#fff;color:#333;display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;margin-top:1rem;padding:.8rem;border:none;border-radius:50px;cursor:pointer;font-weight:600}
+        .logged-in-only{display:none}
+        .logged-out-only{display:flex}
+        body.authenticated .logged-in-only{display:flex}
+        body.authenticated .logged-out-only{display:none}
+        .profile-dropdown{position:absolute;top:100%;right:0;margin-top:.5rem;background:var(--card);border-radius:15px;padding:1rem;min-width:200px;border:1px solid rgba(255,255,255,.1);display:none;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+        .profile-dropdown.show{display:block}
+        .user-profile{position:relative}
+        .profile-btn{display:flex;align-items:center;gap:.5rem;cursor:pointer;padding:.5rem;border-radius:10px}
+        .toast{position:fixed;bottom:2rem;right:2rem;background:var(--card);color:var(--text);padding:1rem 1.5rem;border-radius:10px;border:1px solid rgba(255,255,255,.1);display:none;align-items:center;gap:.5rem;z-index:4000;transform:translateX(100%);transition:transform .3s}
+        .toast.show{display:flex;transform:translateX(0)}
+        .toast.success{border-color:var(--success)}
+        .toast.error{border-color:var(--danger)}
+        .scroll-progress{position:fixed;top:0;left:0;width:0%;height:3px;background:linear-gradient(135deg,#7c3aed 0%,#ec4899 100%);z-index:9999}
+        .spinner{display:none;width:20px;height:20px;border:2px solid rgba(255,255,255,.3);border-radius:50%;border-top-color:#fff;animation:spin 1s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        @media(max-width:768px){.hero h1{font-size:2.5rem}.nav-links{display:none}.cart-sidebar{width:100%;right:-100%}.games-container{grid-template-columns:1fr}.checkout-payment-methods{grid-template-columns:1fr}}
+        .lazy-img{opacity:0;transition:opacity .3s}.lazy-img.loaded{opacity:1}
     </style>
+    
+    <!-- Deferred Font Awesome -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 </head>
 <body>
+    <div class="scroll-progress" id="scroll-progress"></div>
     <div class="bg-animation"></div>
 
-    <!-- Navigation -->
     <nav>
-        <a href="#" class="logo">
-            <i class="fas fa-gamepad"></i>
-            ProSoskaStation
-        </a>
+        <a href="#" class="logo"><i class="fas fa-gamepad"></i>ProSoskaStation</a>
         <div class="nav-links">
             <a href="#games">Games</a>
             <a href="#plus">PS Plus</a>
             <a href="#vbucks">V-Bucks</a>
+            <a href="#rocket">Rocket League</a>
             <a href="#hezo">Hezo</a>
-            <a href="#payment">Payment</a>
         </div>
-        <div class="user-menu">
+        <div class="user-menu" style="display:flex;align-items:center;gap:1.5rem">
+            <div class="cart-icon" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cart-count">0</span>
+            </div>
             <div class="logged-out-only">
                 <button class="btn btn-secondary" onclick="openModal('login')">Sign In</button>
                 <button class="btn btn-primary" onclick="openModal('signup')">Sign Up</button>
             </div>
             <div class="logged-in-only user-profile">
                 <div class="profile-btn" onclick="toggleProfile()">
-                    <i class="fas fa-user-circle"></i>
+                    <i class="fas fa-user-circle fa-lg"></i>
                     <span id="username-display">User</span>
-                    <i class="fas fa-chevron-down"></i>
                 </div>
                 <div class="profile-dropdown" id="profile-dropdown">
-                    <a href="#"><i class="fas fa-user"></i> My Profile</a>
-                    <a href="#"><i class="fas fa-shopping-bag"></i> My Orders</a>
-                    <hr>
-                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    <div style="padding:.5rem;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:.5rem">
+                        <small style="color:#94a3b8">Balance</small>
+                        <div class="wallet-amount" id="user-wallet">0 EGP</div>
+                    </div>
+                    <a href="#" onclick="logout()" style="display:flex;align-items:center;gap:.5rem;color:var(--text);text-decoration:none;padding:.5rem"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero -->
     <section class="hero">
         <div class="hero-content">
             <h1>Connect. Play. Dominate.</h1>
             <p>Your trusted PlayStation games store in Egypt. Primary & Secondary accounts for PS4 & PS5.</p>
-            <button class="btn btn-primary" onclick="scrollToSection('games')" style="font-size: 1.1rem; padding: 1rem 2rem;">
+            <button class="btn btn-primary" onclick="document.getElementById('games').scrollIntoView({behavior:'smooth'})">
                 <i class="fas fa-rocket"></i> Browse Games
             </button>
-            <div class="hero-stats">
-                <div class="stat"><div class="stat-value">10K+</div><div class="stat-label">Happy Customers</div></div>
-                <div class="stat"><div class="stat-value">500+</div><div class="stat-label">Games Available</div></div>
-                <div class="stat"><div class="stat-value">24/7</div><div class="stat-label">Support</div></div>
-            </div>
         </div>
     </section>
 
-    <!-- Games Section -->
     <section id="games">
         <h2 class="section-title">Games</h2>
         <p class="section-subtitle">Primary & Secondary accounts for PS4 & PS5</p>
         <div class="games-container" id="games-container"></div>
     </section>
 
-    <!-- PlayStation Plus -->
     <section id="plus">
         <h2 class="section-title">PlayStation Plus</h2>
-        <p class="section-subtitle">1-12 Month subscriptions</p>
+        <p class="section-subtitle">Choose your plan</p>
         <div class="games-container" id="plus-container"></div>
     </section>
 
-    <!-- Fortnite V-Bucks -->
     <section id="vbucks">
         <h2 class="section-title">Fortnite V-Bucks</h2>
-        <p class="section-subtitle">Direct delivery to your Epic account</p>
+        <p class="section-subtitle">Select package and enter Epic credentials</p>
         <div class="games-container" id="vbucks-container"></div>
     </section>
 
-    <!-- Rocket League -->
     <section id="rocket">
         <h2 class="section-title">Rocket League Credits</h2>
         <p class="section-subtitle">Get credits fast and secure</p>
         <div class="games-container" id="rocket-container"></div>
     </section>
 
-    <!-- Hezo Section -->
     <section id="hezo">
         <div class="hezo-section">
             <h2 class="section-title"><i class="fas fa-bolt"></i> Hezo Services</h2>
-            <p class="section-subtitle">Boost your social presence - Custom amounts available</p>
+            <p class="section-subtitle">Boost your social media presence</p>
             <div class="hezo-grid" id="hezo-container"></div>
         </div>
     </section>
 
-    <!-- Payment -->
+    <section id="paymob">
+        <div class="paymob-section">
+            <h2 class="section-title"><i class="fas fa-credit-card"></i> Paymob Payment</h2>
+            <p class="section-subtitle">Secure online payment with multiple options</p>
+            <div class="paymob-card">
+                <div class="paymob-header">
+                    <div class="paymob-icon"><i class="fas fa-wallet"></i></div>
+                    <div>
+                        <h3 style="font-size:1.3rem;font-weight:700">Online Payment</h3>
+                        <p style="color:#94a3b8;font-size:.9rem">Pay with card, wallet, or installments</p>
+                    </div>
+                </div>
+                <div class="wallet-display logged-in-only">
+                    <span><i class="fas fa-wallet"></i> Your Wallet</span>
+                    <span class="wallet-amount" id="paymob-wallet">0 EGP</span>
+                </div>
+                <div class="duration-options">
+                    <button class="option-btn active" onclick="selectPaymobMethod('card',this)"><i class="fas fa-credit-card"></i> Card</button>
+                    <button class="option-btn" onclick="selectPaymobMethod('wallet',this)"><i class="fas fa-mobile-alt"></i> Wallet</button>
+                    <button class="option-btn" onclick="selectPaymobMethod('installment',this)"><i class="fas fa-calendar-alt"></i> Installment</button>
+                </div>
+                <button class="paymob-btn logged-in-only" onclick="openPaymobCheckout()"><i class="fas fa-lock"></i> Pay with Paymob</button>
+                <button class="btn btn-secondary logged-out-only" onclick="openModal('login')" style="width:100%"><i class="fas fa-sign-in-alt"></i> Login to Pay</button>
+            </div>
+        </div>
+    </section>
+
     <section id="payment">
         <div class="payment-section">
-            <h2 class="section-title">Payment Methods</h2>
-            <p class="section-subtitle">Choose your preferred payment option</p>
+            <h2 class="section-title">Other Payment Methods</h2>
             <div class="payment-options">
-                <div class="payment-card">
+                <div class="payment-card" onclick="copyToClipboard('@selimahmed1')">
                     <i class="fas fa-wallet"></i>
                     <h3>Telda</h3>
-                    <div class="payment-info">@selimahmed1</div>
-                    <p class="payment-desc">Send to this username</p>
+                    <div style="font-size:1.3rem;font-weight:700;color:var(--success)">@selimahmed1</div>
+                    <small style="color:#94a3b8">Click to copy</small>
                 </div>
-                <div class="payment-card">
+                <div class="payment-card" onclick="copyToClipboard('01204423575')">
                     <i class="fas fa-money-bill-wave"></i>
                     <h3>InstaPay</h3>
-                    <div class="payment-info">01204423575</div>
-                    <p class="payment-desc">Transfer to this number</p>
+                    <div style="font-size:1.3rem;font-weight:700;color:var(--success)">01204423575</div>
+                    <small style="color:#94a3b8">Click to copy</small>
                 </div>
             </div>
-            <div class="whatsapp-option" onclick="openWhatsApp()">
-                <i class="fab fa-whatsapp"></i>
+            <div class="whatsapp-option" onclick="window.open('https://wa.me/201212072882','_blank')">
+                <i class="fab fa-whatsapp fa-3x"></i>
                 <h3>Order via WhatsApp</h3>
                 <div class="whatsapp-number">01212072882</div>
-                <p style="margin-top: 0.5rem; opacity: 0.9;">Click to chat directly</p>
-            </div>
-            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(239, 68, 68, 0.1); border-radius: 10px; border: 1px solid rgba(239, 68, 68, 0.3);">
-                <p style="color: var(--danger); font-weight: 600; text-align: center;">
-                    <i class="fas fa-exclamation-triangle"></i> Important: You must send us a screenshot of the transfer
-                </p>
             </div>
         </div>
     </section>
 
-    <!-- How It Works -->
-    <section id="how-it-works">
-        <h2 class="section-title">How It Works</h2>
-        <p class="section-subtitle">إزاي تشتري منا؟</p>
-        <div class="steps">
-            <div class="step">
-                <div class="step-number">1</div>
-                <h3>Contact Us</h3>
-                <p>Contact us using WhatsApp<br>تواصل معانا على الواتساب</p>
-            </div>
-            <div class="step">
-                <div class="step-number">2</div>
-                <h3>Confirm & Pay</h3>
-                <p>Confirm your order then pay<br>أكد طلبك وادفع</p>
-            </div>
-            <div class="step">
-                <div class="step-number">3</div>
-                <h3>Wait 10-60 Minutes</h3>
-                <p>We prepare your account<br>استنى من 10 ل 60 دقيقة</p>
-            </div>
-            <div class="step">
-                <div class="step-number">4</div>
-                <h3>Scan QR Code</h3>
-                <p>Send us the QR code photo<br>صور الكود وابعتهولنا</p>
-            </div>
-            <div class="step">
-                <div class="step-number">5</div>
-                <h3>Play & Enjoy!</h3>
-                <p>Start playing your game!<br>العب واستمتع!</p>
-            </div>
+    <div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Your Cart</h3>
+            <button onclick="toggleCart()" style="background:none;border:none;color:var(--text);font-size:1.5rem;cursor:pointer"><i class="fas fa-times"></i></button>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-logo"><i class="fas fa-gamepad"></i> ProSoskaStation</div>
-            <p class="footer-text">Your trusted gaming partner in Egypt. Quality accounts, instant delivery, 24/7 support.</p>
-            <div class="social-links">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#" onclick="openWhatsApp()"><i class="fab fa-whatsapp"></i></a>
-                <a href="#"><i class="fab fa-discord"></i></a>
-            </div>
-            <p class="copyright">© 2026 ProSoskaStation. All rights reserved.</p>
+        <div class="cart-items" id="cart-items">
+            <p style="text-align:center;color:#94a3b8;margin-top:2rem">Your cart is empty</p>
         </div>
-    </footer>
+        <div class="cart-footer">
+            <div class="cart-total"><span>Total:</span><span id="cart-total">0 L.E</span></div>
+            <small style="color:#94a3b8;display:block;margin-bottom:.5rem">Select Payment Method:</small>
+            <div class="checkout-payment-methods">
+                <div class="checkout-method selected" onclick="selectCheckoutMethod('wallet',this)"><i class="fas fa-wallet" style="color:var(--success)"></i><span>Wallet</span></div>
+                <div class="checkout-method" onclick="selectCheckoutMethod('paymob',this)"><i class="fas fa-credit-card" style="color:var(--accent)"></i><span>Paymob</span></div>
+                <div class="checkout-method" onclick="selectCheckoutMethod('whatsapp',this)"><i class="fab fa-whatsapp" style="color:#25d366"></i><span>WhatsApp</span></div>
+            </div>
+            <button class="btn btn-primary" style="width:100%" onclick="checkout()"><i class="fas fa-shopping-bag"></i> Checkout</button>
+        </div>
+    </div>
 
-    <!-- Auth Modal -->
     <div class="modal-overlay" id="auth-modal">
         <div class="modal">
             <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
-            
             <div id="login-form">
                 <h2>Welcome Back!</h2>
-                <p class="modal-subtitle">Sign in to your ProSoskaStation account</p>
+                <p class="modal-subtitle">Sign in to your account</p>
                 <form onsubmit="handleLogin(event)">
-                    <div class="form-group">
-                        <label>Email or Phone Number</label>
-                        <input type="text" placeholder="Enter email or phone" required id="login-email">
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" placeholder="Enter password" required id="login-password">
-                    </div>
-                    <div class="captcha-box" onclick="toggleCaptcha(this)">
-                        <div class="captcha-checkbox" id="login-captcha"><i class="fas fa-check" style="display: none; color: white;"></i></div>
-                        <span class="captcha-text">I'm not a robot</span>
-                    </div>
-                    <div class="form-options">
-                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                            <input type="checkbox" style="width: auto;"> Remember me
-                        </label>
-                        <a href="#" onclick="showForgotPassword()">Forgot password?</a>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">
-                        <span class="btn-text">Sign In</span>
-                        <div class="loader"></div>
-                    </button>
+                    <div class="form-group"><label>Email</label><input type="email" id="login-email" required placeholder="Enter your email"></div>
+                    <div class="form-group"><label>Password</label><input type="password" id="login-password" required placeholder="Enter your password"></div>
+                    <div class="captcha-box" onclick="toggleCaptcha(this)"><div class="captcha-checkbox"><i class="fas fa-check"></i></div><span>I'm not a robot</span></div>
+                    <button type="submit" class="btn btn-primary" style="width:100%"><span class="spinner" id="login-spinner"></span><span>Sign In</span></button>
                 </form>
-                <div class="divider">or continue with</div>
-                <button class="btn btn-google" onclick="handleGoogleSignIn()">
-                    <i class="fab fa-google"></i> Sign in with Google
-                </button>
-                <div class="auth-switch">
-                    Don't have an account? <a href="#" onclick="switchAuthMode('signup')">Sign Up</a>
-                </div>
+                <div class="divider">or</div>
+                <button class="btn btn-google" onclick="loginWithGoogle()"><i class="fab fa-google"></i> Sign in with Google</button>
+                <div class="auth-switch">Don't have an account? <a href="#" onclick="switchAuthMode('signup')">Sign Up</a></div>
             </div>
-
-            <div id="signup-form" style="display: none;">
+            <div id="signup-form" style="display:none">
                 <h2>Create Account</h2>
-                <p class="modal-subtitle">Join ProSoskaStation today</p>
+                <p class="modal-subtitle">Join ProSoskaStation</p>
                 <form onsubmit="handleSignup(event)">
-                    <div class="form-group">
-                        <label>Full Name</label>
-                        <input type="text" placeholder="Enter your name" required id="signup-name">
-                    </div>
-                    <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" placeholder="Enter email" required id="signup-email">
-                    </div>
-                    <div class="form-group">
-                        <label>Phone Number</label>
-                        <input type="tel" placeholder="01xxxxxxxxx" required id="signup-phone" pattern="01[0-9]{9}">
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" placeholder="Create password (min 8 chars)" required id="signup-password" minlength="8">
-                    </div>
-                    <div class="form-group">
-                        <label>Confirm Password</label>
-                        <input type="password" placeholder="Confirm password" required id="signup-confirm">
-                    </div>
-                    <div class="captcha-box" onclick="toggleCaptcha(this)">
-                        <div class="captcha-checkbox" id="signup-captcha"><i class="fas fa-check" style="display: none; color: white;"></i></div>
-                        <span class="captcha-text">I'm not a robot</span>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">
-                        <span class="btn-text">Create Account</span>
-                        <div class="loader"></div>
-                    </button>
+                    <div class="form-group"><label>Full Name</label><input type="text" id="signup-name" required placeholder="Enter your full name"></div>
+                    <div class="form-group"><label>Email</label><input type="email" id="signup-email" required placeholder="Enter your email"></div>
+                    <div class="form-group"><label>Phone</label><input type="tel" id="signup-phone" pattern="01[0-9]{9}" required placeholder="01xxxxxxxxx"></div>
+                    <div class="form-group"><label>Password</label><input type="password" id="signup-password" minlength="8" required placeholder="Min 8 characters"></div>
+                    <div class="form-group"><label>Confirm Password</label><input type="password" id="signup-confirm" required placeholder="Confirm your password"></div>
+                    <div class="captcha-box" onclick="toggleCaptcha(this)"><div class="captcha-checkbox"><i class="fas fa-check"></i></div><span>I'm not a robot</span></div>
+                    <button type="submit" class="btn btn-primary" style="width:100%"><span class="spinner" id="signup-spinner"></span><span>Sign Up</span></button>
                 </form>
-                <div class="divider">or continue with</div>
-                <button class="btn btn-google" onclick="handleGoogleSignIn()">
-                    <i class="fab fa-google"></i> Sign up with Google
-                </button>
-                <div class="auth-switch">
-                    Already have an account? <a href="#" onclick="switchAuthMode('login')">Sign In</a>
-                </div>
-            </div>
-
-            <div id="forgot-form" style="display: none;">
-                <h2>Reset Password</h2>
-                <p class="modal-subtitle">Enter your email to receive reset link</p>
-                <form onsubmit="handleForgotPassword(event)">
-                    <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" placeholder="Enter your email" required id="forgot-email">
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">
-                        <span class="btn-text">Send Reset Link</span>
-                        <div class="loader"></div>
-                    </button>
-                </form>
-                <div class="auth-switch">
-                    Remember your password? <a href="#" onclick="switchAuthMode('login')">Sign In</a>
-                </div>
+                <div class="auth-switch">Have an account? <a href="#" onclick="switchAuthMode('login')">Sign In</a></div>
             </div>
         </div>
     </div>
 
-    <!-- Toast -->
-    <div class="toast" id="toast">
-        <i class="fas fa-check-circle"></i>
-        <span id="toast-message">Success!</span>
+    <div class="modal-overlay" id="paymob-modal">
+        <div class="modal" style="max-width:600px">
+            <button class="modal-close" onclick="closePaymobModal()"><i class="fas fa-times"></i></button>
+            <h2>Complete Your Payment</h2>
+            <p class="modal-subtitle">Secure checkout powered by Paymob</p>
+            <div id="paymob-iframe-container" style="width:100%;height:500px;border-radius:10px;overflow:hidden;background:var(--darker)"></div>
+        </div>
     </div>
 
-    <script>
-        // Game data with ORIGINAL prices (will multiply by 1.5)
-        const gamesData = [
-            { 
-                name: "FC 26", 
-                icon: "fa-futbol",
-                options: [
-                    { type: "Primary PS4", price: 300 },
-                    { type: "Primary PS5", price: 450 },
-                    { type: "Secondary PS4", price: 150 },
-                    { type: "Secondary PS5", price: 200 }
-                ]
-            },
-            { 
-                name: "GTA V", 
-                icon: "fa-car",
-                options: [
-                    { type: "Primary PS4", price: 250 },
-                    { type: "Primary PS5", price: 350 },
-                    { type: "Secondary PS4", price: 100 },
-                    { type: "Secondary PS5", price: 150 }
-                ]
-            },
-            { 
-                name: "Red Dead Redemption 2", 
-                icon: "fa-horse",
-                options: [
-                    { type: "Primary PS4", price: 350 },
-                    { type: "Primary PS5", price: 450 },
-                    { type: "Secondary PS4", price: 150 },
-                    { type: "Secondary PS5", price: 200 }
-                ]
-            },
-            { 
-                name: "WWE 2K26", 
-                icon: "fa-hand-rock",
-                options: [
-                    { type: "Primary PS4", price: 400 },
-                    { type: "Primary PS5", price: 600 },
-                    { type: "Secondary PS4", price: 200 },
-                    { type: "Secondary PS5", price: 250 }
-                ]
-            },
-            { 
-                name: "Spider-Man 2", 
-                icon: "fa-spider",
-                options: [
-                    { type: "Primary PS5", price: 750 },
-                    { type: "Secondary PS5", price: 300 }
-                ]
-            },
-            { 
-                name: "NBA 2K20", 
-                icon: "fa-basketball-ball",
-                options: [
-                    { type: "Primary PS4", price: 200 },
-                    { type: "Secondary PS4", price: 80 }
-                ]
-            },
-            { 
-                name: "Forza Horizon 5", 
-                icon: "fa-road",
-                options: [
-                    { type: "Primary Xbox/PC", price: 450 },
-                    { type: "Secondary Xbox/PC", price: 180 }
-                ]
-            },
-            { 
-                name: "Ghost of Yotei", 
-                icon: "fa-ghost",
-                options: [
-                    { type: "Primary PS5", price: 900 },
-                    { type: "Secondary PS5", price: 350 }
-                ]
-            },
-            { 
-                name: "Hollow Knight Silksong", 
-                icon: "fa-bug",
-                options: [
-                    { type: "Primary PS5", price: 300 },
-                    { type: "Secondary PS5", price: 120 }
-                ]
-            },
-            { 
-                name: "Diablo IV", 
-                icon: "fa-skull",
-                options: [
-                    { type: "Primary PS4", price: 400 },
-                    { type: "Primary PS5", price: 550 },
-                    { type: "Secondary PS4", price: 180 },
-                    { type: "Secondary PS5", price: 220 }
-                ]
-            },
-            { 
-                name: "Resident Evil Requiem", 
-                icon: "fa-biohazard",
-                options: [
-                    { type: "Primary PS5", price: 600 },
-                    { type: "Secondary PS5", price: 250 }
-                ]
-            },
-            { 
-                name: "It Takes Two", 
-                icon: "fa-users",
-                options: [
-                    { type: "Primary PS4", price: 280 },
-                    { type: "Primary PS5", price: 350 },
-                    { type: "Secondary PS4", price: 120 },
-                    { type: "Secondary PS5", price: 150 }
-                ]
-            },
-            { 
-                name: "Gang Beasts", 
-                icon: "fa-hand-paper",
-                options: [
-                    { type: "Primary PS4", price: 180 },
-                    { type: "Secondary PS4", price: 80 }
-                ]
-            },
-            { 
-                name: "Watch Dogs 2", 
-                icon: "fa-eye",
-                options: [
-                    { type: "Primary PS4", price: 220 },
-                    { type: "Secondary PS4", price: 100 }
-                ]
-            },
-            { 
-                name: "Detroit Become Human", 
-                icon: "fa-robot",
-                options: [
-                    { type: "Primary PS4", price: 200 },
-                    { type: "Secondary PS4", price: 90 }
-                ]
-            },
-            { 
-                name: "Little Nightmares III", 
-                icon: "fa-child",
-                options: [
-                    { type: "Primary PS5", price: 350 },
-                    { type: "Secondary PS5", price: 150 }
-                ]
-            },
-            { 
-                name: "Ready or Not", 
-                icon: "fa-shield-alt",
-                options: [
-                    { type: "Primary PS5", price: 400 },
-                    { type: "Secondary PS5", price: 180 }
-                ]
-            },
-            { 
-                name: "Call of Duty Black Ops 7", 
-                icon: "fa-crosshairs",
-                options: [
-                    { type: "Primary PS5", price: 1000 },
-                    { type: "Secondary PS5", price: 400 }
-                ]
-            },
-            { 
-                name: "Arc Raiders", 
-                icon: "fa-rocket",
-                options: [
-                    { type: "Primary PS5", price: 350 },
-                    { type: "Secondary PS5", price: 150 }
-                ]
-            },
-            { 
-                name: "Hogwarts Legacy", 
-                icon: "fa-hat-wizard",
-                options: [
-                    { type: "Primary PS5", price: 550 },
-                    { type: "Secondary PS5", price: 220 }
-                ]
-            },
-            { 
-                name: "The Last of Us Part II Remastered", 
-                icon: "fa-heart",
-                options: [
-                    { type: "Primary PS5", price: 450 },
-                    { type: "Secondary PS5", price: 180 }
-                ]
-            },
-            { 
-                name: "A Way Out", 
-                icon: "fa-door-open",
-                options: [
-                    { type: "Primary PS4", price: 200 },
-                    { type: "Secondary PS4", price: 90 }
-                ]
-            },
-            { 
-                name: "NFS Heat", 
-                icon: "fa-fire",
-                options: [
-                    { type: "Primary PS4", price: 280 },
-                    { type: "Secondary PS4", price: 120 }
-                ]
-            },
-            { 
-                name: "NFS Payback", 
-                icon: "fa-money-bill",
-                options: [
-                    { type: "Primary PS4", price: 220 },
-                    { type: "Secondary PS4", price: 100 }
-                ]
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toast-message">Success!</span></div>
+
+    <!-- Firebase with App Check -->
+    <script type="module">
+        import {initializeApp} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut,createUserWithEmailAndPassword,signInWithEmailAndPassword,updateProfile} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import {getFirestore,doc,setDoc,getDoc,updateDoc,increment} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import {initializeAppCheck,ReCaptchaV3Provider} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-check.js";
+
+        const firebaseConfig={apiKey:"AIzaSyC8Kf6nWKEsM2WLEPN9Tqub65PYhXRAvQM",authDomain:"prososkastation.firebaseapp.com",projectId:"prososkastation",storageBucket:"prososkastation.firebasestorage.app",messagingSenderId:"103229744331",appId:"1:103229744331:web:81d02b03792bc6df4039ee"};
+        const app=initializeApp(firebaseConfig);
+        const auth=getAuth(app);
+        const db=getFirestore(app);
+        
+        // Initialize App Check with your reCAPTCHA v3 site key
+        const appCheck=initializeAppCheck(app,{provider:new ReCaptchaV3Provider('6Ld2X6gsAAAAAEKbZKofIltv3Nk8kY1fNItYUgVH'),isTokenAutoRefreshEnabled:true});
+
+        const provider=new GoogleAuthProvider();
+
+        window.loginWithGoogle=async function(){
+            try{
+                const result=await signInWithPopup(auth,provider);
+                const user=result.user;
+                const userRef=doc(db,"users",user.uid);
+                const userSnap=await getDoc(userRef);
+                if(!userSnap.exists()){
+                    await setDoc(userRef,{name:user.displayName,email:user.email,phone:user.phoneNumber||'',wallet:0,createdAt:new Date().toISOString(),orders:[]});
+                    await syncToExcel({uid:user.uid,name:user.displayName,email:user.email,phone:user.phoneNumber||'',action:'signup'});
+                }
+                showToast(`Welcome, ${user.displayName}!`);
+                updateUI(user);
+                closeModal();
+            }catch(error){
+                showToast('Login failed: '+error.message,'error');
             }
-        ];
-
-        const psPlusData = [
-            { name: "1 Month - Essential", type: "Primary PS5", basePrice: 200 },
-            { name: "3 Months - Essential", type: "Primary PS5", basePrice: 450 },
-            { name: "12 Months - Essential", type: "Primary PS5", basePrice: 1100 },
-            { name: "1 Month - Extra", type: "Primary PS5", basePrice: 300 },
-            { name: "3 Months - Extra", type: "Primary PS5", basePrice: 700 },
-            { name: "12 Months - Extra", type: "Primary PS5", basePrice: 1700 },
-            { name: "1 Month - Premium", type: "Primary PS5", basePrice: 400 },
-            { name: "12 Months - Premium", type: "Primary PS5", basePrice: 2200 }
-        ];
-
-        const vBucksData = [
-            { amount: "1,000 V-Bucks", basePrice: 100 },
-            { amount: "2,800 V-Bucks", basePrice: 250 },
-            { amount: "5,000 V-Bucks", basePrice: 400 },
-            { amount: "13,500 V-Bucks", basePrice: 950 }
-        ];
-
-        const rocketData = [
-            { amount: "500 Credits", basePrice: 75 },
-            { amount: "1,100 Credits", basePrice: 150 },
-            { amount: "3,000 Credits", basePrice: 350 },
-            { amount: "6,500 Credits", basePrice: 650 }
-        ];
-
-        // Hezo pricing per unit
-        const hezoPricing = {
-            likes: 0.075,      // 75 EGP per 1000
-            views: 0.012,      // 12 EGP per 1000
-            favorites: 0.15,   // 150 EGP per 1000
-            shares: 0.09,      // 90 EGP per 1000
-            followers: 0.15,   // 150 EGP per 1000
-            comments: 2.25     // 225 EGP per 100
         };
 
-        // Calculate 1.5x price
-        function calcPrice(base) {
-            return Math.round(base * 1.5);
+        window.firebaseSignUp=async function(email,password,name,phone){
+            try{
+                const userCredential=await createUserWithEmailAndPassword(auth,email,password);
+                const user=userCredential.user;
+                await updateProfile(user,{displayName:name});
+                await setDoc(doc(db,"users",user.uid),{name:name,email:email,phone:phone,wallet:0,createdAt:new Date().toISOString(),orders:[]});
+                await syncToExcel({uid:user.uid,name:name,email:email,phone:phone,action:'signup'});
+                return{success:true,user};
+            }catch(error){
+                return{success:false,error:error.message};
+            }
+        };
+
+        window.firebaseSignIn=async function(email,password){
+            try{
+                const userCredential=await signInWithEmailAndPassword(auth,email,password);
+                return{success:true,user:userCredential.user};
+            }catch(error){
+                return{success:false,error:error.message};
+            }
+        };
+
+        window.getUserWallet=async function(uid){
+            try{
+                const userRef=doc(db,"users",uid);
+                const userSnap=await getDoc(userRef);
+                return userSnap.exists()?userSnap.data().wallet||0:0;
+            }catch{return 0}
+        };
+
+        window.updateUserWallet=async function(uid,amount){
+            try{
+                const userRef=doc(db,"users",uid);
+                await updateDoc(userRef,{wallet:increment(amount)});
+                return true;
+            }catch{return false}
+        };
+
+        window.addUserOrder=async function(uid,orderData){
+            try{
+                const userRef=doc(db,"users",uid);
+                const userSnap=await getDoc(userRef);
+                const currentOrders=userSnap.data().orders||[];
+                currentOrders.push({...orderData,date:new Date().toISOString()});
+                await updateDoc(userRef,{orders:currentOrders});
+                await syncToExcel({uid:uid,...orderData,action:'order'});
+                return true;
+            }catch{return false}
+        };
+
+        async function syncToExcel(data){
+            try{
+                const response=await fetch('https://script.google.com/macros/s/AKfycbzJBDK2PbaF6lLUkqVPwlISsBWLPini_0Rb0bwWgLhiwldIIWYbQbzmxBz7B388Gj9cTg/exec',{
+                    method:'POST',
+                    headers:{'Content-Type':'application/json'},
+                    body:JSON.stringify(data)
+                });
+                return await response.json();
+            }catch(error){console.error("Excel sync error:",error)}
         }
 
-        // Render Games with all options
-        function renderGames() {
-            const container = document.getElementById('games-container');
-            container.innerHTML = gamesData.map((game, idx) => `
+        onAuthStateChanged(auth,async(user)=>{
+            if(user){
+                updateUI(user);
+                const wallet=await getUserWallet(user.uid);
+                updateWalletDisplay(wallet);
+            }else{
+                document.body.classList.remove('authenticated');
+            }
+        });
+
+        window.logout=async function(){
+            try{
+                await signOut(auth);
+                document.body.classList.remove('authenticated');
+                showToast('Logged out successfully');
+            }catch{showToast('Logout failed','error')}
+        };
+
+        function updateUI(user){
+            document.body.classList.add('authenticated');
+            document.getElementById('username-display').textContent=user.displayName||user.email.split('@')[0];
+        }
+
+        function updateWalletDisplay(amount){
+            document.getElementById('user-wallet').textContent=amount+' EGP';
+            document.getElementById('paymob-wallet').textContent=amount+' EGP';
+        }
+
+        window.firebaseAuth=auth;
+        window.firebaseDb=db;
+    </script>
+
+    <script>
+        // Optimized JavaScript
+        const gamesData=[
+            {name:"FC 26",icon:"fa-futbol",ps5:700,ps4:600,ps5_2nd:300,ps4_2nd:250,img:"https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=400&h=300&fit=crop"},
+            {name:"GTA V",icon:"fa-car",ps5:450,ps4:350,ps5_2nd:200,ps4_2nd:150,img:"https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=300&fit=crop"},
+            {name:"Red Dead Redemption 2",icon:"fa-horse",ps5:450,ps4:400,ps5_2nd:250,ps4_2nd:200,img:"https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&h=300&fit=crop"},
+            {name:"WWE 2K26",icon:"fa-hand-rock",ps5:1600,ps4:1400,ps5_2nd:800,ps4_2nd:700,img:"https://images.unsplash.com/photo-1552072092-7f9b8d63efcb?w=400&h=300&fit=crop"},
+            {name:"Spider-Man 2",icon:"fa-spider",ps5:1099,ps4:0,ps5_2nd:550,ps4_2nd:0,img:"https://images.unsplash.com/photo-1635805737707-575885ab0820?w=400&h=300&fit=crop"},
+            {name:"NBA 2K20",icon:"fa-basketball-ball",ps5:700,ps4:600,ps5_2nd:350,ps4_2nd:300,img:"https://images.unsplash.com/photo-1546519638-68e109498ffc?w=400&h=300&fit=crop"},
+            {name:"Ghost of Yotei",icon:"fa-ghost",ps5:1500,ps4:1300,ps5_2nd:750,ps4_2nd:650,img:"https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&h=300&fit=crop"},
+            {name:"Hollow Knight Silksong",icon:"fa-bug",ps5:450,ps4:400,ps5_2nd:225,ps4_2nd:200,img:"https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&h=300&fit=crop"},
+            {name:"Diablo IV",icon:"fa-skull",ps5:1050,ps4:900,ps5_2nd:525,ps4_2nd:450,img:"https://images.unsplash.com/photo-1542751110-97427bbecf20?w=400&h=300&fit=crop"},
+            {name:"Resident Evil Requiem",icon:"fa-biohazard",ps5:1900,ps4:1700,ps5_2nd:950,ps4_2nd:850,img:"https://images.unsplash.com/photo-1509343256512-d77a5cb3791b?w=400&h=300&fit=crop"},
+            {name:"It Takes Two",icon:"fa-users",ps5:350,ps4:300,ps5_2nd:175,ps4_2nd:150,img:"https://images.unsplash.com/photo-1605901309584-818e25960a8f?w=400&h=300&fit=crop"},
+            {name:"Gang Beasts",icon:"fa-hand-paper",ps5:400,ps4:350,ps5_2nd:200,ps4_2nd:175,img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop"},
+            {name:"Watch Dogs 2",icon:"fa-eye",ps5:450,ps4:400,ps5_2nd:225,ps4_2nd:200,img:"https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&h=300&fit=crop"},
+            {name:"Detroit Become Human",icon:"fa-robot",ps5:400,ps4:350,ps5_2nd:200,ps4_2nd:175,img:"https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&h=300&fit=crop"},
+            {name:"Little Nightmares III",icon:"fa-child",ps5:650,ps4:550,ps5_2nd:325,ps4_2nd:275,img:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&h=300&fit=crop"},
+            {name:"Ready or Not",icon:"fa-shield-alt",ps5:950,ps4:800,ps5_2nd:475,ps4_2nd:400,img:"https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=400&h=300&fit=crop"},
+            {name:"Call of Duty Black Ops 7",icon:"fa-crosshairs",ps5:1200,ps4:1000,ps5_2nd:600,ps4_2nd:500,img:"https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=300&fit=crop"},
+            {name:"Arc Raiders",icon:"fa-rocket",ps5:800,ps4:700,ps5_2nd:400,ps4_2nd:350,img:"https://images.unsplash.com/photo-1517976487492-5750f3195933?w=400&h=300&fit=crop"},
+            {name:"Hogwarts Legacy",icon:"fa-hat-wizard",ps5:450,ps4:400,ps5_2nd:225,ps4_2nd:200,img:"https://images.unsplash.com/photo-1618336753974-aae8e04506aa?w=400&h=300&fit=crop"},
+            {name:"The Last of Us Part II Remastered",icon:"fa-heart",ps5:650,ps4:550,ps5_2nd:325,ps4_2nd:275,img:"https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?w=400&h=300&fit=crop"},
+            {name:"A Way Out",icon:"fa-door-open",ps5:350,ps4:300,ps5_2nd:175,ps4_2nd:150,img:"https://images.unsplash.com/photo-1499364615650-ec38552f4f34?w=400&h=300&fit=crop"},
+            {name:"NFS Heat",icon:"fa-fire",ps5:250,ps4:220,ps5_2nd:125,ps4_2nd:110,img:"https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=400&h=300&fit=crop"},
+            {name:"NFS Payback",icon:"fa-money-bill",ps5:200,ps4:180,ps5_2nd:100,ps4_2nd:90,img:"https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=300&fit=crop"}
+        ];
+
+        const plusData=[
+            {name:'Essential',basePrices:{'1m_p':200,'3m_p':450,'12m_p':1100,'1m_s':100,'3m_s':250,'12m_s':600}},
+            {name:'Extra',basePrices:{'1m_p':500,'3m_p':1100,'12m_p':2800,'1m_s':250,'3m_s':600,'12m_s':1400}},
+            {name:'Premium',basePrices:{'1m_p':700,'3m_p':1500,'12m_p':3500,'1m_s':350,'3m_s':800,'12m_s':1800}}
+        ];
+
+        const vBucksData=[{amount:800,price:330},{amount:2400,price:750},{amount:4500,price:1200},{amount:12500,price:2650}];
+        const rocketData=[{name:'500 Credits',price:250},{name:'1100 Credits',price:420},{name:'3000 Credits',price:850},{name:'6500 Credits',price:1700},{name:'Rocket Pass',price:380}];
+        const hezoData=[{name:'Likes',icon:'fa-heart',pricePer1k:12,unit:'likes'},{name:'Views',icon:'fa-eye',pricePer1k:10,unit:'views'},{name:'Favorites',icon:'fa-star',pricePer1k:15,unit:'favorites'},{name:'Shares',icon:'fa-share-alt',pricePer1k:9,unit:'shares'},{name:'Followers',icon:'fa-user-plus',pricePer1k:150,unit:'followers'},{name:'Comments',icon:'fa-comment',pricePer1k:225,unit:'comments'}];
+
+        let cart=[],selectedPlatform={},selectedType={},plusSelections={},selectedVBuck=0,selectedRocket=0,selectedCheckoutMethod='wallet',selectedPaymobMethod='card';
+
+        function gamePrice(base){return base+300}
+
+        function renderGames(){
+            const container=document.getElementById('games-container');
+            container.innerHTML=gamesData.map((game,idx)=>`
                 <div class="game-card">
                     <div class="game-image">
+                        <img src="${game.img}" alt="${game.name}" loading="lazy" onload="this.classList.add('loaded')" class="lazy-img">
                         <i class="fas ${game.icon}"></i>
+                    </div>
+                    <div class="platform-tabs">
+                        <button class="platform-tab active" onclick="switchPlatform(${idx},'ps5',this)">PS5</button>
+                        <button class="platform-tab" onclick="switchPlatform(${idx},'ps4',this)" ${game.ps4===0?'style="opacity:0.3;cursor:not-allowed" disabled':''}>PS4</button>
+                    </div>
+                    <div class="account-type-tabs">
+                        <button class="type-tab active" onclick="switchType(${idx},'primary',this)">Primary</button>
+                        <button class="type-tab" onclick="switchType(${idx},'2nd',this)">2nd</button>
                     </div>
                     <div class="game-content">
                         <h3 class="game-title">${game.name}</h3>
-                        <div class="price-options" id="game-${idx}-options">
-                            ${game.options.map((opt, optIdx) => `
-                                <div class="price-option ${optIdx === 0 ? 'selected' : ''}" 
-                                     onclick="selectOption('game-${idx}', ${optIdx}, '${game.name}', '${opt.type}', ${calcPrice(opt.price)})"
-                                     data-type="${opt.type}" data-price="${calcPrice(opt.price)}">
-                                    <span class="option-type">${opt.type}</span>
-                                    <span class="option-price">${calcPrice(opt.price)} L.E</span>
-                                </div>
-                            `).join('')}
+                        <div class="price-display" id="price-${idx}">${gamePrice(game.ps5)} L.E</div>
+                        <button class="btn-order" onclick="buyNow(${idx},'${game.name}')">Buy Now</button>
+                        <button class="btn btn-cart" onclick="addToCartGame(${idx},'${game.name}')"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function switchPlatform(idx,platform,btn){
+            if(gamesData[idx][platform]===0)return;
+            btn.parentElement.querySelectorAll('.platform-tab').forEach(t=>t.classList.remove('active'));
+            btn.classList.add('active');
+            selectedPlatform[idx]=platform;
+            updatePrice(idx);
+        }
+
+        function switchType(idx,type,btn){
+            btn.parentElement.querySelectorAll('.type-tab').forEach(t=>t.classList.remove('active'));
+            btn.classList.add('active');
+            selectedType[idx]=type;
+            updatePrice(idx);
+        }
+
+        function updatePrice(idx){
+            const game=gamesData[idx],platform=selectedPlatform[idx]||'ps5',type=selectedType[idx]||'primary';
+            let basePrice=0;
+            if(platform==='ps5'&&type==='primary')basePrice=game.ps5;
+            else if(platform==='ps4'&&type==='primary')basePrice=game.ps4;
+            else if(platform==='ps5'&&type==='2nd')basePrice=game.ps5_2nd;
+            else if(platform==='ps4'&&type==='2nd')basePrice=game.ps4_2nd;
+            document.getElementById(`price-${idx}`).textContent=gamePrice(basePrice)+' L.E';
+        }
+
+        function buyNow(idx,name){
+            const platform=selectedPlatform[idx]||'ps5',type=selectedType[idx]||'primary',game=gamesData[idx];
+            let price=0;
+            if(platform==='ps5'&&type==='primary')price=game.ps5;
+            else if(platform==='ps4'&&type==='primary')price=game.ps4;
+            else if(platform==='ps5'&&type==='2nd')price=game.ps5_2nd;
+            else if(platform==='ps4'&&type==='2nd')price=game.ps4_2nd;
+            const msg=`Buy Now: ${name}\nPlatform: ${platform.toUpperCase()}\nType: ${type}\nPrice: ${gamePrice(price)} L.E`;
+            window.open(`https://wa.me/201212072882?text=${encodeURIComponent(msg)}`,'_blank');
+        }
+
+        function addToCartGame(idx,name){
+            const platform=selectedPlatform[idx]||'ps5',type=selectedType[idx]||'primary',game=gamesData[idx];
+            let price=0;
+            if(platform==='ps5'&&type==='primary')price=game.ps5;
+            else if(platform==='ps4'&&type==='primary')price=game.ps4;
+            else if(platform==='ps5'&&type==='2nd')price=game.ps5_2nd;
+            else if(platform==='ps4'&&type==='2nd')price=game.ps4_2nd;
+            cart.push({name:name,details:`${platform.toUpperCase()} - ${type}`,price:gamePrice(price)});
+            updateCart();
+            showToast('Added to cart!');
+        }
+
+        function renderPlus(){
+            document.getElementById('plus-container').innerHTML=plusData.map((plan,idx)=>`
+                <div class="plus-card">
+                    <div class="plus-header">
+                        <div class="plus-icon"><i class="fas fa-plus-circle"></i></div>
+                        <div class="plus-title">PS Plus ${plan.name}</div>
+                    </div>
+                    <div style="margin-bottom:.5rem;color:#94a3b8;font-size:.9rem">Duration:</div>
+                    <div class="duration-options" id="dur-${idx}">
+                        <button class="option-btn active" onclick="selectPlus(${idx},'1m',this)">1 Month</button>
+                        <button class="option-btn" onclick="selectPlus(${idx},'3m',this)">3 Months</button>
+                        <button class="option-btn" onclick="selectPlus(${idx},'12m',this)">12 Months</button>
+                    </div>
+                    <div style="margin-bottom:.5rem;color:#94a3b8;font-size:.9rem">Account Type:</div>
+                    <div class="account-options" id="acc-${idx}">
+                        <button class="option-btn active" onclick="selectPlusType(${idx},'p',this)">Primary PS5</button>
+                        <button class="option-btn" onclick="selectPlusType(${idx},'s',this)">Secondary</button>
+                    </div>
+                    <div class="price-display" id="plus-price-${idx}" style="margin-top:1rem">${plan.basePrices['1m_p']+300} L.E</div>
+                    <button class="btn-order" onclick="buyPlus(${idx})" style="margin-top:1rem">Buy Now</button>
+                    <button class="btn btn-cart" onclick="addPlusToCart(${idx})"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                </div>
+            `).join('');
+        }
+
+        function selectPlus(idx,dur,btn){
+            document.querySelectorAll(`#dur-${idx} .option-btn`).forEach(b=>b.classList.remove('active'));
+            btn.classList.add('active');
+            if(!plusSelections[idx])plusSelections[idx]={};
+            plusSelections[idx].dur=dur;
+            updatePlusPrice(idx);
+        }
+
+        function selectPlusType(idx,type,btn){
+            document.querySelectorAll(`#acc-${idx} .option-btn`).forEach(b=>b.classList.remove('active'));
+            btn.classList.add('active');
+            if(!plusSelections[idx])plusSelections[idx]={};
+            plusSelections[idx].type=type;
+            updatePlusPrice(idx);
+        }
+
+        function updatePlusPrice(idx){
+            const sel=plusSelections[idx]||{dur:'1m',type:'p'};
+            const price=plusData[idx].basePrices[sel.dur+'_'+sel.type]+300;
+            document.getElementById(`plus-price-${idx}`).textContent=price+' L.E';
+        }
+
+        function buyPlus(idx){
+            const sel=plusSelections[idx]||{dur:'1m',type:'p'};
+            const durText=sel.dur==='1m'?'1 Month':sel.dur==='3m'?'3 Months':'12 Months';
+            const typeText=sel.type==='p'?'Primary':'Secondary';
+            const price=plusData[idx].basePrices[sel.dur+'_'+sel.type]+300;
+            const msg=`PS Plus ${plusData[idx].name}\nDuration: ${durText}\nType: ${typeText}\nPrice: ${price} L.E`;
+            window.open(`https://wa.me/201212072882?text=${encodeURIComponent(msg)}`,'_blank');
+        }
+
+        function addPlusToCart(idx){
+            const sel=plusSelections[idx]||{dur:'1m',type:'p'};
+            const durText=sel.dur==='1m'?'1 Month':sel.dur==='3m'?'3 Months':'12 Months';
+            const typeText=sel.type==='p'?'Primary':'Secondary';
+            const price=plusData[idx].basePrices[sel.dur+'_'+sel.type]+300;
+            cart.push({name:`PS Plus ${plusData[idx].name}`,details:`${durText} - ${typeText}`,price:price});
+            updateCart();
+            showToast('Added to cart!');
+        }
+
+        function renderVBucks(){
+            document.getElementById('vbucks-container').innerHTML=`
+                <div class="game-card" style="grid-column:1/-1">
+                    <div class="game-content">
+                        <h3 class="game-title" style="text-align:center;margin-bottom:1.5rem">Select V-Bucks Package</h3>
+                        <div class="package-grid">
+                            ${vBucksData.map((vb,idx)=>`<div class="package-card ${idx===0?'selected':''}" onclick="selectVBuck(${idx},this)"><div class="package-amount">${vb.amount.toLocaleString()}</div><div style="color:#94a3b8;font-size:.9rem">V-Bucks</div><div class="package-price">${vb.price+300} L.E</div></div>`).join('')}
                         </div>
-                        <button class="btn-order" onclick="orderGame(${idx}, '${game.name}')">
-                            Order Now
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Render PS Plus
-        function renderPSPlus() {
-            const container = document.getElementById('plus-container');
-            container.innerHTML = psPlusData.map(item => `
-                <div class="game-card">
-                    <div class="game-image" style="background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);">
-                        <i class="fas fa-plus-circle" style="color: white; font-size: 4rem;"></i>
-                    </div>
-                    <div class="game-content">
-                        <h3 class="game-title">${item.name}</h3>
-                        <p class="option-type" style="margin-bottom: 1rem;">${item.type}</p>
-                        <div class="option-price" style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--success);">${calcPrice(item.basePrice)} L.E</div>
-                        <button class="btn-order" onclick="orderItem('PS Plus ${item.name}', ${calcPrice(item.basePrice)})">
-                            Order Now
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Render V-Bucks with Epic form
-        function renderVBucks() {
-            const container = document.getElementById('vbucks-container');
-            container.innerHTML = vBucksData.map((item, idx) => `
-                <div class="game-card">
-                    <div class="game-image" style="background: linear-gradient(135deg, #f59e0b 0%, #ec4899 100%);">
-                        <i class="fas fa-coins" style="color: white; font-size: 4rem;"></i>
-                    </div>
-                    <div class="game-content">
-                        <h3 class="game-title">${item.amount}</h3>
-                        <div class="option-price" style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--success);">${calcPrice(item.basePrice)} L.E</div>
                         <div class="epic-form">
-                            <div class="form-group">
-                                <label>Epic Email</label>
-                                <input type="email" id="vbuck-email-${idx}" placeholder="your@email.com">
-                            </div>
-                            <div class="form-group">
-                                <label>Epic Password</label>
-                                <input type="password" id="vbuck-pass-${idx}" placeholder="Password">
-                            </div>
-                            <p class="epic-note">* Email and password needed to deliver V-Bucks</p>
+                            <h4><i class="fas fa-envelope"></i> Epic Games Credentials</h4>
+                            <input type="email" id="vbuck-email" placeholder="your@email.com">
+                            <input type="password" id="vbuck-pass" placeholder="Your password">
+                            <p style="font-size:.8rem;color:var(--accent);font-style:italic">* Email and password needed to deliver V-Bucks to your account</p>
                         </div>
-                        <button class="btn-order" onclick="orderVBuck(${idx}, '${item.amount}', ${calcPrice(item.basePrice)})" style="margin-top: 0.5rem;">
-                            Order Now
-                        </button>
+                        <div style="display:flex;gap:1rem">
+                            <button class="btn-order" style="flex:1" onclick="buyVBuck()">Buy Now</button>
+                            <button class="btn btn-cart" style="flex:1" onclick="addVBuckToCart()"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                        </div>
                     </div>
                 </div>
-            `).join('');
+            `;
         }
 
-        // Render Rocket League with Epic form
-        function renderRocket() {
-            const container = document.getElementById('rocket-container');
-            container.innerHTML = rocketData.map((item, idx) => `
-                <div class="game-card">
-                    <div class="game-image" style="background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);">
-                        <i class="fas fa-car" style="color: white; font-size: 4rem;"></i>
-                    </div>
+        function selectVBuck(idx,el){
+            document.querySelectorAll('.package-card').forEach(c=>c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedVBuck=idx;
+        }
+
+        function buyVBuck(){
+            const email=document.getElementById('vbuck-email').value,pass=document.getElementById('vbuck-pass').value;
+            if(!email||!pass){showToast('Please enter Epic credentials','error');return}
+            const vb=vBucksData[selectedVBuck];
+            window.open(`https://wa.me/201212072882?text=${encodeURIComponent(`V-Bucks: ${vb.amount}\nPrice: ${vb.price+300} L.E\nEmail: ${email}\nPass: ${pass}`)}`,'_blank');
+        }
+
+        function addVBuckToCart(){
+            const email=document.getElementById('vbuck-email').value,pass=document.getElementById('vbuck-pass').value;
+            if(!email||!pass){showToast('Please enter Epic credentials','error');return}
+            const vb=vBucksData[selectedVBuck];
+            cart.push({name:`${vb.amount.toLocaleString()} V-Bucks`,details:`Epic: ${email}`,price:vb.price+300});
+            updateCart();
+            showToast('Added to cart!');
+        }
+
+        function renderRocket(){
+            document.getElementById('rocket-container').innerHTML=`
+                <div class="game-card" style="grid-column:1/-1">
                     <div class="game-content">
-                        <h3 class="game-title">${item.amount}</h3>
-                        <div class="option-price" style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--success);">${calcPrice(item.basePrice)} L.E</div>
-                        <div class="epic-form">
-                            <div class="form-group">
-                                <label>Epic Email</label>
-                                <input type="email" id="rocket-email-${idx}" placeholder="your@email.com">
-                            </div>
-                            <div class="form-group">
-                                <label>Epic Password</label>
-                                <input type="password" id="rocket-pass-${idx}" placeholder="Password">
-                            </div>
-                            <p class="epic-note">* Email and password needed to deliver Credits</p>
+                        <h3 class="game-title" style="text-align:center;margin-bottom:1.5rem">Select Credits Package</h3>
+                        <div class="package-grid">
+                            ${rocketData.map((rl,idx)=>`<div class="package-card ${idx===0?'selected':''}" onclick="selectRocket(${idx},this)"><div class="package-amount">${rl.name}</div><div class="package-price">${rl.price+300} L.E</div></div>`).join('')}
                         </div>
-                        <button class="btn-order" onclick="orderRocket(${idx}, '${item.amount}', ${calcPrice(item.basePrice)})" style="margin-top: 0.5rem;">
-                            Order Now
-                        </button>
+                        <div class="epic-form">
+                            <h4><i class="fas fa-envelope"></i> Epic Games Credentials</h4>
+                            <input type="email" id="rocket-email" placeholder="your@email.com">
+                            <input type="password" id="rocket-pass" placeholder="Your password">
+                        </div>
+                        <div style="display:flex;gap:1rem">
+                            <button class="btn-order" style="flex:1" onclick="buyRocket()">Buy Now</button>
+                            <button class="btn btn-cart" style="flex:1" onclick="addRocketToCart()"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                        </div>
                     </div>
                 </div>
-            `).join('');
+            `;
         }
 
-        // Render Hezo with custom inputs
-        function renderHezo() {
-            const container = document.getElementById('hezo-container');
-            const services = [
-                { name: 'Likes', icon: 'fa-heart', type: 'likes', unit: 'likes' },
-                { name: 'Views', icon: 'fa-eye', type: 'views', unit: 'views' },
-                { name: 'Favorites', icon: 'fa-star', type: 'favorites', unit: 'favorites' },
-                { name: 'Shares', icon: 'fa-share-alt', type: 'shares', unit: 'shares' },
-                { name: 'Followers', icon: 'fa-user-plus', type: 'followers', unit: 'followers' },
-                { name: 'Comments', icon: 'fa-comment', type: 'comments', unit: 'comments' }
-            ];
+        function selectRocket(idx,el){
+            document.querySelectorAll('#rocket-container .package-card').forEach(c=>c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedRocket=idx;
+        }
 
-            container.innerHTML = services.map((svc, idx) => `
+        function buyRocket(){
+            const email=document.getElementById('rocket-email').value,pass=document.getElementById('rocket-pass').value;
+            if(!email||!pass){showToast('Please enter Epic credentials','error');return}
+            const rl=rocketData[selectedRocket];
+            window.open(`https://wa.me/201212072882?text=${encodeURIComponent(`Rocket League: ${rl.name}\nPrice: ${rl.price+300} L.E\nEmail: ${email}\nPass: ${pass}`)}`,'_blank');
+        }
+
+        function addRocketToCart(){
+            const email=document.getElementById('rocket-email').value,pass=document.getElementById('rocket-pass').value;
+            if(!email||!pass){showToast('Please enter Epic credentials','error');return}
+            const rl=rocketData[selectedRocket];
+            cart.push({name:rl.name,details:`RL - Epic: ${email}`,price:rl.price+300});
+            updateCart();
+            showToast('Added to cart!');
+        }
+
+        function renderHezo(){
+            document.getElementById('hezo-container').innerHTML=hezoData.map((svc,idx)=>`
                 <div class="hezo-card">
                     <div class="hezo-header">
                         <div class="hezo-icon"><i class="fas ${svc.icon}"></i></div>
-                        <div class="hezo-title">${svc.name}</div>
-                    </div>
-                    
-                    <div class="preset-options">
-                        <button class="preset-btn" onclick="setHezoAmount(${idx}, 1000, '${svc.type}')">1,000</button>
-                        <button class="preset-btn" onclick="setHezoAmount(${idx}, 5000, '${svc.type}')">5,000</button>
-                        <button class="preset-btn" onclick="setHezoAmount(${idx}, 10000, '${svc.type}')">10,000</button>
-                        <button class="preset-btn" onclick="setHezoAmount(${idx}, 50000, '${svc.type}')">50,000</button>
-                    </div>
-                    
-                    <div class="custom-order">
-                        <div class="custom-input-group">
-                            <input type="number" id="hezo-amount-${idx}" placeholder="Custom amount..." min="100" oninput="calculateHezoPrice(${idx}, '${svc.type}')">
-                            <span style="color: var(--text-muted); align-self: center;">${svc.unit}</span>
+                        <div>
+                            <div class="hezo-title">${svc.name}</div>
+                            <div style="color:var(--success);font-size:.9rem">${svc.pricePer1k} EGP per 1,000 ${svc.unit}</div>
                         </div>
-                        <div class="price-calc" id="hezo-price-${idx}" style="display: none;">
-                            Price: <span id="hezo-price-value-${idx}">0</span> L.E
-                        </div>
-                        <button class="btn-order" onclick="orderHezo(${idx}, '${svc.name}', '${svc.type}')">
-                            Order Now
-                        </button>
                     </div>
+                    <div class="preset-buttons">
+                        <button class="preset-btn" onclick="setHezo(${idx},1000)">1,000</button>
+                        <button class="preset-btn" onclick="setHezo(${idx},5000)">5,000</button>
+                        <button class="preset-btn" onclick="setHezo(${idx},10000)">10,000</button>
+                        <button class="preset-btn" onclick="setHezo(${idx},50000)">50,000</button>
+                    </div>
+                    <div class="custom-input">
+                        <input type="number" id="hezo-${idx}" placeholder="Custom amount..." min="100" oninput="calcHezo(${idx})">
+                        <span style="color:#94a3b8;align-self:center">${svc.unit}</span>
+                    </div>
+                    <div class="total-display" id="hezo-total-${idx}" style="display:none">Total: <span id="hezo-price-${idx}">0</span> EGP</div>
+                    <button class="btn-order" onclick="buyHezo(${idx},'${svc.name}')">Buy Now</button>
+                    <button class="btn btn-cart" onclick="addHezoToCart(${idx},'${svc.name}')"><i class="fas fa-cart-plus"></i> Add to Cart</button>
                 </div>
             `).join('');
         }
 
-        // Selection handler
-        function selectOption(gameId, optIdx, gameName, type, price) {
-            const options = document.querySelectorAll(`#${gameId}-options .price-option`);
-            options.forEach((opt, idx) => {
-                if (idx === optIdx) opt.classList.add('selected');
-                else opt.classList.remove('selected');
-            });
+        function setHezo(idx,amount){
+            document.getElementById(`hezo-${idx}`).value=amount;
+            calcHezo(idx);
         }
 
-        function orderGame(gameIdx, gameName) {
-            const selected = document.querySelector(`#game-${gameIdx}-options .price-option.selected`);
-            const type = selected.dataset.type;
-            const price = selected.dataset.price;
-            orderItem(`${gameName} - ${type}`, price);
+        function calcHezo(idx){
+            const amount=parseInt(document.getElementById(`hezo-${idx}`).value)||0;
+            const total=Math.round((amount/1000)*hezoData[idx].pricePer1k);
+            const totalDiv=document.getElementById(`hezo-total-${idx}`);
+            if(amount>0){totalDiv.style.display='block';document.getElementById(`hezo-price-${idx}`).textContent=total}else{totalDiv.style.display='none'}
         }
 
-        function orderVBuck(idx, amount, price) {
-            const email = document.getElementById(`vbuck-email-${idx}`).value;
-            const pass = document.getElementById(`vbuck-pass-${idx}`).value;
-            if (!email || !pass) {
-                showToast('Please enter Epic credentials', 'error');
+        function buyHezo(idx,name){
+            const amount=parseInt(document.getElementById(`hezo-${idx}`).value);
+            if(!amount||amount<100){showToast('Please enter minimum 100','error');return}
+            const total=Math.round((amount/1000)*hezoData[idx].pricePer1k);
+            window.open(`https://wa.me/201212072882?text=${encodeURIComponent(`Hezo ${name}\nAmount: ${amount.toLocaleString()}\nPrice: ${total} EGP`)}`,'_blank');
+        }
+
+        function addHezoToCart(idx,name){
+            const amount=parseInt(document.getElementById(`hezo-${idx}`).value);
+            if(!amount||amount<100){showToast('Please enter minimum 100','error');return}
+            const total=Math.round((amount/1000)*hezoData[idx].pricePer1k);
+            cart.push({name:`Hezo ${name}`,details:`${amount.toLocaleString()} ${hezoData[idx].unit}`,price:total});
+            updateCart();
+            showToast('Added to cart!');
+        }
+
+        function toggleCart(){
+            document.getElementById('cart-sidebar').classList.toggle('open');
+            document.getElementById('cart-overlay').classList.toggle('show');
+        }
+
+        function updateCart(){
+            const cartItems=document.getElementById('cart-items'),cartCount=document.getElementById('cart-count'),cartTotal=document.getElementById('cart-total');
+            cartCount.textContent=cart.length;
+            if(cart.length===0){
+                cartItems.innerHTML='<p style="text-align:center;color:#94a3b8;margin-top:2rem">Your cart is empty</p>';
+                cartTotal.textContent='0 L.E';
                 return;
             }
-            const msg = `V-Bucks: ${amount}\nPrice: ${price} L.E\nEpic Email: ${email}\nEpic Pass: ${pass}`;
-            window.open(`https://wa.me/201212072882?text=${encodeURIComponent(msg)}`, '_blank');
+            cartItems.innerHTML=cart.map((item,idx)=>`
+                <div class="cart-item">
+                    <div class="cart-item-info"><h4>${item.name}</h4><p>${item.details}</p></div>
+                    <div style="text-align:right"><div class="cart-item-price">${item.price} L.E</div><button class="remove-item" onclick="removeFromCart(${idx})"><i class="fas fa-trash"></i></button></div>
+                </div>
+            `).join('');
+            cartTotal.textContent=cart.reduce((sum,item)=>sum+item.price,0)+' L.E';
         }
 
-        function orderRocket(idx, amount, price) {
-            const email = document.getElementById(`rocket-email-${idx}`).value;
-            const pass = document.getElementById(`rocket-pass-${idx}`).value;
-            if (!email || !pass) {
-                showToast('Please enter Epic credentials', 'error');
-                return;
-            }
-            const msg = `Rocket League: ${amount}\nPrice: ${price} L.E\nEpic Email: ${email}\nEpic Pass: ${pass}`;
-            window.open(`https://wa.me/201212072882?text=${encodeURIComponent(msg)}`, '_blank');
+        function removeFromCart(idx){cart.splice(idx,1);updateCart();showToast('Item removed')}
+
+        function selectCheckoutMethod(method,el){
+            document.querySelectorAll('.checkout-method').forEach(m=>m.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedCheckoutMethod=method;
         }
 
-        function setHezoAmount(idx, amount, type) {
-            document.getElementById(`hezo-amount-${idx}`).value = amount;
-            calculateHezoPrice(idx, type);
-        }
-
-        function calculateHezoPrice(idx, type) {
-            const amount = parseInt(document.getElementById(`hezo-amount-${idx}`).value) || 0;
-            const rate = hezoPricing[type];
-            let price = 0;
+        async function checkout(){
+            if(cart.length===0){showToast('Cart is empty!','error');return}
+            const total=cart.reduce((sum,item)=>sum+item.price,0);
+            const user=window.firebaseAuth.currentUser;
+            if(!user){showToast('Please login first','error');openModal('login');return}
             
-            if (type === 'comments') {
-                price = Math.round((amount / 100) * rate * 1.5);
-            } else {
-                price = Math.round((amount / 1000) * rate * 1.5);
-            }
-            
-            const priceDisplay = document.getElementById(`hezo-price-${idx}`);
-            const priceValue = document.getElementById(`hezo-price-value-${idx}`);
-            
-            if (amount > 0) {
-                priceDisplay.style.display = 'block';
-                priceValue.textContent = price;
-            } else {
-                priceDisplay.style.display = 'none';
+            if(selectedCheckoutMethod==='wallet'){
+                const wallet=await getUserWallet(user.uid);
+                if(wallet<total){showToast(`Insufficient balance. You need ${total-wallet} more EGP`,'error');return}
+                if(await updateUserWallet(user.uid,-total)){
+                    await addUserOrder(user.uid,{items:cart,total:total,paymentMethod:'wallet',status:'completed'});
+                    cart=[];
+                    updateCart();
+                    toggleCart();
+                    showToast('Payment successful! Order placed.');
+                    updateWalletDisplay(await getUserWallet(user.uid));
+                }
+            }else if(selectedCheckoutMethod==='paymob'){
+                openPaymobCheckout();
+            }else if(selectedCheckoutMethod==='whatsapp'){
+                let msg='My Order:\n\n';
+                cart.forEach((item,idx)=>{msg+=`${idx+1}. ${item.name}\n   ${item.details}\n   Price: ${item.price} L.E\n\n`});
+                window.open(`https://wa.me/201212072882?text=${encodeURIComponent(msg+`Total: ${total} L.E`)}`,'_blank');
             }
         }
 
-        function orderHezo(idx, name, type) {
-            const amount = document.getElementById(`hezo-amount-${idx}`).value;
-            if (!amount || amount < 100) {
-                showToast('Please enter a valid amount (min 100)', 'error');
-                return;
-            }
+        function selectPaymobMethod(method,btn){
+            document.querySelectorAll('#paymob .option-btn').forEach(b=>b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedPaymobMethod=method;
+        }
+
+        async function openPaymobCheckout(){
+            const user=window.firebaseAuth.currentUser;
+            if(!user){showToast('Please login first','error');return}
+            const total=cart.reduce((sum,item)=>sum+item.price,0);
+            if(total===0){showToast('Cart is empty!','error');return}
             
-            const rate = hezoPricing[type];
-            let price = 0;
-            if (type === 'comments') {
-                price = Math.round((amount / 100) * rate * 1.5);
-            } else {
-                price = Math.round((amount / 1000) * rate * 1.5);
-            }
+            document.getElementById('paymob-modal').classList.add('active');
+            const container=document.getElementById('paymob-iframe-container');
+            container.innerHTML='<p style="text-align:center;padding:2rem">Loading payment...</p>';
             
-            orderItem(`Hezo ${name} - ${amount}`, price);
+            // Simulate Paymob integration - replace with actual API call
+            setTimeout(()=>{
+                container.innerHTML=`
+                    <div style="text-align:center;padding:2rem">
+                        <i class="fas fa-credit-card fa-3x" style="color:var(--accent);margin-bottom:1rem"></i>
+                        <h3>Paymob Integration</h3>
+                        <p>Amount: ${total} EGP</p>
+                        <p style="color:#94a3b8;font-size:.9rem">In production, this will load the Paymob secure checkout iframe</p>
+                        <button class="btn btn-primary" onclick="simulatePaymobSuccess(${total})" style="margin-top:1rem">Simulate Successful Payment</button>
+                    </div>
+                `;
+            },1000);
         }
 
-        function orderItem(name, price) {
-            const message = `Hello! I want to order:\n${name}\nPrice: ${price} L.E\n\nPayment method: [Telda/InstaPay]`;
-            window.open(`https://wa.me/201212072882?text=${encodeURIComponent(message)}`, '_blank');
+        async function simulatePaymobSuccess(total){
+            const user=window.firebaseAuth.currentUser;
+            await addUserOrder(user.uid,{items:cart,total:total,paymentMethod:'paymob',transactionId:'SIM_'+Date.now(),status:'completed'});
+            cart=[];
+            updateCart();
+            closePaymobModal();
+            showToast('Payment successful! Order placed.');
         }
 
-        function openWhatsApp() {
-            window.open('https://wa.me/201212072882', '_blank');
-        }
+        function closePaymobModal(){document.getElementById('paymob-modal').classList.remove('active')}
 
-        // Modal functions
-        function openModal(mode) {
+        function openModal(mode){
             document.getElementById('auth-modal').classList.add('active');
-            switchAuthMode(mode);
+            document.getElementById('login-form').style.display=mode==='login'?'block':'none';
+            document.getElementById('signup-form').style.display=mode==='signup'?'block':'none';
         }
 
-        function closeModal() {
-            document.getElementById('auth-modal').classList.remove('active');
+        function closeModal(){document.getElementById('auth-modal').classList.remove('active')}
+        function switchAuthMode(mode){
+            document.getElementById('login-form').style.display=mode==='login'?'block':'none';
+            document.getElementById('signup-form').style.display=mode==='signup'?'block':'none';
         }
+        function toggleCaptcha(el){el.querySelector('.captcha-checkbox').classList.toggle('checked')}
 
-        function switchAuthMode(mode) {
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('signup-form').style.display = 'none';
-            document.getElementById('forgot-form').style.display = 'none';
-            if (mode === 'login') document.getElementById('login-form').style.display = 'block';
-            else if (mode === 'signup') document.getElementById('signup-form').style.display = 'block';
-            else if (mode === 'forgot') document.getElementById('forgot-form').style.display = 'block';
-        }
-
-        function showForgotPassword() {
-            switchAuthMode('forgot');
-        }
-
-        function toggleCaptcha(element) {
-            const checkbox = element.querySelector('.captcha-checkbox');
-            const check = checkbox.querySelector('i');
-            checkbox.classList.toggle('checked');
-            check.style.display = checkbox.classList.contains('checked') ? 'block' : 'none';
-        }
-
-        function handleLogin(e) {
+        async function handleLogin(e){
             e.preventDefault();
-            const captcha = document.querySelector('#login-captcha').classList.contains('checked');
-            if (!captcha) { showToast('Please verify you are not a robot', 'error'); return; }
-            const email = document.getElementById('login-email').value;
-            const btn = e.target.querySelector('button[type="submit"]');
-            btn.classList.add('loading');
-            setTimeout(() => {
-                btn.classList.remove('loading');
-                document.body.classList.add('authenticated');
-                document.getElementById('username-display').textContent = email.split('@')[0];
-                closeModal();
-                showToast('Welcome back!', 'success');
-            }, 1500);
+            const email=document.getElementById('login-email').value,password=document.getElementById('login-password').value;
+            const spinner=document.getElementById('login-spinner'),btn=spinner.parentElement;
+            spinner.style.display='inline-block';btn.disabled=true;
+            const result=await firebaseSignIn(email,password);
+            spinner.style.display='none';btn.disabled=false;
+            if(result.success){showToast('Welcome back!');closeModal()}else{showToast(result.error,'error')}
         }
 
-        function handleSignup(e) {
+        async function handleSignup(e){
             e.preventDefault();
-            const captcha = document.querySelector('#signup-captcha').classList.contains('checked');
-            if (!captcha) { showToast('Please verify you are not a robot', 'error'); return; }
-            const password = document.getElementById('signup-password').value;
-            const confirm = document.getElementById('signup-confirm').value;
-            if (password !== confirm) { showToast('Passwords do not match', 'error'); return; }
-            const name = document.getElementById('signup-name').value;
-            const btn = e.target.querySelector('button[type="submit"]');
-            btn.classList.add('loading');
-            setTimeout(() => {
-                btn.classList.remove('loading');
-                document.body.classList.add('authenticated');
-                document.getElementById('username-display').textContent = name;
-                closeModal();
-                showToast('Account created successfully!', 'success');
-            }, 1500);
+            const pass=document.getElementById('signup-password').value,confirm=document.getElementById('signup-confirm').value;
+            if(pass!==confirm){showToast('Passwords do not match!','error');return}
+            const spinner=document.getElementById('signup-spinner'),btn=spinner.parentElement;
+            spinner.style.display='inline-block';btn.disabled=true;
+            const result=await firebaseSignUp(document.getElementById('signup-email').value,pass,document.getElementById('signup-name').value,document.getElementById('signup-phone').value);
+            spinner.style.display='none';btn.disabled=false;
+            if(result.success){showToast('Account created!');closeModal()}else{showToast(result.error,'error')}
         }
 
-        function handleForgotPassword(e) {
-            e.preventDefault();
-            const email = document.getElementById('forgot-email').value;
-            const btn = e.target.querySelector('button[type="submit"]');
-            btn.classList.add('loading');
-            setTimeout(() => {
-                btn.classList.remove('loading');
-                showToast(`Reset link sent to ${email}`, 'success');
-                switchAuthMode('login');
-            }, 1500);
+        function toggleProfile(){document.getElementById('profile-dropdown').classList.toggle('show')}
+        function showToast(message,type='success'){
+            const toast=document.getElementById('toast'),icon=toast.querySelector('i');
+            document.getElementById('toast-message').textContent=message;
+            icon.className=type==='success'?'fas fa-check-circle':'fas fa-exclamation-circle';
+            toast.className='toast show '+type;
+            setTimeout(()=>toast.classList.remove('show'),3000);
         }
+        function copyToClipboard(text){navigator.clipboard.writeText(text).then(()=>showToast(`Copied: ${text}`))}
 
-        function handleGoogleSignIn() {
-            showToast('Google Sign In coming soon', 'success');
-        }
-
-        function logout() {
-            document.body.classList.remove('authenticated');
-            showToast('Logged out successfully', 'success');
-            toggleProfile();
-        }
-
-        function toggleProfile() {
-            document.getElementById('profile-dropdown').classList.toggle('show');
-        }
-
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toast-message');
-            const icon = toast.querySelector('i');
-            toastMessage.textContent = message;
-            toast.className = 'toast show ' + type;
-            icon.className = type === 'error' ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        function scrollToSection(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Close modal on outside click
-        document.getElementById('auth-modal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
+        window.addEventListener('scroll',()=>{
+            const scrolled=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight))*100;
+            document.getElementById('scroll-progress').style.width=scrolled+'%';
         });
 
-        // Close profile dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            const profile = document.querySelector('.user-profile');
-            const dropdown = document.getElementById('profile-dropdown');
-            if (profile && !profile.contains(e.target)) dropdown.classList.remove('show');
+        document.addEventListener('click',e=>{
+            const profile=document.querySelector('.user-profile');
+            if(profile&&!profile.contains(e.target))document.getElementById('profile-dropdown').classList.remove('show');
         });
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            renderGames();
-            renderPSPlus();
-            renderVBucks();
-            renderRocket();
-            renderHezo();
+        document.addEventListener('DOMContentLoaded',()=>{
+            renderGames();renderPlus();renderVBucks();renderRocket();renderHezo();
         });
     </script>
 </body>
