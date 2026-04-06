@@ -39,7 +39,6 @@
             overflow-x: hidden;
         }
 
-        /* Animated Background */
         .bg-animation {
             position: fixed;
             top: 0;
@@ -75,7 +74,6 @@
             50% { transform: translate(-5%, -5%) rotate(5deg); }
         }
 
-        /* Navigation */
         nav {
             position: fixed;
             top: 0;
@@ -273,7 +271,6 @@
             transform: translateY(-2px);
         }
 
-        /* Hero */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -333,7 +330,6 @@
             transform: translateY(30px);
         }
 
-        /* Auth Modal */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -483,24 +479,6 @@
             display: block;
         }
 
-        .form-options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            font-size: 0.85rem;
-        }
-
-        .form-options a {
-            color: var(--secondary);
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        .form-options a:hover {
-            text-decoration: underline;
-        }
-
         .divider {
             display: flex;
             align-items: center;
@@ -535,7 +513,6 @@
             text-decoration: underline;
         }
 
-        /* Sections */
         section {
             padding: 5rem 5%;
         }
@@ -561,7 +538,6 @@
             transform: translateY(20px);
         }
 
-        /* Game Cards */
         .games-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -733,7 +709,6 @@
             transform: scale(0.98);
         }
 
-        /* PS Plus Cards */
         .plus-card {
             background: var(--card);
             border-radius: 20px;
@@ -809,7 +784,6 @@
             transform: translateY(-2px);
         }
 
-        /* V-Bucks & Rocket League */
         .package-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -881,7 +855,6 @@
             font-style: italic;
         }
 
-        /* Hezo Section */
         .hezo-section {
             background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
             border-radius: 30px;
@@ -1002,7 +975,6 @@
             transition: all 0.3s;
         }
 
-        /* Cart Sidebar */
         .cart-sidebar {
             position: fixed;
             top: 0;
@@ -1127,7 +1099,6 @@
             opacity: 1;
         }
 
-        /* Payment Section */
         .payment-section {
             background: var(--card);
             border-radius: 30px;
@@ -1219,7 +1190,6 @@
             font-weight: 800;
         }
 
-        /* Paymob Section */
         .paymob-section {
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
             border-radius: 30px;
@@ -1288,7 +1258,6 @@
             box-shadow: 0 5px 20px rgba(245, 158, 11, 0.5);
         }
 
-        /* Toast */
         .toast {
             position: fixed;
             bottom: 2rem;
@@ -1315,7 +1284,6 @@
         .toast.success { border-color: var(--success); }
         .toast.error { border-color: var(--danger); }
 
-        /* User Profile */
         .logged-in-only { display: none; }
         .logged-out-only { display: flex; }
         body.authenticated .logged-in-only { display: flex; }
@@ -1359,7 +1327,6 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        /* Loading Spinner */
         .spinner {
             display: none;
             width: 20px;
@@ -1374,21 +1341,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Security Badge */
-        .security-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--success);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin-top: 1rem;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-
-        /* Wallet Display */
         .wallet-display {
             background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
             border: 1px solid rgba(124, 58, 237, 0.3);
@@ -1406,7 +1358,6 @@
             color: var(--success);
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
             .nav-links { display: none; }
@@ -1417,7 +1368,6 @@
             .paymob-section { padding: 2rem 1rem; }
         }
 
-        /* Scroll Progress Bar */
         .scroll-progress {
             position: fixed;
             top: 0;
@@ -1429,7 +1379,6 @@
             transition: width 0.1s;
         }
 
-        /* Payment Method Selector */
         .checkout-payment-methods {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1468,7 +1417,6 @@
             font-weight: 600;
         }
 
-        /* Admin Panel */
         #admin-panel {
             display: none;
             padding: 2rem;
@@ -1511,7 +1459,6 @@
     <div class="scroll-progress" id="scroll-progress"></div>
     <div class="bg-animation"></div>
 
-    <!-- Navigation -->
     <nav>
         <a href="#" class="logo">
             <i class="fas fa-gamepad"></i>
@@ -1555,7 +1502,6 @@
         </div>
     </nav>
 
-    <!-- Hero -->
     <section class="hero">
         <div class="hero-content">
             <h1>Connect. Play. Dominate.</h1>
@@ -1566,35 +1512,30 @@
         </div>
     </section>
 
-    <!-- Games Section -->
     <section id="games">
         <h2 class="section-title">Games</h2>
         <p class="section-subtitle">Primary & Secondary accounts for PS4 & PS5</p>
         <div class="games-container" id="games-container"></div>
     </section>
 
-    <!-- PlayStation Plus -->
     <section id="plus">
         <h2 class="section-title">PlayStation Plus</h2>
         <p class="section-subtitle">Choose your plan</p>
         <div class="games-container" id="plus-container"></div>
     </section>
 
-    <!-- Fortnite V-Bucks -->
     <section id="vbucks">
         <h2 class="section-title">Fortnite V-Bucks</h2>
         <p class="section-subtitle">Select package and enter Epic credentials</p>
         <div class="games-container" id="vbucks-container"></div>
     </section>
 
-    <!-- Rocket League -->
     <section id="rocket">
         <h2 class="section-title">Rocket League Credits</h2>
         <p class="section-subtitle">Get credits fast and secure</p>
         <div class="games-container" id="rocket-container"></div>
     </section>
 
-    <!-- Hezo Section -->
     <section id="hezo">
         <div class="hezo-section">
             <h2 class="section-title"><i class="fas fa-bolt"></i> Hezo Services</h2>
@@ -1603,7 +1544,6 @@
         </div>
     </section>
 
-    <!-- Paymob Payment Section -->
     <section id="paymob">
         <div class="paymob-section">
             <h2 class="section-title"><i class="fas fa-credit-card"></i> Paymob Payment</h2>
@@ -1644,7 +1584,6 @@
         </div>
     </section>
 
-    <!-- Payment -->
     <section id="payment">
         <div class="payment-section">
             <h2 class="section-title">Other Payment Methods</h2>
@@ -1671,7 +1610,6 @@
         </div>
     </section>
 
-    <!-- Cart Sidebar -->
     <div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
     <div class="cart-sidebar" id="cart-sidebar">
         <div class="cart-header">
@@ -1689,7 +1627,6 @@
                 <span id="cart-total">0 L.E</span>
             </div>
             
-            <!-- Payment Method Selection -->
             <div style="margin-bottom: 1rem;">
                 <small style="color: var(--text-muted); display: block; margin-bottom: 0.5rem;">Select Payment Method:</small>
                 <div class="checkout-payment-methods">
@@ -1714,7 +1651,6 @@
         </div>
     </div>
 
-    <!-- Auth Modal -->
     <div class="modal-overlay" id="auth-modal">
         <div class="modal">
             <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
@@ -1789,13 +1725,11 @@
         </div>
     </div>
 
-    <!-- Toast -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
         <span id="toast-message">Success!</span>
     </div>
 
-    <!-- Paymob Checkout Modal -->
     <div class="modal-overlay" id="paymob-modal">
         <div class="modal" style="max-width: 600px;">
             <button class="modal-close" onclick="closePaymobModal()"><i class="fas fa-times"></i></button>
@@ -1810,7 +1744,6 @@
         </div>
     </div>
 
-    <!-- Admin Panel -->
     <div id="admin-panel">
         <h2><i class="fas fa-cog"></i> Admin Panel</h2>
         <p style="color: var(--text-muted); margin-bottom: 1rem;">Manage orders and user requests</p>
@@ -1821,16 +1754,13 @@
     </div>
 
     <script>
-        // Register GSAP ScrollTrigger
         gsap.registerPlugin(ScrollTrigger);
 
-        // Cart array
         let cart = [];
         let selectedCheckoutMethod = 'wallet';
         let selectedPaymobMethod = 'card';
         let currentUser = null;
 
-        // Game data with ORIGINAL prices (will add 300)
         const gamesData = [
             { name: "FC 26", icon: "fa-futbol", ps5: 700, ps4: 600, ps5_2nd: 300, ps4_2nd: 250 },
             { name: "GTA V", icon: "fa-car", ps5: 450, ps4: 350, ps5_2nd: 200, ps4_2nd: 150 },
@@ -1857,12 +1787,10 @@
             { name: "NFS Payback", icon: "fa-money-bill", ps5: 200, ps4: 180, ps5_2nd: 100, ps4_2nd: 90 }
         ];
 
-        // Add 300 to game price
         function gamePrice(base) {
             return base + 300;
         }
 
-        // Render Games
         function renderGames() {
             const container = document.getElementById('games-container');
             container.innerHTML = gamesData.map((game, idx) => `
@@ -1891,7 +1819,6 @@
                 </div>
             `).join('');
 
-            // Animate game cards on scroll
             gsap.utils.toArray('.game-card').forEach((card, i) => {
                 gsap.to(card, {
                     scrollTrigger: {
@@ -1957,6 +1884,7 @@
             const type = selectedType[idx] || 'primary';
             const game = gamesData[idx];
             let price = 0;
+            
             if (platform === 'ps5' && type === 'primary') price = game.ps5;
             else if (platform === 'ps4' && type === 'primary') price = game.ps4;
             else if (platform === 'ps5' && type === '2nd') price = game.ps5_2nd;
@@ -1971,6 +1899,7 @@
             const type = selectedType[idx] || 'primary';
             const game = gamesData[idx];
             let price = 0;
+            
             if (platform === 'ps5' && type === 'primary') price = game.ps5;
             else if (platform === 'ps4' && type === 'primary') price = game.ps4;
             else if (platform === 'ps5' && type === '2nd') price = game.ps5_2nd;
@@ -1984,11 +1913,9 @@
             updateCart();
             showToast('Added to cart!');
             
-            // Animate cart icon
             gsap.fromTo('.cart-icon', {scale: 1.3}, {scale: 1, duration: 0.3});
         }
 
-        // PS Plus Data (original + 300)
         const plusData = [
             { name: 'Essential', basePrices: { '1m_p': 200, '3m_p': 450, '12m_p': 1100, '1m_s': 100, '3m_s': 250, '12m_s': 600 } },
             { name: 'Extra', basePrices: { '1m_p': 500, '3m_p': 1100, '12m_p': 2800, '1m_s': 250, '3m_s': 600, '12m_s': 1400 } },
@@ -2024,7 +1951,6 @@
                 </div>
             `).join('');
 
-            // Animate PS Plus cards
             gsap.utils.toArray('.plus-card').forEach((card, i) => {
                 gsap.to(card, {
                     scrollTrigger: {
@@ -2093,7 +2019,6 @@
             showToast('Added to cart!');
         }
 
-        // V-Bucks (original + 300)
         const vBucksData = [
             { amount: 800, price: 330 },
             { amount: 2400, price: 750 },
@@ -2140,7 +2065,6 @@
                 </div>
             `;
 
-            // Animate V-Bucks card
             gsap.to('#vbucks-container .game-card', {
                 scrollTrigger: {
                     trigger: '#vbucks-container',
@@ -2158,7 +2082,6 @@
             el.classList.add('selected');
             selectedVBuck = idx;
             
-            // Animate selection
             gsap.fromTo(el, {scale: 0.95}, {scale: 1, duration: 0.3});
         }
 
@@ -2191,7 +2114,6 @@
             showToast('Added to cart!');
         }
 
-        // Rocket League (original + 300)
         const rocketData = [
             { name: '500 Credits', price: 250 },
             { name: '1100 Credits', price: 420 },
@@ -2238,7 +2160,6 @@
                 </div>
             `;
 
-            // Animate Rocket League card
             gsap.to('#rocket-container .game-card', {
                 scrollTrigger: {
                     trigger: '#rocket-container',
@@ -2288,7 +2209,6 @@
             showToast('Added to cart!');
         }
 
-        // Hezo Services (CORRECTED PRICES)
         const hezoData = [
             { name: 'Likes', icon: 'fa-heart', pricePer1k: 12, unit: 'likes' },
             { name: 'Views', icon: 'fa-eye', pricePer1k: 10, unit: 'views' },
@@ -2331,7 +2251,6 @@
                 </div>
             `).join('');
 
-            // Animate Hezo cards
             gsap.utils.toArray('.hezo-card').forEach((card, i) => {
                 gsap.to(card, {
                     scrollTrigger: {
@@ -2352,7 +2271,6 @@
             document.getElementById(`hezo-${idx}`).value = amount;
             calcHezo(idx);
             
-            // Animate the input
             gsap.fromTo(`#hezo-${idx}`, 
                 {backgroundColor: "rgba(236, 72, 153, 0.3)"}, 
                 {backgroundColor: "var(--darker)", duration: 0.5}
@@ -2405,7 +2323,6 @@
             showToast('Added to cart!');
         }
 
-        // Cart Functions
         function toggleCart() {
             document.getElementById('cart-sidebar').classList.toggle('open');
             document.getElementById('cart-overlay').classList.toggle('show');
@@ -2469,7 +2386,6 @@
                     openModal('login');
                     return;
                 }
-                // Simulate wallet payment
                 showToast('Processing wallet payment...');
                 setTimeout(() => {
                     cart = [];
@@ -2499,7 +2415,6 @@
             }
         }
 
-        // Paymob Functions
         function selectPaymobMethod(method, btn) {
             document.querySelectorAll('#paymob .option-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
@@ -2518,7 +2433,6 @@
             document.getElementById('paymob-modal').classList.remove('active');
         }
 
-        // Auth Functions
         function openModal(mode) {
             document.getElementById('auth-modal').classList.add('active');
             document.getElementById('login-form').style.display = mode === 'login' ? 'block' : 'none';
@@ -2547,13 +2461,11 @@
             spinner.style.display = 'inline-block';
             btn.disabled = true;
             
-            // Simulate login
             setTimeout(() => {
                 currentUser = { email: email, displayName: email.split('@')[0] };
                 document.body.classList.add('authenticated');
                 document.getElementById('username-display').textContent = currentUser.displayName;
                 
-                // Check if admin
                 if (email === "selimahmedmohamed49@gmail.com") {
                     document.getElementById("admin-btn").style.display = "block";
                 }
@@ -2583,7 +2495,6 @@
             const name = document.getElementById('signup-name').value;
             const email = document.getElementById('signup-email').value;
             
-            // Simulate signup
             setTimeout(() => {
                 currentUser = { email: email, displayName: name };
                 document.body.classList.add('authenticated');
@@ -2597,7 +2508,6 @@
         }
 
         function loginWithGoogle() {
-            // Simulate Google login
             currentUser = { email: "user@gmail.com", displayName: "Google User" };
             document.body.classList.add('authenticated');
             document.getElementById('username-display').textContent = "Google User";
@@ -2642,7 +2552,6 @@
             });
         }
 
-        // Admin Functions
         function openAdmin() {
             const panel = document.getElementById("admin-panel");
             panel.style.display = panel.style.display === "none" ? "block" : "none";
@@ -2652,7 +2561,6 @@
         }
 
         function loadOrders() {
-            // Simulate loading orders
             const orders = [
                 { id: 'ORD001', user: 'user@example.com', total: 1200, status: 'PENDING', date: '2024-01-15' },
                 { id: 'ORD002', user: 'test@gmail.com', total: 850, status: 'PAID', date: '2024-01-14' }
@@ -2679,7 +2587,6 @@
             loadOrders();
         }
 
-        // Scroll Progress Bar
         window.addEventListener('scroll', () => {
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -2687,7 +2594,6 @@
             document.getElementById('scroll-progress').style.width = scrolled + '%';
         });
 
-        // Close dropdowns when clicking outside
         document.addEventListener('click', function(e) {
             const profile = document.querySelector('.user-profile');
             if (profile && !profile.contains(e.target)) {
@@ -2695,7 +2601,6 @@
             }
         });
 
-        // Smooth scroll for nav links
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -2706,9 +2611,7 @@
             });
         });
 
-        // Initialize GSAP Animations
         function initAnimations() {
-            // Hero animations
             gsap.to('.hero h1', {
                 opacity: 1,
                 y: 0,
@@ -2733,7 +2636,6 @@
                 ease: "power3.out"
             });
 
-            // Section titles
             gsap.utils.toArray('.section-title').forEach(title => {
                 gsap.to(title, {
                     scrollTrigger: {
@@ -2748,7 +2650,6 @@
                 });
             });
 
-            // Section subtitles
             gsap.utils.toArray('.section-subtitle').forEach(sub => {
                 gsap.to(sub, {
                     scrollTrigger: {
@@ -2764,7 +2665,6 @@
                 });
             });
 
-            // Hezo section
             gsap.to('.hezo-section', {
                 scrollTrigger: {
                     trigger: '.hezo-section',
@@ -2776,7 +2676,6 @@
                 ease: "power3.out"
             });
 
-            // Paymob section
             gsap.to('.paymob-section', {
                 scrollTrigger: {
                     trigger: '.paymob-section',
@@ -2788,7 +2687,6 @@
                 ease: "power3.out"
             });
 
-            // Payment section
             gsap.to('.payment-section', {
                 scrollTrigger: {
                     trigger: '.payment-section',
@@ -2800,7 +2698,6 @@
                 ease: "power3.out"
             });
 
-            // Payment cards
             gsap.utils.toArray('.payment-card').forEach((card, i) => {
                 gsap.to(card, {
                     scrollTrigger: {
@@ -2815,7 +2712,6 @@
                 });
             });
 
-            // WhatsApp option
             gsap.to('.whatsapp-option', {
                 scrollTrigger: {
                     trigger: '.whatsapp-option',
@@ -2829,7 +2725,6 @@
             });
         }
 
-        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             renderGames();
             renderPlus();
